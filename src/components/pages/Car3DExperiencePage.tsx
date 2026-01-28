@@ -271,7 +271,21 @@ export default function Car3DExperiencePage() {
               transition={{ duration: 0.6 }}
               className="lg:col-span-2"
             >
-              <div className="relative bg-white border-2 border-secondary/10 overflow-hidden">
+              <div className="relative bg-white border-2 border-secondary/10 overflow-hidden" style={{ minHeight: '600px' }}>
+                {/* Sketchfab 3D Model */}
+                <div className="w-full h-full" style={{ minHeight: '600px' }}>
+                  <iframe
+                    title="Rayfield Caliburn | www.vecarz.com"
+                    frameBorder="0"
+                    allowFullScreen
+                    mozAllowFullScreen={true}
+                    webkitAllowFullScreen={true}
+                    allow="autoplay; fullscreen; xr-spatial-tracking"
+                    xr-spatial-tracking="true"
+                    src="https://sketchfab.com/models/10d3d2c26ebc42938933fc3779061615/embed"
+                    style={{ width: '100%', height: '100%', minHeight: '600px' }}
+                  />
+                </div>
 
                 {/* Controls Overlay */}
                 <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3">
