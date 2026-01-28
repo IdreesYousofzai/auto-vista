@@ -38,6 +38,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/3d-experience" className="font-paragraph text-sm text-secondary-foreground/80 hover:text-primary transition-colors">
+                  3D Experience
+                </Link>
+              </li>
+              <li>
                 <Link to="/services" className="font-paragraph text-sm text-secondary-foreground/80 hover:text-primary transition-colors">
                   Services & Products
                 </Link>

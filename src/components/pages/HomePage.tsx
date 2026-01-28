@@ -160,9 +160,9 @@ export default function HomePage() {
                 Start Driving
               </Button>
             </Link>
-            <Link to="/contact">
+            <Link to="/3d-experience">
               <Button variant="outline" className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white rounded-none px-10 py-7 text-lg font-medium transition-all duration-300">
-                Contact Us
+                3D Experience
               </Button>
             </Link>
           </FadeIn>

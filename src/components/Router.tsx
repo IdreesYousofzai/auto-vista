@@ -5,6 +5,7 @@ import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
 import HomePage from '@/components/pages/HomePage';
 import VehiclesPage from '@/components/pages/VehiclesPage';
 import VehicleDetailPage from '@/components/pages/VehicleDetailPage';
+import Car3DExperiencePage from '@/components/pages/Car3DExperiencePage';
 import ServicesPage from '@/components/pages/ServicesPage';
 import AnalyticsPage from '@/components/pages/AnalyticsPage';
 import AboutPage from '@/components/pages/AboutPage';
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "vehicles/:id",
         element: <VehicleDetailPage />,
+      },
+      {
+        path: "3d-experience",
+        element: <Car3DExperiencePage />,
       },
       {
         path: "services",
