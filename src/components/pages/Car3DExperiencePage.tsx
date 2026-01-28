@@ -272,7 +272,7 @@ export default function Car3DExperiencePage() {
               className="lg:col-span-2"
             >
               <div className="relative bg-white border-2 border-secondary/10 overflow-hidden">
-                
+
                 {/* Controls Overlay */}
                 <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3">
                   <button

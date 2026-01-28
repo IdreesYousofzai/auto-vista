@@ -170,9 +170,7 @@ export default function HomePage() {
 
           <FadeIn delay={0.4} className="flex flex-wrap gap-4">
             <Link to="/vehicles">
-              <Button className="bg-primary text-white hover:bg-primary/90 rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/30">
-                Buy your favorite car!
-              </Button>
+              <Button className="bg-primary text-white hover:bg-primary/90 rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/30">Buy</Button>
             </Link>
             <Link to="/3d-experience">
               <Button variant="outline" className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300">
