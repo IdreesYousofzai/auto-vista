@@ -38,18 +38,31 @@ export default function AboutPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="w-full bg-primary py-16 lg:py-24">
-        <div className="max-w-[100rem] mx-auto px-8 lg:px-16">
+      <section className="w-full bg-gradient-to-br from-primary via-primary to-blue-600 py-20 lg:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl" />
+        </div>
+        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="font-heading text-5xl lg:text-6xl text-primary-foreground mb-6">
-              About Velocity Auto
+            <motion.div 
+              className="inline-block mb-6"
+              initial={{ width: 0 }}
+              animate={{ width: 48 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="h-1 w-12 bg-white" />
+            </motion.div>
+            <h1 className="font-heading text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              About <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">Velocity Auto</span>
             </h1>
-            <p className="font-paragraph text-lg text-primary-foreground/90 max-w-3xl mx-auto">
+            <p className="font-paragraph text-lg text-white/80 max-w-3xl mx-auto leading-relaxed">
               Pioneering the future of automotive retail through innovation, integrity, and exceptional customer service
             </p>
           </motion.div>
@@ -57,7 +70,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="w-full max-w-[100rem] mx-auto px-8 lg:px-16 py-20 lg:py-32">
+      <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-20 lg:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
           <motion.div
             initial={{ opacity: 0, x: -30 }}

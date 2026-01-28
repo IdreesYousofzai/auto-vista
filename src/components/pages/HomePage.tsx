@@ -137,46 +137,85 @@ export default function HomePage() {
     <div ref={containerRef} className="min-h-screen bg-background font-paragraph text-secondary selection:bg-primary selection:text-white overflow-x-hidden">
       <Header />
 
-      {/* HERO SECTION - Split Layout (Inspiration: Jay Reed) */}
+      {/* HERO SECTION - Premium Split Layout */}
       <section className="relative w-full min-h-screen flex flex-col lg:flex-row overflow-clip">
         {/* Left Content */}
         <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 sm:px-12 lg:px-20 xl:px-24 py-24 lg:py-0 z-10 bg-background">
           <FadeIn>
-            <h1 className="font-heading text-7xl sm:text-8xl xl:text-9xl font-bold tracking-tighter leading-[0.9] mb-8 text-secondary">
-              Velocity<br />
-              <span className="text-primary">Auto</span>
-            </h1>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+            >
+              <div className="inline-block mb-6">
+                <motion.div 
+                  className="h-1 w-12 bg-primary"
+                  initial={{ width: 0 }}
+                  animate={{ width: 48 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                />
+              </div>
+              <h1 className="font-heading text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-8 text-secondary">
+                The Future of <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Automotive</span> <br/>
+                Excellence
+              </h1>
+            </motion.div>
           </FadeIn>
           
           <FadeIn delay={0.2}>
-            <p className="text-lg sm:text-xl text-secondary/80 max-w-md mb-12 leading-relaxed">
-              Amplify your driving experience with data-driven insights and precision engineering. The future of automotive retail is here.
+            <p className="text-lg sm:text-xl text-secondary/70 max-w-lg mb-12 leading-relaxed font-light">
+              Experience premium vehicles curated with precision. Data-driven insights, luxury design, and innovation at every turn.
             </p>
           </FadeIn>
 
           <FadeIn delay={0.4} className="flex flex-wrap gap-4">
             <Link to="/vehicles">
-              <Button className="bg-primary text-white hover:bg-primary/90 rounded-none px-10 py-7 text-lg font-medium transition-all duration-300 hover:px-12">
-                Start Driving
+              <Button className="bg-primary text-white hover:bg-primary/90 rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/30">
+                Explore Inventory
               </Button>
             </Link>
             <Link to="/3d-experience">
-              <Button variant="outline" className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white rounded-none px-10 py-7 text-lg font-medium transition-all duration-300">
+              <Button variant="outline" className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300">
                 3D Experience
               </Button>
             </Link>
+          </FadeIn>
+
+          {/* Stats */}
+          <FadeIn delay={0.6} className="mt-16 grid grid-cols-3 gap-8">
+            <div>
+              <div className="text-3xl font-bold text-secondary mb-2">500+</div>
+              <div className="text-sm text-secondary/60">Premium Vehicles</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-secondary mb-2">98%</div>
+              <div className="text-sm text-secondary/60">Satisfaction Rate</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-secondary mb-2">24/7</div>
+              <div className="text-sm text-secondary/60">Expert Support</div>
+            </div>
           </FadeIn>
         </div>
 
         {/* Right Image - Full Bleed */}
         <div className="w-full lg:w-1/2 h-[50vh] lg:h-screen relative">
-          <ParallaxImage 
-            src="https://static.wixstatic.com/media/cec0c1_14617f498bf040ba99089f4bae0c7c05~mv2.png?originWidth=1152&originHeight=896"
-            alt="Luxury vehicle front view"
+          <motion.div
+            initial={{ scale: 1.05, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="w-full h-full"
-          />
-          {/* Decorative Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+          >
+            <ParallaxImage 
+              src="https://static.wixstatic.com/media/cec0c1_14617f498bf040ba99089f4bae0c7c05~mv2.png?originWidth=1152&originHeight=896"
+              alt="Luxury vehicle front view"
+              className="w-full h-full"
+            />
+          </motion.div>
+          {/* Premium Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent opacity-10 pointer-events-none" />
         </div>
       </section>
 

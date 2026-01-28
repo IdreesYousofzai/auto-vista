@@ -223,19 +223,32 @@ export default function Car3DExperiencePage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="w-full bg-backgrounddark py-16 lg:py-24">
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
+      <section className="w-full bg-gradient-to-br from-backgrounddark via-backgrounddark to-primary/10 py-20 lg:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        </div>
+        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="font-heading text-5xl lg:text-6xl text-secondary-foreground mb-6">
-              3D Car Experience
+            <motion.div 
+              className="inline-block mb-6"
+              initial={{ width: 0 }}
+              animate={{ width: 48 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="h-1 w-12 bg-primary" />
+            </motion.div>
+            <h1 className="font-heading text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              3D Car <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Experience</span>
             </h1>
-            <p className="font-paragraph text-lg text-secondary-foreground/80 max-w-3xl mx-auto">
-              Explore our vehicles in stunning 3D. Rotate, zoom, and discover every detail from every angle.
+            <p className="font-paragraph text-lg text-white/70 max-w-3xl mx-auto leading-relaxed">
+              Explore our vehicles in stunning 3D. Rotate, zoom, and discover every detail from every angle with interactive controls.
             </p>
           </motion.div>
         </div>

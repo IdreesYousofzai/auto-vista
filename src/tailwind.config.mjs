@@ -19,8 +19,8 @@ export default {
                 '9xl': ['8rem', { lineHeight: '1', letterSpacing: '-0.04em', fontWeight: '900' }],
             },
             fontFamily: {
-                heading: "poppins-v2",
-                paragraph: "open sans"
+                heading: "'Inter', 'Helvetica Neue', sans-serif",
+                paragraph: "'Inter', 'Helvetica Neue', sans-serif"
             },
             colors: {
                 backgrounddark: '#121212',
