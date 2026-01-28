@@ -136,7 +136,6 @@ export default function HomePage() {
   return (
     <div ref={containerRef} className="min-h-screen bg-background font-paragraph text-secondary selection:bg-primary selection:text-white overflow-x-hidden">
       <Header />
-
       {/* HERO SECTION - Premium Split Layout */}
       <section className="relative w-full min-h-screen flex flex-col lg:flex-row overflow-clip">
         {/* Left Content */}
@@ -155,7 +154,7 @@ export default function HomePage() {
                   transition={{ duration: 0.8, delay: 0.2 }}
                 />
               </div>
-              <h1 className="font-heading text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-8 text-secondary">
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-8 text-secondary font-roboto">
                 The Future of <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Automotive</span> <br/>
                 Excellence
@@ -171,9 +170,7 @@ export default function HomePage() {
 
           <FadeIn delay={0.4} className="flex flex-wrap gap-4">
             <Link to="/vehicles">
-              <Button className="bg-primary text-white hover:bg-primary/90 rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/30">
-                Explore Inventory
-              </Button>
+              <Button className="bg-primary text-white hover:bg-primary/90 rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/30">Buy</Button>
             </Link>
             <Link to="/3d-experience">
               <Button variant="outline" className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300">
@@ -218,7 +215,6 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent opacity-10 pointer-events-none" />
         </div>
       </section>
-
       {/* MARQUEE TICKER - Dynamic Motion */}
       <div className="w-full bg-secondary py-6 overflow-hidden whitespace-nowrap border-y border-white/10">
         <motion.div 
@@ -238,7 +234,6 @@ export default function HomePage() {
           ))}
         </motion.div>
       </div>
-
       {/* FEATURES GRID - Minimalist & Clean */}
       <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -267,7 +262,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* ANALYTICS & DATA VIZ SECTION - Dark Mode Contrast */}
       <section className="w-full bg-backgrounddark text-white py-32 overflow-hidden relative">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
@@ -371,7 +365,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* SERVICES LIST - Horizontal Scroll / Grid */}
       <section className="w-full py-32 bg-background">
         <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
@@ -414,7 +407,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* IMMERSIVE IMAGE BREAK */}
       <section className="w-full h-[80vh] relative overflow-clip">
         <ParallaxImage 
@@ -430,7 +422,6 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
-
       {/* CTA SECTION */}
       <section className="w-full py-32 bg-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -457,7 +448,6 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
-
       <Footer />
     </div>
   );

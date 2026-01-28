@@ -19,8 +19,9 @@ export default {
                 '9xl': ['8rem', { lineHeight: '1', letterSpacing: '-0.04em', fontWeight: '900' }],
             },
             fontFamily: {
-                heading: "'Inter', 'Helvetica Neue', sans-serif",
-                paragraph: "'Inter', 'Helvetica Neue', sans-serif"
+                heading: ["'Inter'", "'Helvetica Neue'", "sans-serif"],
+                paragraph: ["'Inter'", "'Helvetica Neue'", "sans-serif"],
+                roboto: ["roboto", "sans-serif"]
             },
             colors: {
                 backgrounddark: '#121212',
