@@ -221,7 +221,6 @@ export default function Car3DExperiencePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-
       {/* Hero Section */}
       <section className="w-full bg-gradient-to-br from-backgrounddark via-backgrounddark to-primary/10 py-20 lg:py-32 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
@@ -253,7 +252,6 @@ export default function Car3DExperiencePage() {
           </motion.div>
         </div>
       </section>
-
       {/* 3D Viewer Section */}
       <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-16 lg:py-24">
         {isLoading ? (
@@ -274,11 +272,6 @@ export default function Car3DExperiencePage() {
               className="lg:col-span-2"
             >
               <div className="relative bg-white border-2 border-secondary/10 overflow-hidden">
-                <div
-                  ref={containerRef}
-                  className="w-full h-[600px] lg:h-[700px]"
-                  style={{ background: '#fafafa' }}
-                />
 
                 {/* Controls Overlay */}
                 <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3">
@@ -457,7 +450,6 @@ export default function Car3DExperiencePage() {
           </div>
         )}
       </section>
-
       {/* Features Section */}
       <section className="w-full bg-backgrounddark py-20 lg:py-32">
         <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
@@ -517,7 +509,6 @@ export default function Car3DExperiencePage() {
           </motion.div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="w-full bg-primary py-20 lg:py-32">
         <div className="max-w-[100rem] mx-auto px-6 sm:px-12 lg:px-24 text-center">
@@ -541,7 +532,6 @@ export default function Car3DExperiencePage() {
           </motion.div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
