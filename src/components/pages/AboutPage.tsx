@@ -84,7 +84,7 @@ export default function AboutPage() {
             className="aspect-[4/3] bg-backgrounddark"
           >
             <Image
-              src="https://static.wixstatic.com/media/cec0c1_cc0f070b051f445eae1495e96a231313~mv2.png?originWidth=896&originHeight=640"
+              src="https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.png?id=1"
               alt="Velocity Auto showroom"
               className="w-full h-full object-cover"
             />
