@@ -211,7 +211,7 @@ export default function HomePage() {
               playsInline
               className="w-full h-full object-cover"
             >
-              <source src="https://www.youtube.com/watch?v=NMThdHhrLoM&pp=ygUac3VwZXJjYXIgZHJpdmluZyBzaWRlIHZpZXc%3D" type="video/mp4" />
+              <source src="https://www.pexels.com/download/video/33604722/" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </motion.div>
