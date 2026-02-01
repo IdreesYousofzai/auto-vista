@@ -110,8 +110,14 @@ export default function Footer() {
             <h4 className="font-heading text-lg font-bold text-white mb-6">Services</h4>
             <ul className="space-y-3">
               {services.map((service, idx) => (
-                <li key={idx} className="font-paragraph text-sm text-secondary-foreground/70">
-                  {service}
+                <li key={idx}>
+                  <Link 
+                    to="/services" 
+                    className="font-paragraph text-sm text-secondary-foreground/70 hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    {service}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
                 </li>
               ))}
             </ul>

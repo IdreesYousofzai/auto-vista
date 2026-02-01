@@ -196,19 +196,24 @@ export default function HomePage() {
           </FadeIn>
         </div>
 
-        {/* Right Image - Full Bleed */}
-        <div className="w-full lg:w-1/2 h-[50vh] lg:h-screen relative">
+        {/* Right Video - Full Bleed */}
+        <div className="w-full lg:w-1/2 h-[50vh] lg:h-screen relative overflow-hidden">
           <motion.div
             initial={{ scale: 1.05, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="w-full h-full"
           >
-            <ParallaxImage 
-              src="https://static.wixstatic.com/media/cec0c1_14617f498bf040ba99089f4bae0c7c05~mv2.png?originWidth=1152&originHeight=896"
-              alt="Luxury vehicle front view"
-              className="w-full h-full"
-            />
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              className="w-full h-full object-cover"
+            >
+              <source src="https://videos.pexels.com/video-files/3045163/3045163-hd_1920_1080_30fps.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </motion.div>
           {/* Premium Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
@@ -383,7 +388,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {SERVICES_DATA.map((service, idx) => (
               <FadeIn key={service.id} delay={idx * 0.1}>
-                <div className="group relative h-full bg-white border border-secondary/10 p-8 hover:border-primary transition-colors duration-300 flex flex-col justify-between min-h-[320px]">
+                <Link to="/services" className="group relative h-full bg-white border border-secondary/10 p-8 hover:border-primary transition-colors duration-300 flex flex-col justify-between min-h-[320px] no-underline">
                   <div>
                     <div className="text-xs font-bold tracking-widest text-primary uppercase mb-4">{service.category}</div>
                     <h3 className="font-heading text-2xl font-bold mb-4 group-hover:text-primary transition-colors">{service.name}</h3>
@@ -395,7 +400,7 @@ export default function HomePage() {
                       <ArrowUpRight className="w-5 h-5" />
                     </div>
                   </div>
-                </div>
+                </Link>
               </FadeIn>
             ))}
           </div>
