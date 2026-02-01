@@ -516,7 +516,7 @@ export default function HomePage() {
         
         {/* Grid Pattern Overlay */}
         <motion.div 
-          className="absolute inset-0 opacity-10"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(92, 92, 246, 0.1) 25%, rgba(92, 92, 246, 0.1) 26%, transparent 27%, transparent 74%, rgba(92, 92, 246, 0.1) 75%, rgba(92, 92, 246, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(92, 92, 246, 0.1) 25%, rgba(92, 92, 246, 0.1) 26%, transparent 27%, transparent 74%, rgba(92, 92, 246, 0.1) 75%, rgba(92, 92, 246, 0.1) 76%, transparent 77%, transparent)',
             backgroundSize: '50px 50px'
