@@ -287,7 +287,7 @@ export default function Car3DExperiencePage() {
                       execution-while-out-of-viewport="true"
                       execution-while-not-rendered="true"
                       web-share="true"
-                      src="https://sketchfab.com/models/f8141ecd755547989c9209784b71ad43/embed?autospin=1&autostart=1&preload=1"
+                      src="https://sketchfab.com/models/f8141ecd755547989c9209784b71ad43/embed?autospin=0&autostart=1&preload=1"
                       style={{ width: '100%', height: '100%', minHeight: '600px' }}
                     />
                   </div>
