@@ -136,68 +136,10 @@ export default function HomePage() {
   return (
     <div ref={containerRef} className="min-h-screen bg-background font-paragraph text-secondary selection:bg-primary selection:text-white overflow-x-hidden">
       <Header />
-      {/* HERO SECTION - Premium Split Layout */}
-      <section className="relative w-full min-h-screen flex flex-col lg:flex-row overflow-clip">
-        {/* Left Content */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 sm:px-12 lg:px-20 xl:px-24 py-24 lg:py-0 z-10 bg-background">
-          <FadeIn>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-            >
-              <div className="inline-block mb-6">
-                <motion.div 
-                  className="h-1 w-12 bg-primary"
-                  initial={{ width: 0 }}
-                  animate={{ width: 48 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                />
-              </div>
-              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-8 text-secondary font-roboto">
-                The Future of <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Automotive</span> <br/>
-                Excellence
-              </h1>
-            </motion.div>
-          </FadeIn>
-          
-          <FadeIn delay={0.2}>
-            <p className="text-lg sm:text-xl text-secondary/70 max-w-lg mb-12 leading-relaxed font-light">
-              Experience premium vehicles curated with precision. Data-driven insights, luxury design, and innovation at every turn.
-            </p>
-          </FadeIn>
-
-          <FadeIn delay={0.4} className="flex flex-wrap gap-4">
-            <Link to="/vehicles">
-              <Button className="bg-primary text-white hover:bg-primary/90 rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/30">Buy</Button>
-            </Link>
-            <Link to="/3d-experience">
-              <Button variant="outline" className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-white rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300">
-                3D Experience
-              </Button>
-            </Link>
-          </FadeIn>
-
-          {/* Stats */}
-          <FadeIn delay={0.6} className="mt-16 grid grid-cols-3 gap-8">
-            <div>
-              <div className="text-3xl font-bold text-secondary mb-2">500+</div>
-              <div className="text-sm text-secondary/60">Premium Vehicles</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-secondary mb-2">98%</div>
-              <div className="text-sm text-secondary/60">Satisfaction Rate</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-secondary mb-2">24/7</div>
-              <div className="text-sm text-secondary/60">Expert Support</div>
-            </div>
-          </FadeIn>
-        </div>
-
-        {/* Right Video - Full Bleed */}
-        <div className="w-full lg:w-1/2 h-[50vh] lg:h-screen relative overflow-hidden">
+      {/* HERO SECTION - Video Background with Text Overlay */}
+      <section className="relative w-full min-h-screen flex items-center justify-center overflow-clip">
+        {/* Video Background */}
+        <div className="absolute inset-0 w-full h-full">
           <motion.div
             initial={{ scale: 1.05, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -215,9 +157,75 @@ export default function HomePage() {
               Your browser does not support the video tag.
             </video>
           </motion.div>
-          {/* Premium Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent opacity-10 pointer-events-none" />
+          
+          {/* Enhanced Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
+          
+          {/* Animated Gradient Accent */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent opacity-40"
+            animate={{ opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+        </div>
+
+        {/* Content Overlay */}
+        <div className="relative z-10 w-full max-w-[100rem] mx-auto px-6 sm:px-12 lg:px-24 py-24 flex flex-col justify-center items-start min-h-screen">
+          <FadeIn>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+            >
+              <div className="inline-block mb-6">
+                <motion.div 
+                  className="h-1 w-12 bg-primary"
+                  initial={{ width: 0 }}
+                  animate={{ width: 48 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                />
+              </div>
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-8 text-white font-roboto drop-shadow-lg">
+                The Future of <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Automotive</span> <br/>
+                Excellence
+              </h1>
+            </motion.div>
+          </FadeIn>
+          
+          <FadeIn delay={0.2}>
+            <p className="text-lg sm:text-xl text-white/90 max-w-lg mb-12 leading-relaxed font-light drop-shadow-md">
+              Experience premium vehicles curated with precision. Data-driven insights, luxury design, and innovation at every turn.
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.4} className="flex flex-wrap gap-4">
+            <Link to="/vehicles">
+              <Button className="bg-primary text-white hover:bg-primary/90 rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary/50">Buy</Button>
+            </Link>
+            <Link to="/3d-experience">
+              <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-secondary rounded-lg px-10 py-6 text-base font-semibold transition-all duration-300">
+                3D Experience
+              </Button>
+            </Link>
+          </FadeIn>
+
+          {/* Stats */}
+          <FadeIn delay={0.6} className="mt-16 grid grid-cols-3 gap-8">
+            <div>
+              <div className="text-3xl font-bold text-white mb-2 drop-shadow-md">500+</div>
+              <div className="text-sm text-white/70">Premium Vehicles</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-white mb-2 drop-shadow-md">98%</div>
+              <div className="text-sm text-white/70">Satisfaction Rate</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-white mb-2 drop-shadow-md">24/7</div>
+              <div className="text-sm text-white/70">Expert Support</div>
+            </div>
+          </FadeIn>
         </div>
       </section>
       {/* MARQUEE TICKER - Dynamic Motion */}
@@ -239,12 +247,35 @@ export default function HomePage() {
           ))}
         </motion.div>
       </div>
-      {/* FEATURES GRID - Minimalist & Clean */}
-      <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      {/* FEATURES GRID - Creative & Innovative */}
+      <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-32 relative">
+        {/* Animated Background Elements */}
+        <motion.div 
+          className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"
+          animate={{ 
+            x: [0, 30, 0],
+            y: [0, -30, 0]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"
+          animate={{ 
+            x: [0, -30, 0],
+            y: [0, 30, 0]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-4">
             <FadeIn>
-              <div className="w-12 h-1 bg-primary mb-8" />
+              <motion.div 
+                className="w-12 h-1 bg-primary mb-8"
+                initial={{ width: 0 }}
+                whileInView={{ width: 48 }}
+                transition={{ duration: 0.8 }}
+              />
               <h2 className="font-heading text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 Engineered for <br/>Excellence.
               </h2>
@@ -257,11 +288,36 @@ export default function HomePage() {
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             {FEATURES.map((feature, idx) => (
               <FadeIn key={idx} delay={idx * 0.1} className="group">
-                <div className="h-full p-8 border border-secondary/10 hover:border-primary/50 bg-white transition-colors duration-500 hover:shadow-lg hover:shadow-primary/5">
-                  <feature.icon className="w-10 h-10 text-primary mb-6 group-hover:scale-110 transition-transform duration-500" />
-                  <h3 className="font-heading text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{feature.title}</h3>
-                  <p className="text-secondary/70 leading-relaxed">{feature.desc}</p>
-                </div>
+                <motion.div 
+                  className="h-full p-8 bg-white border border-secondary/10 relative overflow-hidden transition-all duration-500"
+                  whileHover={{ 
+                    y: -8,
+                    borderColor: 'rgb(92, 92, 246)'
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {/* Gradient Background on Hover */}
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-br from-primary/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    initial={{ opacity: 0 }}
+                  />
+                  
+                  {/* Animated Border Accent */}
+                  <motion.div 
+                    className="absolute top-0 left-0 h-1 bg-gradient-to-r from-primary to-blue-500 w-0 group-hover:w-full transition-all duration-500"
+                  />
+                  
+                  <div className="relative z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.2, rotate: 10 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <feature.icon className="w-10 h-10 text-primary mb-6 group-hover:text-blue-600 transition-colors duration-500" />
+                    </motion.div>
+                    <h3 className="font-heading text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{feature.title}</h3>
+                    <p className="text-secondary/70 leading-relaxed">{feature.desc}</p>
+                  </div>
+                </motion.div>
               </FadeIn>
             ))}
           </div>
@@ -427,25 +483,68 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
-      {/* CTA SECTION */}
-      <section className="w-full py-32 bg-white">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      {/* CTA SECTION - Dynamic Background */}
+      <section className="w-full py-32 relative overflow-hidden">
+        {/* Animated Background Gradient */}
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-br from-backgrounddark via-primary/20 to-blue-900/30"
+          animate={{ 
+            backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        
+        {/* Animated Gradient Orbs */}
+        <motion.div 
+          className="absolute top-20 right-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl"
+          animate={{ 
+            x: [0, 50, 0],
+            y: [0, -50, 0],
+            scale: [1, 1.2, 1]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute bottom-10 left-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+          animate={{ 
+            x: [0, -50, 0],
+            y: [0, 50, 0],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
+        
+        {/* Grid Pattern Overlay */}
+        <motion.div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(92, 92, 246, 0.1) 25%, rgba(92, 92, 246, 0.1) 26%, transparent 27%, transparent 74%, rgba(92, 92, 246, 0.1) 75%, rgba(92, 92, 246, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(92, 92, 246, 0.1) 25%, rgba(92, 92, 246, 0.1) 26%, transparent 27%, transparent 74%, rgba(92, 92, 246, 0.1) 75%, rgba(92, 92, 246, 0.1) 76%, transparent 77%, transparent)',
+            backgroundSize: '50px 50px'
+          }}
+          animate={{ 
+            y: [0, 50, 0]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+        
+        {/* Content */}
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
-            <h2 className="font-heading text-5xl md:text-6xl font-bold mb-8 text-secondary">
+            <h2 className="font-heading text-5xl md:text-6xl font-bold mb-8 text-white drop-shadow-lg">
               Ready to upgrade your journey?
             </h2>
-            <p className="text-xl text-secondary/70 mb-12 leading-relaxed">
+            <p className="text-xl text-white/90 mb-12 leading-relaxed drop-shadow-md">
               Join the thousands of satisfied clients who have discovered the Velocity difference. 
               Schedule your consultation today.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <Link to="/contact" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto bg-secondary text-white hover:bg-secondary/90 px-12 py-8 text-lg rounded-none">
+                <Button className="w-full sm:w-auto bg-white text-backgrounddark hover:bg-white/90 px-12 py-8 text-lg font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-white/30">
                   Book Consultation
                 </Button>
               </Link>
               <Link to="/vehicles" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto border-2 border-secondary text-secondary hover:bg-secondary hover:text-white px-12 py-8 text-lg rounded-none">
+                <Button variant="outline" className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-backgrounddark px-12 py-8 text-lg font-bold rounded-lg transition-all duration-300\">
                   Browse Inventory
                 </Button>
               </Link>
