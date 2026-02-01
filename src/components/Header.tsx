@@ -25,9 +25,9 @@ export default function Header() {
       <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center group">
+          <Link to="/" className="flex items-center group text-new2">
             <motion.span 
-              className="font-heading text-2xl lg:text-3xl font-bold group-hover:text-primary transition-colors text-new"
+              className="font-heading text-2xl lg:text-3xl font-bold group-hover:text-primary transition-colors text-new2"
               whileHover={{ scale: 1.05 }}
             >
               Velocity
