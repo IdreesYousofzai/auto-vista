@@ -50,29 +50,6 @@ export interface PriceTrends {
 
 
 /**
- * Collection ID: reviews
- * Interface for Reviews
- */
-export interface Reviews {
-  _id: string;
-  _createdDate?: Date;
-  _updatedDate?: Date;
-  /** @wixFieldType text */
-  reviewerName?: string;
-  /** @wixFieldType number */
-  rating?: number;
-  /** @wixFieldType text */
-  comment?: string;
-  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
-  reviewerPhoto?: string;
-  /** @wixFieldType datetime */
-  reviewDate?: Date | string;
-  /** @wixFieldType text */
-  reviewTitle?: string;
-}
-
-
-/**
  * Collection ID: servicesandproducts
  * Interface for ServicesandProducts
  */
@@ -126,8 +103,6 @@ export interface Vehicles {
   _id: string;
   _createdDate?: Date;
   _updatedDate?: Date;
-  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
-  interiorImage?: string;
   /** @wixFieldType text */
   make?: string;
   /** @wixFieldType text */
