@@ -24,16 +24,18 @@ export default {
                 roboto: ["roboto", "sans-serif"]
             },
             colors: {
-                backgrounddark: '#121212',
-                accentbluelight: '#6E6EFF',
-                foreground: '#5C5CF6',
-                destructive: '#DF3131',
-                destructiveforeground: '#FFFFFF',
-                background: '#FFFFFF',
-                secondary: '#000000',
-                'secondary-foreground': '#FFFFFF',
-                'primary-foreground': '#FFFFFF',
-                primary: '#5C5CF6'
+                primary: "#5C5CF6",
+                "primary-foreground": "#FFFFFF",
+                secondary: "#000000",
+                "secondary-foreground": "#FFFFFF",
+                background: "#FFFFFF",
+                backgrounddark: "#121212",
+                accentbluelight: "#6E6EFF",
+                foreground: "#5C5CF6",
+                destructive: "#DF3131",
+                destructiveforeground: "#FFFFFF",
+                new: "#e22424ff",
+                new2: "#fc4821ff"
             },
         },
     },

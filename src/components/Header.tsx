@@ -27,13 +27,13 @@ export default function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center group">
             <motion.span 
-              className="font-heading text-2xl lg:text-3xl font-bold text-secondary group-hover:text-primary transition-colors"
+              className="font-heading text-2xl lg:text-3xl font-bold group-hover:text-primary transition-colors text-new"
               whileHover={{ scale: 1.05 }}
             >
               Velocity
             </motion.span>
             <motion.span 
-              className="font-heading text-2xl lg:text-3xl font-bold text-primary ml-1"
+              className="font-heading text-2xl lg:text-3xl font-bold ml-1 [text-shadow:none] text-new2"
               whileHover={{ scale: 1.05 }}
             >
               Auto
