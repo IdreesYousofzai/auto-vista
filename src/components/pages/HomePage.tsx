@@ -136,6 +136,7 @@ export default function HomePage() {
   return (
     <div ref={containerRef} className="min-h-screen bg-background font-paragraph text-secondary selection:bg-primary selection:text-white overflow-x-hidden">
       <Header />
+      
       {/* HERO SECTION - Video Background with Text Overlay */}
       <section className="relative w-full min-h-screen flex items-center justify-center overflow-clip">
         {/* Video Background */}
@@ -228,6 +229,7 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
+
       {/* MARQUEE TICKER - Dynamic Motion */}
       <div className="w-full bg-secondary py-6 overflow-hidden whitespace-nowrap border-y border-white/10">
         <motion.div 
@@ -247,6 +249,7 @@ export default function HomePage() {
           ))}
         </motion.div>
       </div>
+
       {/* FEATURES GRID - Creative & Innovative */}
       <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-32 relative">
         {/* Animated Background Elements */}
@@ -323,6 +326,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* ANALYTICS & DATA VIZ SECTION - Dark Mode Contrast */}
       <section className="w-full bg-backgrounddark text-white py-32 overflow-hidden relative">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
@@ -426,6 +430,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* SERVICES LIST - Horizontal Scroll / Grid */}
       <section className="w-full py-32 bg-background">
         <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
@@ -468,6 +473,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* IMMERSIVE IMAGE BREAK */}
       <section className="w-full h-[80vh] relative overflow-clip">
         <ParallaxImage 
@@ -483,68 +489,234 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
-      {/* CTA SECTION - Dynamic Background */}
-      <section className="w-full py-32 relative overflow-hidden">
-        {/* Animated Background Gradient */}
+
+      {/* CTA SECTION - Interactive Car Following Cursor */}
+      <section 
+        className="w-full py-32 relative overflow-hidden cursor-none"
+        onMouseMove={(e) => {
+          const section = e.currentTarget;
+          const rect = section.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          section.style.setProperty('--mouse-x', `${x}px`);
+          section.style.setProperty('--mouse-y', `${y}px`);
+        }}
+      >
+        {/* Animated Road Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-backgrounddark">
+          {/* Road Stripes Animation */}
+          <motion.div 
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 40px,
+                rgba(255, 255, 255, 0.3) 40px,
+                rgba(255, 255, 255, 0.3) 60px
+              )`
+            }}
+            animate={{ 
+              backgroundPositionY: ['0px', '100px']
+            }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+
+        {/* Speedometer Glow Effect */}
         <motion.div 
-          className="absolute inset-0 bg-gradient-to-br from-backgrounddark via-primary/20 to-blue-900/30"
-          animate={{ 
-            backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        />
-        
-        {/* Animated Gradient Orbs */}
-        <motion.div 
-          className="absolute top-20 right-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl"
-          animate={{ 
-            x: [0, 50, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1]
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div 
-          className="absolute bottom-10 left-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
-          animate={{ 
-            x: [0, -50, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.1, 1]
-          }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        />
-        
-        {/* Grid Pattern Overlay */}
-        <motion.div 
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
           style={{
-            backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(92, 92, 246, 0.1) 25%, rgba(92, 92, 246, 0.1) 26%, transparent 27%, transparent 74%, rgba(92, 92, 246, 0.1) 75%, rgba(92, 92, 246, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(92, 92, 246, 0.1) 25%, rgba(92, 92, 246, 0.1) 26%, transparent 27%, transparent 74%, rgba(92, 92, 246, 0.1) 75%, rgba(92, 92, 246, 0.1) 76%, transparent 77%, transparent)',
-            backgroundSize: '50px 50px'
+            left: 'var(--mouse-x, 50%)',
+            top: 'var(--mouse-y, 50%)',
+            transform: 'translate(-50%, -50%)',
+            background: 'radial-gradient(circle, rgba(92, 92, 246, 0.3) 0%, transparent 70%)',
+            filter: 'blur(40px)'
           }}
-          animate={{ 
-            y: [0, 50, 0]
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
           }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         />
-        
+
+        {/* Tire Track Trail Effect */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
+          <defs>
+            <pattern id="tire-tracks" x="0" y="0" width="100" height="20" patternUnits="userSpaceOnUse">
+              <rect x="10" y="2" width="30" height="4" fill="rgba(255,255,255,0.3)" rx="2"/>
+              <rect x="10" y="14" width="30" height="4" fill="rgba(255,255,255,0.3)" rx="2"/>
+              <rect x="60" y="2" width="30" height="4" fill="rgba(255,255,255,0.3)" rx="2"/>
+              <rect x="60" y="14" width="30" height="4" fill="rgba(255,255,255,0.3)" rx="2"/>
+            </pattern>
+          </defs>
+          <motion.rect 
+            width="100%" 
+            height="100%" 
+            fill="url(#tire-tracks)"
+            animate={{ x: [0, -100] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          />
+        </svg>
+
+        {/* Particle System - Exhaust Effect */}
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-2 h-2 bg-white/40 rounded-full pointer-events-none blur-sm"
+            initial={{ 
+              x: 0, 
+              y: 0,
+              opacity: 0
+            }}
+            animate={{
+              x: [0, Math.random() * 100 - 50],
+              y: [0, Math.random() * 100 + 50],
+              opacity: [0, 0.6, 0],
+              scale: [0, 1, 0]
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.2,
+              ease: "easeOut"
+            }}
+            style={{
+              left: `${20 + (i * 4)}%`,
+              top: `${30 + (i % 3) * 20}%`
+            }}
+          />
+        ))}
+
+        {/* Custom Cursor - Car Icon */}
+        <motion.div
+          className="absolute pointer-events-none z-50"
+          style={{
+            left: 'var(--mouse-x, 50%)',
+            top: 'var(--mouse-y, 50%)',
+            transform: 'translate(-50%, -50%)'
+          }}
+          animate={{
+            rotate: [0, 2, -2, 0]
+          }}
+          transition={{ duration: 0.5, repeat: Infinity }}
+        >
+          {/* Car SVG Icon */}
+          <svg width="60" height="40" viewBox="0 0 60 40" className="drop-shadow-2xl">
+            {/* Car Body */}
+            <motion.g
+              animate={{
+                y: [0, -1, 0]
+              }}
+              transition={{ duration: 0.3, repeat: Infinity }}
+            >
+              <ellipse cx="30" cy="35" rx="25" ry="3" fill="rgba(0,0,0,0.3)" opacity="0.5"/>
+              <path d="M15 25 L10 30 L50 30 L45 25 L40 15 L20 15 Z" fill="url(#carGradient)" stroke="#5C5CF6" strokeWidth="1.5"/>
+              <rect x="22" y="17" width="7" height="6" fill="rgba(92, 92, 246, 0.3)" rx="1"/>
+              <rect x="31" y="17" width="7" height="6" fill="rgba(92, 92, 246, 0.3)" rx="1"/>
+              {/* Headlights */}
+              <circle cx="48" cy="28" r="2" fill="#FFD700">
+                <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="12" cy="28" r="2" fill="#FF4444"/>
+              {/* Wheels */}
+              <motion.circle 
+                cx="20" 
+                cy="32" 
+                r="4" 
+                fill="#333" 
+                stroke="#5C5CF6" 
+                strokeWidth="1"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                style={{ transformOrigin: '20px 32px' }}
+              />
+              <motion.circle 
+                cx="40" 
+                cy="32" 
+                r="4" 
+                fill="#333" 
+                stroke="#5C5CF6" 
+                strokeWidth="1"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                style={{ transformOrigin: '40px 32px' }}
+              />
+            </motion.g>
+            <defs>
+              <linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#5C5CF6"/>
+                <stop offset="100%" stopColor="#3B3BF6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          
+          {/* Speed Lines */}
+          <motion.div
+            className="absolute right-full top-1/2 -translate-y-1/2"
+            animate={{
+              opacity: [0, 0.8, 0],
+              x: [10, -20]
+            }}
+            transition={{ duration: 0.4, repeat: Infinity }}
+          >
+            <div className="flex flex-col gap-1">
+              <div className="h-0.5 w-8 bg-gradient-to-r from-transparent to-primary/80 rounded"/>
+              <div className="h-0.5 w-6 bg-gradient-to-r from-transparent to-primary/60 rounded"/>
+              <div className="h-0.5 w-4 bg-gradient-to-r from-transparent to-primary/40 rounded"/>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Horizon Line with Moving Lights */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-backgrounddark/80 to-transparent">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`light-${i}`}
+              className="absolute bottom-10 w-1 h-20 bg-gradient-to-t from-yellow-400/60 to-transparent"
+              style={{ left: `${i * 12.5}%` }}
+              animate={{
+                height: [60, 80, 60],
+                opacity: [0.4, 0.8, 0.4]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.2
+              }}
+            />
+          ))}
+        </div>
+
         {/* Content */}
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
-            <h2 className="font-heading text-5xl md:text-6xl font-bold mb-8 text-white drop-shadow-lg">
+            <motion.h2 
+              className="font-heading text-5xl md:text-6xl font-bold mb-8 text-white drop-shadow-lg"
+              animate={{
+                textShadow: [
+                  '0 0 20px rgba(92, 92, 246, 0.5)',
+                  '0 0 30px rgba(92, 92, 246, 0.8)',
+                  '0 0 20px rgba(92, 92, 246, 0.5)'
+                ]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
               Ready to upgrade your journey?
-            </h2>
+            </motion.h2>
             <p className="text-xl text-white/90 mb-12 leading-relaxed drop-shadow-md">
               Join the thousands of satisfied clients who have discovered the Velocity difference. 
               Schedule your consultation today.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <Link to="/contact" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto bg-white text-backgrounddark hover:bg-white/90 px-12 py-8 text-lg font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-white/30">
+                <Button className="w-full sm:w-auto bg-white text-backgrounddark hover:bg-white/90 px-12 py-8 text-lg font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-white/30 hover:scale-105">
                   Book Consultation
                 </Button>
               </Link>
               <Link to="/vehicles" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-backgrounddark px-12 py-8 text-lg font-bold rounded-lg transition-all duration-300\">
+                <Button variant="outline" className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-backgrounddark px-12 py-8 text-lg font-bold rounded-lg transition-all duration-300 hover:scale-105">
                   Browse Inventory
                 </Button>
               </Link>
@@ -552,6 +724,7 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
+
       <Footer />
     </div>
   );
