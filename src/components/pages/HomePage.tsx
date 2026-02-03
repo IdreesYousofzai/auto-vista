@@ -167,7 +167,6 @@ export default function HomePage() {
   return (
     <div ref={containerRef} className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-red-600 selection:text-white overflow-x-hidden" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
       <Header />
-      
       {/* HERO SECTION - Split Screen Design */}
       <section className="relative w-full min-h-screen flex items-center justify-center overflow-clip bg-zinc-950">
         {/* Video Background with Vignette */}
@@ -223,9 +222,9 @@ export default function HomePage() {
               </div>
               
               <h1 className="text-6xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.95] mb-8 text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                VELOCITY<br />
+                Drive more Y<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600">
-                  REDEFINED
+                  than a Car.
                 </span>
               </h1>
               
@@ -249,9 +248,7 @@ export default function HomePage() {
 
           <FadeIn delay={0.4} className="flex flex-wrap gap-5">
             <Link to="/vehicles">
-              <Button className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/50 border-b-4 border-red-800 hover:scale-105" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                EXPLORE FLEET
-              </Button>
+              <Button className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/50 border-b-4 border-red-800 hover:scale-105" style={{ fontFamily: 'Orbitron, sans-serif' }}>EXPLORE FLEET</Button>
             </Link>
             <Link to="/3d-experience">
               <Button variant="outline" className="border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 backdrop-blur-md" style={{ fontFamily: 'Orbitron, sans-serif' }}>
@@ -280,7 +277,6 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
-
       {/* RACING TICKER */}
       <div className="w-full bg-gradient-to-r from-red-600 to-orange-600 py-4 overflow-hidden border-y-2 border-red-800">
         <motion.div 
@@ -300,7 +296,6 @@ export default function HomePage() {
           ))}
         </motion.div>
       </div>
-
       {/* FEATURES - 3D Card Design */}
       <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-32 relative bg-zinc-950">
         {/* Ambient Glow Effects */}
@@ -405,7 +400,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* ANALYTICS SECTION - Premium Dark */}
       <section className="w-full bg-zinc-900 py-32 overflow-hidden relative border-y border-zinc-800">
         {/* Grid Pattern */}
@@ -528,7 +522,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* PREMIUM SERVICES */}
       <section className="w-full py-32 bg-zinc-950 relative">
         {/* Background Elements */}
@@ -597,7 +590,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* IMMERSIVE PARALLAX */}
       <section className="w-full h-[90vh] relative overflow-clip">
         <ParallaxImage 
@@ -627,7 +619,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* CTA - INTERACTIVE CAR */}
       <section 
         className="w-full py-32 relative overflow-hidden cursor-none"
@@ -835,7 +826,6 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
-
       <Footer />
     </div>
   );
