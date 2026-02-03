@@ -80,7 +80,7 @@ const SERVICES_DATA = [
     price: 199,
     category: 'MAINTENANCE',
     gradient: 'from-red-500/20 to-orange-500/20',
-    icon: '🔧'
+    icon: Wrench
   },
   {
     id: 's2',
@@ -89,7 +89,7 @@ const SERVICES_DATA = [
     price: 599,
     category: 'PERFORMANCE',
     gradient: 'from-blue-500/20 to-cyan-500/20',
-    icon: '⚡'
+    icon: Zap
   },
   {
     id: 's3',
@@ -98,7 +98,7 @@ const SERVICES_DATA = [
     price: 899,
     category: 'PROTECTION',
     gradient: 'from-purple-500/20 to-pink-500/20',
-    icon: '✨'
+    icon: Sparkles
   },
   {
     id: 's4',
@@ -107,7 +107,7 @@ const SERVICES_DATA = [
     price: 1200,
     category: 'ENTERPRISE',
     gradient: 'from-amber-500/20 to-yellow-500/20',
-    icon: '🏆'
+    icon: Trophy
   }
 ];
 
@@ -573,7 +573,17 @@ export default function HomePage() {
                     
                     {/* Icon & Category */}
                     <div className="relative z-10">
-                      <div className="text-5xl mb-6">{service.icon}</div>
+                      {/* Icon with 3D Effect */}
+                      <motion.div
+                        className="mb-6"
+                        whileHover={{ scale: 1.1, rotateY: 15 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-red-600/30 group-hover:shadow-2xl group-hover:shadow-red-600/50 transition-all duration-300">
+                          <service.icon className="w-8 h-8 text-white" />
+                        </div>
+                      </motion.div>
+
                       <div className="inline-block px-3 py-1 bg-zinc-800/80 border border-zinc-700 rounded-full mb-6">
                         <span className="text-red-400 text-xs font-bold tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                           {service.category}
