@@ -222,7 +222,7 @@ export default function HomePage() {
               </div>
               
               <h1 className="text-6xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.95] mb-8 text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                Drive more Y<br />
+                Drive more<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600">
                   than a Car.
                 </span>
