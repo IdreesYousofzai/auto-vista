@@ -41,23 +41,41 @@ export default function ServicesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
       <Header />
 
       {/* Hero Section */}
-      <section className="w-full bg-primary py-16 lg:py-24">
-        <div className="max-w-[100rem] mx-auto px-8 lg:px-16">
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-red-600/20 blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-600/20 blur-[120px]" />
+
+        <div className="relative max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
+            transition={{ duration: 0.8 }}
           >
-            <h1 className="font-heading text-5xl lg:text-6xl text-primary-foreground mb-6">
-              Services & Products
+            <span
+              className="inline-block mb-6 text-red-500 text-sm font-bold tracking-[0.3em] uppercase"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              // ELITE SERVICES
+            </span>
+
+            <h1
+              className="text-6xl md:text-7xl font-black mb-8"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              PREMIUM
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
+                OFFERINGS
+              </span>
             </h1>
-            <p className="font-paragraph text-lg text-primary-foreground/90 max-w-3xl mx-auto">
-              Comprehensive automotive solutions designed to enhance your driving experience
+
+            <p className="text-zinc-400 text-xl max-w-3xl mx-auto">
+              Concierge-level services engineered for the discerning automotive enthusiast
             </p>
           </motion.div>
         </div>
@@ -65,16 +83,17 @@ export default function ServicesPage() {
 
       {/* Category Filter */}
       {categories.length > 0 && (
-        <section className="w-full border-b border-secondary/10 bg-background">
-          <div className="max-w-[100rem] mx-auto px-8 lg:px-16 py-6">
+        <section className="sticky top-20 z-40 bg-zinc-950/90 backdrop-blur-md border-y border-zinc-800">
+          <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-6">
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`px-6 py-2 font-paragraph text-base transition-all ${
+                className={`px-6 py-2 text-sm font-bold tracking-wider transition-all rounded-none border ${
                   selectedCategory === 'all'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-background border-2 border-secondary/20 text-secondary hover:border-primary'
+                    ? 'bg-red-600 text-white border-red-600'
+                    : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-red-500 hover:text-white'
                 }`}
+                style={{ fontFamily: 'Orbitron, sans-serif' }}
               >
                 All Services
               </button>
@@ -82,11 +101,12 @@ export default function ServicesPage() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category!)}
-                  className={`px-6 py-2 font-paragraph text-base transition-all ${
+                  className={`px-6 py-2 text-sm font-bold tracking-wider transition-all rounded-none border ${
                     selectedCategory === category
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-background border-2 border-secondary/20 text-secondary hover:border-primary'
+                      ? 'bg-red-600 text-white border-red-600'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-red-500 hover:text-white'
                   }`}
+                  style={{ fontFamily: 'Orbitron, sans-serif' }}
                 >
                   {category}
                 </button>
@@ -97,95 +117,83 @@ export default function ServicesPage() {
       )}
 
       {/* Services Grid */}
-      <section className="w-full max-w-[100rem] mx-auto px-8 lg:px-16 py-16 min-h-[600px]">
+      <section className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-24">
         {isLoading ? null : filteredServices.length > 0 ? (
-          <motion.div
-            initial="initial"
-            animate="animate"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredServices.map((service, idx) => (
               <motion.div
                 key={service._id}
-                variants={fadeInUp}
-                transition={{ delay: idx * 0.1 }}
-                className="border-2 border-secondary/10 hover:border-primary transition-all duration-300 overflow-hidden bg-background"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
               >
-                {service.image && (
-                  <div className="aspect-[16/10] overflow-hidden bg-backgrounddark">
-                    <Image
-                      src={service.image}
-                      alt={service.name || 'Service'}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                )}
-                <div className="p-6">
-                  {service.category && (
-                    <span className="inline-block px-3 py-1 bg-primary/10 text-primary font-paragraph text-xs mb-3">
-                      {service.category}
-                    </span>
+                <motion.div
+                  whileHover={{ y: -10 }}
+                  className="h-full bg-zinc-900 border border-zinc-800 overflow-hidden transition-all duration-300 hover:border-red-600 flex flex-col"
+                >
+                  {service.image && (
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <Image
+                        src={service.image}
+                        alt={service.name || 'Service'}
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    </div>
                   )}
-                  <h3 className="font-heading text-2xl text-secondary mb-3">
-                    {service.name}
-                  </h3>
-                  {service.description && (
-                    <p className="font-paragraph text-base text-secondary/70 mb-4 line-clamp-3">
-                      {service.description}
-                    </p>
-                  )}
-                  <div className="flex items-center justify-between mt-6">
-                    {service.price && (
-                      <span className="font-heading text-2xl text-primary">
-                        ${service.price.toLocaleString()}
+
+                  <div className="p-6 flex flex-col flex-grow">
+                    {service.category && (
+                      <span
+                        className="inline-block px-3 py-1 bg-red-600/20 text-red-400 text-xs font-bold tracking-widest mb-3 w-fit"
+                        style={{ fontFamily: 'Orbitron, sans-serif' }}
+                      >
+                        {service.category}
                       </span>
                     )}
-                    {service.callToActionUrl && (
-                      <a
-                        href={service.callToActionUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 font-paragraph text-sm text-secondary hover:text-primary transition-colors"
-                      >
-                        Learn More <ExternalLink className="w-4 h-4" />
-                      </a>
+                    <h3
+                      className="text-2xl font-bold mb-3 group-hover:text-red-400 transition-colors"
+                      style={{ fontFamily: 'Orbitron, sans-serif' }}
+                    >
+                      {service.name}
+                    </h3>
+
+                    {service.description && (
+                      <p className="text-sm text-zinc-400 mb-4 flex-grow">
+                        {service.description}
+                      </p>
                     )}
+
+                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-zinc-800">
+                      {service.price && (
+                        <span
+                          className="text-3xl font-black text-white"
+                          style={{ fontFamily: 'Orbitron, sans-serif' }}
+                        >
+                          ${service.price.toLocaleString()}
+                        </span>
+                      )}
+                      {service.callToActionUrl && (
+                        <a
+                          href={service.callToActionUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-red-500 font-bold uppercase tracking-wider hover:text-red-400 transition-colors flex items-center gap-2"
+                        >
+                          Learn More <ExternalLink className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         ) : (
-          <div className="text-center py-20">
-            <p className="font-paragraph text-lg text-secondary/60">
-              No services found in this category
-            </p>
+          <div className="text-center text-zinc-400 py-20">
+            No services match your criteria.
           </div>
         )}
-      </section>
-
-      {/* CTA Section */}
-      <section className="w-full bg-backgrounddark py-20 lg:py-32">
-        <div className="max-w-[100rem] mx-auto px-8 lg:px-16 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="font-heading text-4xl lg:text-5xl text-secondary-foreground mb-6">
-              Need a Custom Solution?
-            </h2>
-            <p className="font-paragraph text-lg text-secondary-foreground/80 max-w-2xl mx-auto mb-10">
-              Our team can create tailored service packages to meet your specific automotive needs
-            </p>
-            <a href="/contact">
-              <Button className="bg-primary text-primary-foreground hover:bg-accentbluelight px-10 py-6 text-base">
-                Contact Our Team
-              </Button>
-            </a>
-          </motion.div>
-        </div>
       </section>
 
       <Footer />

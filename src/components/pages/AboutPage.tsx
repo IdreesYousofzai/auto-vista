@@ -34,35 +34,40 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
       <Header />
 
       {/* Hero Section */}
-      <section className="w-full bg-gradient-to-br from-primary via-primary to-blue-600 py-20 lg:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-red-600/20 blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-600/20 blur-[120px]" />
+
+        <div className="relative max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
           >
-            <motion.div 
-              className="inline-block mb-6"
-              initial={{ width: 0 }}
-              animate={{ width: 48 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+            <span
+              className="inline-block mb-6 text-red-500 text-sm font-bold tracking-[0.3em] uppercase"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
             >
-              <div className="h-1 w-12 bg-white" />
-            </motion.div>
-            <h1 className="font-heading text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              About <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">Velocity Auto</span>
+              // ABOUT ELITE MOTORS
+            </span>
+
+            <h1
+              className="text-6xl md:text-7xl font-black mb-8"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              ENGINEERED
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
+                FOR EXCELLENCE
+              </span>
             </h1>
-            <p className="font-paragraph text-lg text-white/80 max-w-3xl mx-auto leading-relaxed">
+
+            <p className="text-zinc-400 text-xl max-w-3xl mx-auto">
               Pioneering the future of automotive retail through innovation, integrity, and exceptional customer service
             </p>
           </motion.div>
@@ -78,13 +83,13 @@ export default function AboutPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="font-heading text-4xl lg:text-5xl text-secondary mb-6">
+            <h2 className="text-4xl lg:text-5xl font-black mb-6" style={{ fontFamily: 'Orbitron, sans-serif' }}>
               Our Story
             </h2>
-            <p className="font-paragraph text-base text-secondary mb-4">
-              Founded in 2011, Velocity Auto emerged from a vision to revolutionize the car buying experience. We recognized that customers deserved more than traditional dealership practices—they needed transparency, data-driven insights, and genuine partnership.
+            <p className="text-zinc-400 text-base mb-4">
+              Founded in 2011, Elite Motors emerged from a vision to revolutionize the car buying experience. We recognized that customers deserved more than traditional dealership practices—they needed transparency, data-driven insights, and genuine partnership.
             </p>
-            <p className="font-paragraph text-base text-secondary">
+            <p className="text-zinc-400 text-base">
               Today, we stand as a leader in automotive retail innovation, combining cutting-edge technology with personalized service to deliver unmatched value to our customers. Our commitment to excellence has earned us recognition as one of the most trusted dealerships in the region.
             </p>
           </motion.div>
@@ -94,11 +99,11 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="aspect-[4/3] bg-backgrounddark"
+            className="aspect-[4/3] bg-zinc-900 border border-zinc-800 overflow-hidden"
           >
             <Image
               src="https://static.wixstatic.com/media/cec0c1_cc0f070b051f445eae1495e96a231313~mv2.png?originWidth=896&originHeight=640"
-              alt="Velocity Auto showroom"
+              alt="Elite Motors showroom"
               className="w-full h-full object-cover"
             />
           </motion.div>
@@ -132,19 +137,19 @@ export default function AboutPage() {
               key={idx}
               variants={fadeInUp}
               transition={{ delay: idx * 0.1 }}
-              className="bg-backgrounddark p-8 text-center"
+              className="bg-zinc-900 border border-zinc-800 p-8 text-center hover:border-red-600 transition-all duration-300"
             >
-              <value.icon className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="font-heading text-2xl text-secondary-foreground mb-4">{value.title}</h3>
-              <p className="font-paragraph text-base text-secondary-foreground/80">{value.description}</p>
+              <value.icon className="w-12 h-12 text-red-500 mx-auto mb-4" />
+              <h3 className="text-2xl font-black text-white mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>{value.title}</h3>
+              <p className="text-zinc-400 text-base">{value.description}</p>
             </motion.div>
           ))}
         </motion.div>
       </section>
 
       {/* Team Section */}
-      <section className="w-full bg-background py-20 lg:py-32">
-        <div className="max-w-[100rem] mx-auto px-8 lg:px-16">
+      <section className="w-full bg-zinc-950 py-20 lg:py-32">
+        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -152,10 +157,10 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="font-heading text-4xl lg:text-5xl text-secondary mb-6">
+            <h2 className="text-4xl lg:text-5xl font-black mb-6" style={{ fontFamily: 'Orbitron, sans-serif' }}>
               Meet Our Team
             </h2>
-            <p className="font-paragraph text-lg text-secondary/70 max-w-3xl mx-auto">
+            <p className="text-zinc-400 text-lg max-w-3xl mx-auto">
               Experienced professionals dedicated to delivering exceptional automotive solutions
             </p>
           </motion.div>
@@ -172,10 +177,10 @@ export default function AboutPage() {
                     key={member._id}
                     variants={fadeInUp}
                     transition={{ delay: idx * 0.1 }}
-                    className="bg-background border-2 border-secondary/10 overflow-hidden hover:border-primary transition-all duration-300"
+                    className="bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-red-600 transition-all duration-300"
                   >
                     {member.photo && (
-                      <div className="aspect-square bg-backgrounddark">
+                      <div className="aspect-square bg-zinc-800 overflow-hidden">
                         <Image
                           src={member.photo}
                           alt={member.name || 'Team member'}
@@ -184,16 +189,16 @@ export default function AboutPage() {
                       </div>
                     )}
                     <div className="p-6">
-                      <h3 className="font-heading text-2xl text-secondary mb-2">
+                      <h3 className="text-2xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                         {member.name}
                       </h3>
                       {member.jobTitle && (
-                        <p className="font-paragraph text-sm text-primary mb-4">
+                        <p className="text-sm text-red-500 font-bold mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                           {member.jobTitle}
                         </p>
                       )}
                       {member.bio && (
-                        <p className="font-paragraph text-base text-secondary/70 mb-4 line-clamp-3">
+                        <p className="text-zinc-400 text-base mb-4">
                           {member.bio}
                         </p>
                       )}
@@ -201,7 +206,7 @@ export default function AboutPage() {
                         {member.email && (
                           <a
                             href={`mailto:${member.email}`}
-                            className="text-secondary hover:text-primary transition-colors"
+                            className="text-zinc-400 hover:text-red-500 transition-colors"
                             aria-label={`Email ${member.name}`}
                           >
                             <Mail className="w-5 h-5" />
@@ -212,7 +217,7 @@ export default function AboutPage() {
                             href={member.linkedInProfile}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-secondary hover:text-primary transition-colors"
+                            className="text-zinc-400 hover:text-red-500 transition-colors"
                             aria-label={`${member.name} LinkedIn profile`}
                           >
                             <Linkedin className="w-5 h-5" />
@@ -225,7 +230,7 @@ export default function AboutPage() {
               </motion.div>
             ) : (
               <div className="text-center py-20">
-                <p className="font-paragraph text-lg text-secondary/60">
+                <p className="text-zinc-400 text-lg">
                   Team information coming soon
                 </p>
               </div>
@@ -235,8 +240,8 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="w-full bg-primary py-20 lg:py-32">
-        <div className="max-w-[100rem] mx-auto px-8 lg:px-16">
+      <section className="w-full bg-gradient-to-r from-red-600 to-orange-600 py-20 lg:py-32">
+        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
           <motion.div
             initial="initial"
             whileInView="animate"
@@ -255,10 +260,10 @@ export default function AboutPage() {
                 transition={{ delay: idx * 0.1 }}
                 className="text-center"
               >
-                <div className="font-heading text-4xl lg:text-5xl text-primary-foreground mb-2">
+                <div className="text-4xl lg:text-5xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                   {stat.value}
                 </div>
-                <div className="font-paragraph text-sm text-primary-foreground/80">
+                <div className="text-sm text-white/80" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                   {stat.label}
                 </div>
               </motion.div>

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Zap, ChevronRight } from 'lucide-react';
+import { Menu, X, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -58,41 +58,29 @@ export default function Header() {
       <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
         <div className="flex items-center justify-between h-20">
           
-          {/* Premium Logo */}
-          <Link to="/" className="flex items-center gap-3 group relative">
-            {/* Logo Icon with Glow Effect */}
+          {/* Premium Logo - Text Only */}
+          <Link to="/" className="group relative">
             <motion.div
-              className="relative"
-              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
+              className="relative"
             >
-              <div className="absolute inset-0 bg-red-600/30 blur-xl rounded-full group-hover:bg-red-600/50 transition-all duration-300" />
-              <div className="relative w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-lg shadow-red-600/30 group-hover:shadow-2xl group-hover:shadow-red-600/50 transition-all duration-300">
-                <Zap className="w-6 h-6 text-white" fill="white" />
-              </div>
-            </motion.div>
-
-            {/* Logo Text */}
-            <div className="flex flex-col -space-y-1">
               <motion.span 
-                className="font-black text-2xl lg:text-3xl tracking-tighter text-white group-hover:text-red-400 transition-colors"
-                style={{ fontFamily: 'Orbitron, sans-serif' }}
+                className="font-black text-3xl lg:text-4xl tracking-tighter text-white group-hover:text-red-400 transition-colors"
+                style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '-0.02em' }}
                 whileHover={{ x: 2 }}
               >
                 ELITE MOTORS
               </motion.span>
-              <span className="text-[10px] text-zinc-500 tracking-[0.2em] uppercase font-bold">
-                Premium Auto
-              </span>
-            </div>
 
-            {/* Animated Underline */}
-            <motion.div 
-              className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-red-600 to-transparent"
-              initial={{ width: 0 }}
-              whileHover={{ width: '100%' }}
-              transition={{ duration: 0.3 }}
-            />
+              {/* Animated Underline */}
+              <motion.div 
+                className="absolute -bottom-2 left-0 h-0.5 bg-gradient-to-r from-red-600 to-transparent"
+                initial={{ width: 0 }}
+                whileHover={{ width: '100%' }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
           </Link>
 
           {/* Desktop Navigation */}

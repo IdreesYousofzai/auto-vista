@@ -68,50 +68,68 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
       <Header />
 
       {/* Hero Section */}
-      <section className="w-full bg-backgrounddark py-16 lg:py-24">
-        <div className="max-w-[100rem] mx-auto px-8 lg:px-16">
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-red-600/20 blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-600/20 blur-[120px]" />
+
+        <div className="relative max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
+            transition={{ duration: 0.8 }}
           >
-            <h1 className="font-heading text-5xl lg:text-6xl text-secondary-foreground mb-6">
-              Market Analytics Dashboard
+            <span
+              className="inline-block mb-6 text-red-500 text-sm font-bold tracking-[0.3em] uppercase"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              // DATA-DRIVEN INSIGHTS
+            </span>
+
+            <h1
+              className="text-6xl md:text-7xl font-black mb-8"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              MARKET
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
+                ANALYTICS
+              </span>
             </h1>
-            <p className="font-paragraph text-lg text-secondary-foreground/80 max-w-3xl mx-auto">
-              Real-time insights into customer trends and vehicle pricing dynamics
+
+            <p className="text-zinc-400 text-xl max-w-3xl mx-auto">
+              Real-time market data and insights to inform your automotive decisions
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Stats Overview */}
-      <section className="w-full max-w-[100rem] mx-auto px-8 lg:px-16 py-16">
+      <section className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-24">
         <motion.div
           initial="initial"
           animate="animate"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
         >
           {[
-            { icon: Users, label: 'Active Customers', value: '2,847', color: 'text-primary' },
-            { icon: TrendingUp, label: 'Sales Growth', value: '+23%', color: 'text-primary' },
-            { icon: DollarSign, label: 'Avg. Transaction', value: '$45,200', color: 'text-primary' },
-            { icon: BarChart3, label: 'Market Share', value: '18.5%', color: 'text-primary' }
+            { icon: Users, label: 'Active Customers', value: '2,847', color: 'text-red-500' },
+            { icon: TrendingUp, label: 'Sales Growth', value: '+23%', color: 'text-red-500' },
+            { icon: DollarSign, label: 'Avg. Transaction', value: '$45,200', color: 'text-red-500' },
+            { icon: BarChart3, label: 'Market Share', value: '18.5%', color: 'text-red-500' }
           ].map((stat, idx) => (
             <motion.div
               key={idx}
               variants={fadeInUp}
               transition={{ delay: idx * 0.1 }}
-              className="bg-background border-2 border-secondary/10 p-6"
+              className="bg-zinc-900 border border-zinc-800 p-6 hover:border-red-600 transition-all duration-300"
             >
               <stat.icon className={`w-10 h-10 ${stat.color} mb-4`} />
-              <div className="font-heading text-3xl text-secondary mb-2">{stat.value}</div>
-              <div className="font-paragraph text-sm text-secondary/60">{stat.label}</div>
+              <div className="text-3xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>{stat.value}</div>
+              <div className="text-sm text-zinc-400">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -123,39 +141,40 @@ export default function AnalyticsPage() {
           animate="animate"
           className="mb-16"
         >
-          <div className="bg-background border-2 border-secondary/10 p-8">
-            <h2 className="font-heading text-3xl text-secondary mb-8">Customer Demographics</h2>
+          <div className="bg-zinc-900 border border-zinc-800 p-8">
+            <h2 className="text-3xl font-black text-white mb-8" style={{ fontFamily: 'Orbitron, sans-serif' }}>Customer Demographics</h2>
             {isLoadingStats ? (
               <div className="h-[400px] flex items-center justify-center">
-                <p className="font-paragraph text-base text-secondary/60">Loading data...</p>
+                <p className="text-zinc-400">Loading data...</p>
               </div>
             ) : statsChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={statsChartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis 
                     dataKey="category" 
-                    tick={{ fill: '#000000', fontFamily: 'open sans', fontSize: 12 }}
+                    tick={{ fill: '#a1a1aa', fontFamily: 'Orbitron, sans-serif', fontSize: 12 }}
                   />
                   <YAxis 
-                    tick={{ fill: '#000000', fontFamily: 'open sans', fontSize: 12 }}
+                    tick={{ fill: '#a1a1aa', fontFamily: 'Orbitron, sans-serif', fontSize: 12 }}
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#ffffff', 
-                      border: '2px solid #5C5CF6',
-                      fontFamily: 'open sans'
+                      backgroundColor: '#18181b', 
+                      border: '2px solid #ef4444',
+                      fontFamily: 'Orbitron, sans-serif',
+                      color: '#fff'
                     }}
                   />
                   <Legend 
-                    wrapperStyle={{ fontFamily: 'open sans' }}
+                    wrapperStyle={{ fontFamily: 'Orbitron, sans-serif', color: '#fff' }}
                   />
-                  <Bar dataKey="value" fill="#5C5CF6" name="Value" />
+                  <Bar dataKey="value" fill="#ef4444" name="Value" />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
               <div className="h-[400px] flex items-center justify-center">
-                <p className="font-paragraph text-base text-secondary/60">No customer statistics available</p>
+                <p className="text-zinc-400">No customer statistics available</p>
               </div>
             )}
           </div>
@@ -168,49 +187,49 @@ export default function AnalyticsPage() {
           animate="animate"
           transition={{ delay: 0.2 }}
         >
-          <div className="bg-backgrounddark p-8">
-            <h2 className="font-heading text-3xl text-secondary-foreground mb-8">Vehicle Price Trends</h2>
+          <div className="bg-zinc-900 border border-zinc-800 p-8">
+            <h2 className="text-3xl font-black text-white mb-8" style={{ fontFamily: 'Orbitron, sans-serif' }}>Vehicle Price Trends</h2>
             {isLoadingTrends ? (
               <div className="h-[400px] flex items-center justify-center">
-                <p className="font-paragraph text-base text-secondary-foreground/60">Loading data...</p>
+                <p className="text-zinc-400">Loading data...</p>
               </div>
             ) : priceChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={priceChartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#333333" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis 
                     dataKey="date" 
-                    tick={{ fill: '#ffffff', fontFamily: 'open sans', fontSize: 12 }}
+                    tick={{ fill: '#a1a1aa', fontFamily: 'Orbitron, sans-serif', fontSize: 12 }}
                   />
                   <YAxis 
-                    tick={{ fill: '#ffffff', fontFamily: 'open sans', fontSize: 12 }}
+                    tick={{ fill: '#a1a1aa', fontFamily: 'Orbitron, sans-serif', fontSize: 12 }}
                     tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#121212', 
-                      border: '2px solid #5C5CF6',
-                      fontFamily: 'open sans',
-                      color: '#ffffff'
+                      backgroundColor: '#18181b', 
+                      border: '2px solid #ef4444',
+                      fontFamily: 'Orbitron, sans-serif',
+                      color: '#fff'
                     }}
                     formatter={(value: number) => [`$${value.toLocaleString()}`, 'Price']}
                   />
                   <Legend 
-                    wrapperStyle={{ fontFamily: 'open sans', color: '#ffffff' }}
+                    wrapperStyle={{ fontFamily: 'Orbitron, sans-serif', color: '#fff' }}
                   />
                   <Line 
                     type="monotone" 
                     dataKey="price" 
-                    stroke="#5C5CF6" 
+                    stroke="#ef4444" 
                     strokeWidth={3}
                     name="Average Price"
-                    dot={{ fill: '#5C5CF6', r: 5 }}
+                    dot={{ fill: '#ef4444', r: 5 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
             ) : (
               <div className="h-[400px] flex items-center justify-center">
-                <p className="font-paragraph text-base text-secondary-foreground/60">No price trend data available</p>
+                <p className="text-zinc-400">No price trend data available</p>
               </div>
             )}
           </div>
@@ -225,15 +244,15 @@ export default function AnalyticsPage() {
           transition={{ delay: 0.4 }}
           className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8"
         >
-          <div className="bg-primary p-8">
-            <h3 className="font-heading text-2xl text-primary-foreground mb-4">Market Insights</h3>
-            <p className="font-paragraph text-base text-primary-foreground/90">
+          <div className="bg-gradient-to-br from-red-600 to-orange-600 p-8">
+            <h3 className="text-2xl font-black text-white mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>Market Insights</h3>
+            <p className="text-base text-white/90">
               Our analytics show consistent growth in premium vehicle segments, with electric and hybrid models gaining significant market share. Customer preferences are shifting toward technology-integrated features and sustainable options.
             </p>
           </div>
-          <div className="bg-background border-2 border-secondary/10 p-8">
-            <h3 className="font-heading text-2xl text-secondary mb-4">Investment Opportunities</h3>
-            <p className="font-paragraph text-base text-secondary/70">
+          <div className="bg-zinc-900 border border-zinc-800 p-8">
+            <h3 className="text-2xl font-black text-white mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>Investment Opportunities</h3>
+            <p className="text-base text-zinc-400">
               Current market conditions present excellent opportunities for buyers interested in luxury sedans and performance vehicles. Price stabilization in key segments indicates favorable timing for strategic purchases.
             </p>
           </div>

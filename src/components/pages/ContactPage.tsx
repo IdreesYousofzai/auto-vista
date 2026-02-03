@@ -41,42 +41,41 @@ export default function ContactPage() {
     }));
   };
 
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 }
-  };
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
       <Header />
 
       {/* Hero Section */}
-      <section className="w-full bg-gradient-to-br from-backgrounddark via-backgrounddark to-primary/10 py-20 lg:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-red-600/20 blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-600/20 blur-[120px]" />
+
+        <div className="relative max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
           >
-            <motion.div 
-              className="inline-block mb-6"
-              initial={{ width: 0 }}
-              animate={{ width: 48 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+            <span
+              className="inline-block mb-6 text-red-500 text-sm font-bold tracking-[0.3em] uppercase"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
             >
-              <div className="h-1 w-12 bg-primary" />
-            </motion.div>
-            <h1 className="font-heading text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Get In <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Touch</span>
+              // GET IN TOUCH
+            </span>
+
+            <h1
+              className="text-6xl md:text-7xl font-black mb-8"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              CONTACT
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
+                ELITE MOTORS
+              </span>
             </h1>
-            <p className="font-paragraph text-lg text-white/70 max-w-3xl mx-auto leading-relaxed">
+
+            <p className="text-zinc-400 text-xl max-w-3xl mx-auto">
               Have questions? We're here to help you find the perfect vehicle or service solution
             </p>
           </motion.div>
@@ -92,21 +91,21 @@ export default function ContactPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="font-heading text-4xl text-secondary mb-8">
+            <h2 className="text-4xl font-black mb-8" style={{ fontFamily: 'Orbitron, sans-serif' }}>
               Contact Information
             </h2>
-            <p className="font-paragraph text-base text-secondary/70 mb-10">
+            <p className="text-zinc-400 text-base mb-10">
               Reach out to us through any of these channels. Our team is ready to assist you with your automotive needs.
             </p>
 
             <div className="space-y-8">
               <div className="flex items-start gap-4">
-                <div className="bg-primary p-3 flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-primary-foreground" />
+                <div className="bg-red-600 p-3 flex-shrink-0">
+                  <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-xl text-secondary mb-2">Visit Us</h3>
-                  <p className="font-paragraph text-base text-secondary/70">
+                  <h3 className="text-xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>Visit Us</h3>
+                  <p className="text-zinc-400 text-base">
                     123 Auto Drive<br />
                     Innovation City, IC 12345<br />
                     United States
@@ -115,12 +114,12 @@ export default function ContactPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-primary p-3 flex-shrink-0">
-                  <Phone className="w-6 h-6 text-primary-foreground" />
+                <div className="bg-red-600 p-3 flex-shrink-0">
+                  <Phone className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-xl text-secondary mb-2">Call Us</h3>
-                  <p className="font-paragraph text-base text-secondary/70">
+                  <h3 className="text-xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>Call Us</h3>
+                  <p className="text-zinc-400 text-base">
                     Sales: +1 (555) 123-4567<br />
                     Service: +1 (555) 123-4568<br />
                     Parts: +1 (555) 123-4569
@@ -129,26 +128,26 @@ export default function ContactPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-primary p-3 flex-shrink-0">
-                  <Mail className="w-6 h-6 text-primary-foreground" />
+                <div className="bg-red-600 p-3 flex-shrink-0">
+                  <Mail className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-xl text-secondary mb-2">Email Us</h3>
-                  <p className="font-paragraph text-base text-secondary/70">
-                    General: info@velocityauto.com<br />
-                    Sales: sales@velocityauto.com<br />
-                    Support: support@velocityauto.com
+                  <h3 className="text-xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>Email Us</h3>
+                  <p className="text-zinc-400 text-base">
+                    General: info@elitemotors.com<br />
+                    Sales: sales@elitemotors.com<br />
+                    Support: support@elitemotors.com
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-primary p-3 flex-shrink-0">
-                  <Clock className="w-6 h-6 text-primary-foreground" />
+                <div className="bg-red-600 p-3 flex-shrink-0">
+                  <Clock className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-xl text-secondary mb-2">Business Hours</h3>
-                  <p className="font-paragraph text-base text-secondary/70">
+                  <h3 className="text-xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>Business Hours</h3>
+                  <p className="text-zinc-400 text-base">
                     Monday - Friday: 9:00 AM - 8:00 PM<br />
                     Saturday: 9:00 AM - 6:00 PM<br />
                     Sunday: 10:00 AM - 5:00 PM
@@ -164,8 +163,8 @@ export default function ContactPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="bg-backgrounddark p-8 lg:p-10">
-              <h2 className="font-heading text-3xl text-secondary-foreground mb-6">
+            <div className="bg-zinc-900 border border-zinc-800 p-8 lg:p-10">
+              <h2 className="text-3xl font-black text-white mb-6" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 Send Us a Message
               </h2>
 
@@ -173,9 +172,9 @@ export default function ContactPage() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-primary/20 border-2 border-primary p-4 mb-6"
+                  className="bg-red-600/20 border-2 border-red-600 p-4 mb-6"
                 >
-                  <p className="font-paragraph text-base text-secondary-foreground">
+                  <p className="text-base text-white">
                     Thank you for your message! We'll get back to you soon.
                   </p>
                 </motion.div>
@@ -183,7 +182,7 @@ export default function ContactPage() {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block font-paragraph text-sm text-secondary-foreground mb-2">
+                  <label htmlFor="name" className="block text-sm text-zinc-300 mb-2 font-bold">
                     Full Name *
                   </label>
                   <Input
@@ -193,13 +192,13 @@ export default function ContactPage() {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full bg-background border-2 border-secondary/20 focus:border-primary text-secondary"
+                    className="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 text-white rounded-none"
                     placeholder="John Doe"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block font-paragraph text-sm text-secondary-foreground mb-2">
+                  <label htmlFor="email" className="block text-sm text-zinc-300 mb-2 font-bold">
                     Email Address *
                   </label>
                   <Input
@@ -209,13 +208,13 @@ export default function ContactPage() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full bg-background border-2 border-secondary/20 focus:border-primary text-secondary"
+                    className="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 text-white rounded-none"
                     placeholder="john@example.com"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block font-paragraph text-sm text-secondary-foreground mb-2">
+                  <label htmlFor="phone" className="block text-sm text-zinc-300 mb-2 font-bold">
                     Phone Number
                   </label>
                   <Input
@@ -224,13 +223,13 @@ export default function ContactPage() {
                     type="tel"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full bg-background border-2 border-secondary/20 focus:border-primary text-secondary"
+                    className="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 text-white rounded-none"
                     placeholder="+1 (555) 123-4567"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block font-paragraph text-sm text-secondary-foreground mb-2">
+                  <label htmlFor="subject" className="block text-sm text-zinc-300 mb-2 font-bold">
                     Subject *
                   </label>
                   <Input
@@ -240,13 +239,13 @@ export default function ContactPage() {
                     required
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full bg-background border-2 border-secondary/20 focus:border-primary text-secondary"
+                    className="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 text-white rounded-none"
                     placeholder="How can we help you?"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block font-paragraph text-sm text-secondary-foreground mb-2">
+                  <label htmlFor="message" className="block text-sm text-zinc-300 mb-2 font-bold">
                     Message *
                   </label>
                   <Textarea
@@ -256,7 +255,7 @@ export default function ContactPage() {
                     value={formData.message}
                     onChange={handleChange}
                     rows={6}
-                    className="w-full bg-background border-2 border-secondary/20 focus:border-primary text-secondary resize-none"
+                    className="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 text-white resize-none rounded-none"
                     placeholder="Tell us more about your inquiry..."
                   />
                 </div>
@@ -264,7 +263,8 @@ export default function ContactPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-primary text-primary-foreground hover:bg-accentbluelight px-8 py-6 text-base"
+                  className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 px-8 py-6 text-base font-bold rounded-none border-b-4 border-red-900"
+                  style={{ fontFamily: 'Orbitron, sans-serif' }}
                 >
                   {isSubmitting ? 'Sending...' : (
                     <>
@@ -273,28 +273,6 @@ export default function ContactPage() {
                   )}
                 </Button>
               </form>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Map Section */}
-      <section className="w-full bg-backgrounddark py-20">
-        <div className="max-w-[100rem] mx-auto px-8 lg:px-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h2 className="font-heading text-4xl text-secondary-foreground mb-6">
-              Find Us on the Map
-            </h2>
-            <div className="aspect-[21/9] bg-secondary/20 flex items-center justify-center">
-              <p className="font-paragraph text-base text-secondary-foreground/60">
-                Map integration placeholder
-              </p>
             </div>
           </motion.div>
         </div>

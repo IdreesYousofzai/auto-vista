@@ -17,7 +17,7 @@ export default function Footer() {
     { href: '/3d-experience', label: '3D Showroom' },
     { href: '/services', label: 'Elite Services' },
     { href: '/analytics', label: 'Market Analytics' },
-    { href: '/about', label: 'About Velocity' },
+    { href: '/about', label: 'About Elite Motors' },
   ];
 
   const services = [
@@ -52,9 +52,9 @@ export default function Footer() {
               className="text-3xl font-black text-white mb-5 tracking-tight"
               style={{ fontFamily: 'Orbitron, sans-serif' }}
             >
-              Velocity
+              ELITE
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
-                Auto
+                MOTORS
               </span>
             </h3>
 
@@ -126,7 +126,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs text-zinc-500 uppercase tracking-wider">
-            © 2026 Velocity Auto — All Rights Reserved
+            © 2026 Elite Motors — All Rights Reserved
           </p>
 
           <div className="flex gap-6 text-xs uppercase tracking-wider">
