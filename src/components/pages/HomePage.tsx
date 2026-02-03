@@ -253,7 +253,7 @@ export default function HomePage() {
 
           <FadeIn delay={0.4} className="flex flex-wrap gap-5">
             <Link to="/vehicles">
-              <Button className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/50 border-b-4 border-red-800 hover:scale-105" style={{ fontFamily: 'Orbitron, sans-serif' }}>Explore Our Collection</Button>
+              <Button className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/50 border-b-4 border-red-800 hover:scale-105" style={{ fontFamily: 'Orbitron, sans-serif' }}>EXPLORE OUR COLLECTION</Button>
             </Link>
             <Link to="/3d-experience">
               <Button variant="outline" className="border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 backdrop-blur-md" style={{ fontFamily: 'Orbitron, sans-serif' }}>
