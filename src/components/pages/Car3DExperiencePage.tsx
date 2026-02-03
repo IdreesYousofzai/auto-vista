@@ -48,7 +48,7 @@ const CAR_MODELS = [
     make: 'Porsche',
     model: '911 Carrera 4S',
     year: 2024,
-    sketchfabId: 'free-porsche-911-carrera-4s-d01b254483794de3819786d93e0e1ebf',
+    sketchfabId: 'd01b254483794de3819786d93e0e1ebf',
     price: 139800,
     specs: {
       engine: '3.0L Twin-Turbo Flat-6',
@@ -65,7 +65,7 @@ const CAR_MODELS = [
     make: 'Lamborghini',
     model: 'Countach LPI 800-4',
     year: 2021,
-    sketchfabId: '2021-lamborghini-countach-lpi-800-4-d76b94884432422b966d1a7f8815afb5',
+    sketchfabId: 'd76b94884432422b966d1a7f8815afb5',
     price: 2640000,
     specs: {
       engine: '6.5L V12 Hybrid',
@@ -82,7 +82,7 @@ const CAR_MODELS = [
     make: 'McLaren',
     model: 'F1',
     year: 1993,
-    sketchfabId: 'mclaren-f1-1993-by-alexka-294df724d96241cdbe0e0f3c91ad7fce',
+    sketchfabId: '294df724d96241cdbe0e0f3c91ad7fce',
     price: 20000000,
     specs: {
       engine: '6.1L V12',
@@ -99,7 +99,7 @@ const CAR_MODELS = [
     make: 'Toyota',
     model: 'Crown',
     year: 2025,
-    sketchfabId: 'toyota-crown-2025-9f48fc0a66e44a69a09fda2f864e5944',
+    sketchfabId: '9f48fc0a66e44a69a09fda2f864e5944',
     price: 47500,
     specs: {
       engine: '2.4L Turbo Hybrid',
@@ -116,7 +116,7 @@ const CAR_MODELS = [
     make: 'Bugatti',
     model: 'EB110 Super Sport',
     year: 1992,
-    sketchfabId: 'bugatti-eb110-super-sport-1992-by-alexka-4af92c51ecdd4efa9b1c19a1163d9f46',
+    sketchfabId: '4af92c51ecdd4efa9b1c19a1163d9f46',
     price: 3500000,
     specs: {
       engine: '3.5L Quad-Turbo V12',
@@ -133,7 +133,7 @@ const CAR_MODELS = [
     make: 'Mercedes-AMG',
     model: 'CLS',
     year: 2024,
-    sketchfabId: 'mercedes-amg-cls-quartz-creative-88b9a904632e42d18254aa6bf5f43344',
+    sketchfabId: '88b9a904632e42d18254aa6bf5f43344',
     price: 89900,
     specs: {
       engine: '3.0L Twin-Turbo I6',
@@ -150,7 +150,7 @@ const CAR_MODELS = [
     make: 'Concept',
     model: 'Future Legacy',
     year: 2026,
-    sketchfabId: 'future-is-our-legacy-18babb7cc04146ada3e3f80c4739d91a',
+    sketchfabId: '18babb7cc04146ada3e3f80c4739d91a',
     price: 150000,
     specs: {
       engine: 'Electric Tri-Motor',
@@ -167,7 +167,7 @@ const CAR_MODELS = [
     make: 'Audi',
     model: 'R8',
     year: 2024,
-    sketchfabId: 'audi-r8-e17e438f076f4427a58d93aa779edaed',
+    sketchfabId: 'e17e438f076f4427a58d93aa779edaed',
     price: 158600,
     specs: {
       engine: '5.2L V10',
@@ -184,7 +184,7 @@ const CAR_MODELS = [
     make: 'Audi',
     model: 'R8 V10 Plus',
     year: 2024,
-    sketchfabId: 'audi-r8-v10-plus-project-cars-3-498c1b7f5e5a4a178fbc4eb69d699e63',
+    sketchfabId: '498c1b7f5e5a4a178fbc4eb69d699e63',
     price: 194400,
     specs: {
       engine: '5.2L V10',
@@ -201,7 +201,7 @@ const CAR_MODELS = [
     make: 'Tesla',
     model: 'Model X',
     year: 2024,
-    sketchfabId: 'tesla-model-x-animation-36e9d3598c554bb69f3d9cd00e161818',
+    sketchfabId: '36e9d3598c554bb69f3d9cd00e161818',
     price: 98490,
     specs: {
       engine: 'Tri-Motor Electric',
