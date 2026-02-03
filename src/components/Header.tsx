@@ -21,7 +21,7 @@ export default function Header() {
 
   const navLinks = [
     { href: '/', label: 'HOME' },
-    { href: '/vehicles', label: 'FLEET' },
+    { href: '/vehicles', label: 'VEHICLES' },
     { href: '/3d-experience', label: '3D SHOWROOM' },
     { href: '/services', label: 'SERVICES' },
     { href: '/analytics', label: 'DATA' },
