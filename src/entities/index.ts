@@ -128,8 +128,6 @@ export interface Vehicles {
   _updatedDate?: Date;
   /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
   interiorImage?: string;
-  /** @wixFieldType url */
-  model3dUrl?: string;
   /** @wixFieldType text */
   make?: string;
   /** @wixFieldType text */

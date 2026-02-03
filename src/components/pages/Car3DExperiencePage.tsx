@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ArrowRight, Sparkles, Award, TrendingUp, Rocket } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { RotateCw, ZoomIn, ZoomOut, Info, ChevronLeft, ChevronRight } from 'lucide-react';
+import * as THREE from 'three';
 import { BaseCrudService } from '@/integrations';
 import { Vehicles } from '@/entities';
 import { Button } from '@/components/ui/button';
@@ -8,53 +9,26 @@ import { Image } from '@/components/ui/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-// --- UTILITY COMPONENTS ---
-const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, className?: string }) => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-
-  return (
-    <div ref={ref} className={`overflow-clip relative ${className}`}>
-      <motion.div style={{ y }} className="w-full h-[120%] -mt-[10%]">
-        <Image src={src} alt={alt} className="w-full h-full object-cover" />
-      </motion.div>
-    </div>
-  );
-};
-
-const STATS = [
-  { value: '500+', label: 'Premium Vehicles', icon: Sparkles },
-  { value: '98%', label: 'Client Satisfaction', icon: Award },
-  { value: '15+', label: 'Years Excellence', icon: TrendingUp },
-  { value: '24/7', label: 'Concierge Service', icon: Rocket }
-];
+interface CarModel {
+  vehicle: Vehicles;
+  imageUrl: string;
+}
 
 export default function Car3DExperiencePage() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const carGroupRef = useRef<THREE.Group | null>(null);
+  const animationIdRef = useRef<number | null>(null);
+
   const [vehicles, setVehicles] = useState<Vehicles[]>([]);
   const [selectedCarIndex, setSelectedCarIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [rotationSpeed, setRotationSpeed] = useState(0.005);
+  const [zoomLevel, setZoomLevel] = useState(5);
+  const [viewMode, setViewMode] = useState<'exterior' | 'interior'>('exterior');
+  const [autoRotate, setAutoRotate] = useState(true);
 
   // Load vehicles from CMS
   useEffect(() => {
@@ -72,6 +46,154 @@ export default function Car3DExperiencePage() {
     loadVehicles();
   }, []);
 
+  // Initialize Three.js scene
+  useEffect(() => {
+    if (!containerRef.current || vehicles.length === 0) return;
+
+    // Scene setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xfafafa);
+    sceneRef.current = scene;
+
+    // Camera setup
+    const width = containerRef.current.clientWidth;
+    const height = containerRef.current.clientHeight;
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.set(0, 2, zoomLevel);
+    cameraRef.current = camera;
+
+    // Renderer setup
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    containerRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    directionalLight.position.set(5, 10, 7);
+    scene.add(directionalLight);
+
+    const pointLight = new THREE.PointLight(0xffffff, 0.4);
+    pointLight.position.set(-5, 5, 5);
+    scene.add(pointLight);
+
+    // Create car group
+    const carGroup = new THREE.Group();
+    scene.add(carGroup);
+    carGroupRef.current = carGroup;
+
+    // Create a simple car representation using geometric shapes
+    const createSimpleCar = () => {
+      const group = new THREE.Group();
+
+      // Car body
+      const bodyGeometry = new THREE.BoxGeometry(2, 1.2, 4.5);
+      const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0x1a1a1a });
+      const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+      body.position.y = 0.6;
+      group.add(body);
+
+      // Cabin
+      const cabinGeometry = new THREE.BoxGeometry(1.8, 0.8, 1.5);
+      const cabinMaterial = new THREE.MeshPhongMaterial({ color: 0x2a2a2a });
+      const cabin = new THREE.Mesh(cabinGeometry, cabinMaterial);
+      cabin.position.set(0, 1.4, -0.3);
+      group.add(cabin);
+
+      // Windows
+      const windowGeometry = new THREE.BoxGeometry(0.8, 0.6, 0.1);
+      const windowMaterial = new THREE.MeshPhongMaterial({ color: 0x4a9eff, transparent: true, opacity: 0.6 });
+      
+      const frontWindow = new THREE.Mesh(windowGeometry, windowMaterial);
+      frontWindow.position.set(0, 1.4, 0.8);
+      group.add(frontWindow);
+
+      const rearWindow = new THREE.Mesh(windowGeometry, windowMaterial);
+      rearWindow.position.set(0, 1.4, -1.3);
+      group.add(rearWindow);
+
+      // Wheels
+      const wheelGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.3, 32);
+      const wheelMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+
+      const wheelPositions = [
+        [-0.8, 0.5, 1.2],
+        [0.8, 0.5, 1.2],
+        [-0.8, 0.5, -1.2],
+        [0.8, 0.5, -1.2]
+      ];
+
+      wheelPositions.forEach(pos => {
+        const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+        wheel.rotation.z = Math.PI / 2;
+        wheel.position.set(...(pos as [number, number, number]));
+        group.add(wheel);
+      });
+
+      // Headlights
+      const lightGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+      const lightMaterial = new THREE.MeshPhongMaterial({ color: 0xffff00, emissive: 0xffff00 });
+
+      const leftLight = new THREE.Mesh(lightGeometry, lightMaterial);
+      leftLight.position.set(-0.6, 0.8, 2.3);
+      group.add(leftLight);
+
+      const rightLight = new THREE.Mesh(lightGeometry, lightMaterial);
+      rightLight.position.set(0.6, 0.8, 2.3);
+      group.add(rightLight);
+
+      return group;
+    };
+
+    const carModel = createSimpleCar();
+    carGroup.add(carModel);
+
+    // Handle window resize
+    const handleResize = () => {
+      const newWidth = containerRef.current?.clientWidth || width;
+      const newHeight = containerRef.current?.clientHeight || height;
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(newWidth, newHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Animation loop
+    const animate = () => {
+      animationIdRef.current = requestAnimationFrame(animate);
+
+      if (autoRotate && carGroup) {
+        carGroup.rotation.y += rotationSpeed;
+      }
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+      renderer.dispose();
+      containerRef.current?.removeChild(renderer.domElement);
+    };
+  }, [vehicles.length, rotationSpeed, autoRotate, zoomLevel]);
+
+  // Update camera zoom
+  useEffect(() => {
+    if (cameraRef.current) {
+      cameraRef.current.position.z = zoomLevel;
+      cameraRef.current.updateProjectionMatrix();
+    }
+  }, [zoomLevel]);
+
   const handlePreviousCar = () => {
     setSelectedCarIndex((prev) => (prev === 0 ? vehicles.length - 1 : prev - 1));
   };
@@ -80,175 +202,82 @@ export default function Car3DExperiencePage() {
     setSelectedCarIndex((prev) => (prev === vehicles.length - 1 ? 0 : prev + 1));
   };
 
+  const handleResetView = () => {
+    if (carGroupRef.current) {
+      carGroupRef.current.rotation.set(0, 0, 0);
+    }
+    setZoomLevel(5);
+    setAutoRotate(true);
+  };
+
   const selectedVehicle = vehicles[selectedCarIndex];
 
+  const fadeInUp = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5 }
+  };
+
   return (
-    <div ref={containerRef} className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-red-600 selection:text-white overflow-x-hidden" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="min-h-screen bg-background">
       <Header />
-      
-      {/* HERO SECTION - Split Screen Design */}
-      <section className="relative w-full min-h-screen flex items-center justify-center overflow-clip bg-zinc-950">
-        {/* Video Background with Vignette */}
-        <div className="absolute inset-0 w-full h-full">
-          <motion.div
-            initial={{ scale: 1.05, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="w-full h-full"
-          >
-            <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="w-full h-full object-cover"
-            >
-              <source src="https://www.pexels.com/download/video/32098956/" type="video/mp4" />
-            </video>
-          </motion.div>
-          
-          {/* Premium Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/60 to-zinc-950/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-zinc-950/40" />
-          
-          {/* Racing Red Accent Glow */}
-          <motion.div 
-            className="absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-blue-600/10"
-            animate={{ opacity: [0.2, 0.4, 0.2] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          />
-          
-          {/* Carbon Fiber Texture Overlay */}
-          <div className="absolute inset-0 opacity-5" style={{
-            backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,.05) 2px, rgba(255,255,255,.05) 4px)`
-          }} />
+      {/* Hero Section */}
+      <section className="w-full bg-gradient-to-br from-backgrounddark via-backgrounddark to-primary/10 py-20 lg:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         </div>
-
-        {/* Content with Racing Typography */}
-        <div className="relative z-10 w-full max-w-[100rem] mx-auto px-6 sm:px-12 lg:px-24 py-24 flex flex-col justify-center items-start min-h-screen">
-          <FadeIn>
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <motion.div 
+              className="inline-block mb-6"
+              initial={{ width: 0 }}
+              animate={{ width: 48 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
-              {/* Racing Badge */}
-              <div className="inline-flex items-center gap-3 mb-8 px-5 py-2.5 bg-red-600/10 border border-red-600/30 backdrop-blur-md rounded-full">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                <span className="text-red-400 text-sm font-bold tracking-widest uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                  3D SHOWROOM EXPERIENCE
-                </span>
-              </div>
-              
-              <h1 className="text-6xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.95] mb-8 text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                Explore Every<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600">
-                  Detail in 3D.
-                </span>
-              </h1>
-
-              <p className="text-xl sm:text-2xl text-gray-300 max-w-xl mb-8">
-                Immersive vehicle exploration.
-              </p>
-              
-              {/* Racing Stripe Accent */}
-              <motion.div 
-                className="h-1.5 bg-gradient-to-r from-red-600 via-orange-500 to-transparent mb-8"
-                initial={{ width: 0 }}
-                animate={{ width: '300px' }}
-                transition={{ duration: 1, delay: 0.5 }}
-              />
+              <div className="h-1 w-12 bg-primary" />
             </motion.div>
-          </FadeIn>
-          
-          <FadeIn delay={0.2}>
-            <p className="text-xl sm:text-2xl text-zinc-300 max-w-2xl mb-12 leading-relaxed font-light">
-              Rotate, zoom, and inspect <span className="text-red-500 font-semibold">every angle</span> of our premium collection. 
-              <span className="text-blue-400 font-semibold"> Interactive 3D</span> 
-              <br />showcasing automotive excellence.
+            <h1 className="font-heading text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              3D Car <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Experience</span>
+            </h1>
+            <p className="font-paragraph text-lg text-white/70 max-w-3xl mx-auto leading-relaxed">
+              Explore our vehicles in stunning 3D. Rotate, zoom, and discover every detail from every angle with interactive controls.
             </p>
-          </FadeIn>
-
-          <FadeIn delay={0.4} className="flex flex-wrap gap-5">
-            <a href="#3d-viewer">
-              <Button className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/50 border-b-4 border-red-800 hover:scale-105" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                EXPLORE 3D MODELS
-              </Button>
-            </a>
-            <a href="/vehicles">
-              <Button variant="outline" className="border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 backdrop-blur-md" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                VIEW INVENTORY
-              </Button>
-            </a>
-          </FadeIn>
-
-          {/* Performance Stats Bar */}
-          <FadeIn delay={0.6} className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-4xl">
-            {STATS.map((stat, idx) => (
-              <motion.div 
-                key={idx}
-                className="relative group"
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" />
-                <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 group-hover:border-red-600/50 p-6 transition-all duration-300">
-                  <stat.icon className="w-6 h-6 text-red-500 mb-3" />
-                  <div className="text-4xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>{stat.value}</div>
-                  <div className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">{stat.label}</div>
-                </div>
-              </motion.div>
-            ))}
-          </FadeIn>
+          </motion.div>
         </div>
       </section>
-
-      {/* RACING TICKER */}
-      <div className="w-full bg-gradient-to-r from-red-600 to-orange-600 py-4 overflow-hidden border-y-2 border-red-800">
-        <motion.div 
-          className="inline-flex items-center gap-12"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-        >
-          {[...Array(6)].map((_, i) => (
-            <React.Fragment key={i}>
-              <span className="text-white font-black text-3xl uppercase tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>IMMERSIVE</span>
-              <span className="text-white/40 font-black text-3xl">●</span>
-              <span className="text-white font-black text-3xl uppercase tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>INTERACTIVE</span>
-              <span className="text-white/40 font-black text-3xl">●</span>
-              <span className="text-white font-black text-3xl uppercase tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>INNOVATIVE</span>
-              <span className="text-white/40 font-black text-3xl">●</span>
-            </React.Fragment>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* 3D VIEWER SECTION */}
-      <section id="3d-viewer" className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-32 relative bg-zinc-950">
+      {/* 3D Viewer Section */}
+      <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-16 lg:py-24">
         {isLoading ? (
           <div className="text-center py-20">
-            <p className="text-lg text-zinc-400">Loading 3D experience...</p>
+            <p className="font-paragraph text-lg text-secondary/60">Loading 3D experience...</p>
           </div>
         ) : vehicles.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-lg text-zinc-400">No vehicles available for 3D viewing</p>
+            <p className="font-paragraph text-lg text-secondary/60">No vehicles available for 3D viewing</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* 3D Model Showcase */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* 3D Canvas */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               className="lg:col-span-2"
-              key={selectedVehicle?._id}
             >
-              <div className="relative bg-zinc-900 border-2 border-zinc-800 overflow-hidden" style={{ minHeight: '600px' }}>
-                {/* 3D Model */}
-                <div className="w-full h-full" style={{ minHeight: '600px' }}>
-                  {selectedVehicle?.model3dUrl ? (
+              <div className="relative bg-white border-2 border-secondary/10 overflow-hidden" style={{ minHeight: '600px' }}>
+                {/* Sketchfab 3D Model */}
+                <div className="relative bg-white border-2 border-secondary/10 overflow-hidden" style={{ minHeight: '600px' }}>
+                  {/* Sketchfab 3D Model */}
+                  <div className="w-full h-full" style={{ minHeight: '600px' }}>
                     <iframe
-                      title={`3D ${selectedVehicle.make} ${selectedVehicle.model} Model`}
+                      title="2025 BMW M4 Competition"
                       frameBorder="0"
                       allowFullScreen
                       mozAllowFullScreen={true}
@@ -258,17 +287,72 @@ export default function Car3DExperiencePage() {
                       execution-while-out-of-viewport="true"
                       execution-while-not-rendered="true"
                       web-share="true"
-                      src={selectedVehicle.model3dUrl}
+                      src="https://sketchfab.com/models/f8141ecd755547989c9209784b71ad43/embed?autospin=0&autostart=1&preload=1"
                       style={{ width: '100%', height: '100%', minHeight: '600px' }}
                     />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-zinc-800">
-                      <p className="text-zinc-400 text-center px-4">
-                        3D model not available for this vehicle
-                      </p>
-                    </div>
-                  )}
+                  </div>
                 </div>
+
+                {/* Controls Overlay */}
+                <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3">
+                  <button
+                    onClick={() => setAutoRotate(!autoRotate)}
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 hover:bg-primary/90 transition-colors"
+                    title="Toggle auto-rotate"
+                  >
+                    <RotateCw className="w-4 h-4" />
+                    <span className="hidden sm:inline text-sm">{autoRotate ? 'Pause' : 'Rotate'}</span>
+                  </button>
+
+                  <button
+                    onClick={() => setZoomLevel(Math.max(2, zoomLevel - 1))}
+                    className="flex items-center gap-2 bg-secondary text-white px-4 py-2 hover:bg-secondary/90 transition-colors"
+                    title="Zoom in"
+                  >
+                    <ZoomIn className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={() => setZoomLevel(Math.min(15, zoomLevel + 1))}
+                    className="flex items-center gap-2 bg-secondary text-white px-4 py-2 hover:bg-secondary/90 transition-colors"
+                    title="Zoom out"
+                  >
+                    <ZoomOut className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={handleResetView}
+                    className="flex items-center gap-2 bg-secondary text-white px-4 py-2 hover:bg-secondary/90 transition-colors"
+                    title="Reset view"
+                  >
+                    <Info className="w-4 h-4" />
+                    <span className="hidden sm:inline text-sm">Reset</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* View Mode Toggle */}
+              <div className="mt-6 flex gap-4">
+                <button
+                  onClick={() => setViewMode('exterior')}
+                  className={`flex-1 py-3 font-paragraph font-semibold transition-all ${
+                    viewMode === 'exterior'
+                      ? 'bg-primary text-white'
+                      : 'bg-secondary/10 text-secondary hover:bg-secondary/20'
+                  }`}
+                >
+                  Exterior View
+                </button>
+                <button
+                  onClick={() => setViewMode('interior')}
+                  className={`flex-1 py-3 font-paragraph font-semibold transition-all ${
+                    viewMode === 'interior'
+                      ? 'bg-primary text-white'
+                      : 'bg-secondary/10 text-secondary hover:bg-secondary/20'
+                  }`}
+                >
+                  Interior View
+                </button>
               </div>
             </motion.div>
 
@@ -282,7 +366,7 @@ export default function Car3DExperiencePage() {
               {selectedVehicle && (
                 <div className="space-y-6">
                   {/* Vehicle Image */}
-                  <div className="aspect-[4/3] bg-zinc-900 overflow-hidden border-2 border-zinc-800">
+                  <div className="aspect-[4/3] bg-backgrounddark overflow-hidden border-2 border-secondary/10">
                     <Image
                       src={selectedVehicle.mainImage || 'https://static.wixstatic.com/media/cec0c1_80c6fdf44d2543dda360a624430998d3~mv2.png?originWidth=768&originHeight=576'}
                       alt={`${selectedVehicle.make} ${selectedVehicle.model}`}
@@ -291,53 +375,53 @@ export default function Car3DExperiencePage() {
                   </div>
 
                   {/* Vehicle Info */}
-                  <div className="bg-zinc-900 border border-zinc-800 p-6">
-                    <h2 className="text-3xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                  <div className="bg-backgrounddark p-6">
+                    <h2 className="font-heading text-3xl text-secondary-foreground mb-2">
                       {selectedVehicle.make} {selectedVehicle.model}
                     </h2>
-                    <p className="text-sm text-zinc-400 mb-6">
+                    <p className="font-paragraph text-sm text-secondary-foreground/60 mb-6">
                       {selectedVehicle.year}
                     </p>
 
                     <div className="space-y-4 mb-6">
-                      <div className="flex justify-between items-center border-b border-zinc-700 pb-3">
-                        <span className="text-sm text-zinc-400">Price</span>
-                        <span className="text-xl font-black text-red-500">
+                      <div className="flex justify-between items-center border-b border-secondary-foreground/20 pb-3">
+                        <span className="font-paragraph text-sm text-secondary-foreground/70">Price</span>
+                        <span className="font-heading text-xl text-primary">
                           ${selectedVehicle.price?.toLocaleString()}
                         </span>
                       </div>
 
                       {selectedVehicle.mileage && (
-                        <div className="flex justify-between items-center border-b border-zinc-700 pb-3">
-                          <span className="text-sm text-zinc-400">Mileage</span>
-                          <span className="text-sm font-semibold text-white">
+                        <div className="flex justify-between items-center border-b border-secondary-foreground/20 pb-3">
+                          <span className="font-paragraph text-sm text-secondary-foreground/70">Mileage</span>
+                          <span className="font-heading text-sm text-secondary-foreground">
                             {selectedVehicle.mileage.toLocaleString()} mi
                           </span>
                         </div>
                       )}
 
                       {selectedVehicle.engineType && (
-                        <div className="flex justify-between items-center border-b border-zinc-700 pb-3">
-                          <span className="text-sm text-zinc-400">Engine</span>
-                          <span className="text-sm font-semibold text-white">
+                        <div className="flex justify-between items-center border-b border-secondary-foreground/20 pb-3">
+                          <span className="font-paragraph text-sm text-secondary-foreground/70">Engine</span>
+                          <span className="font-heading text-sm text-secondary-foreground">
                             {selectedVehicle.engineType}
                           </span>
                         </div>
                       )}
 
                       {selectedVehicle.transmission && (
-                        <div className="flex justify-between items-center border-b border-zinc-700 pb-3">
-                          <span className="text-sm text-zinc-400">Transmission</span>
-                          <span className="text-sm font-semibold text-white">
+                        <div className="flex justify-between items-center border-b border-secondary-foreground/20 pb-3">
+                          <span className="font-paragraph text-sm text-secondary-foreground/70">Transmission</span>
+                          <span className="font-heading text-sm text-secondary-foreground">
                             {selectedVehicle.transmission}
                           </span>
                         </div>
                       )}
 
                       {selectedVehicle.exteriorColor && (
-                        <div className="flex justify-between items-center border-b border-zinc-700 pb-3">
-                          <span className="text-sm text-zinc-400">Exterior</span>
-                          <span className="text-sm font-semibold text-white">
+                        <div className="flex justify-between items-center border-b border-secondary-foreground/20 pb-3">
+                          <span className="font-paragraph text-sm text-secondary-foreground/70">Exterior</span>
+                          <span className="font-heading text-sm text-secondary-foreground">
                             {selectedVehicle.exteriorColor}
                           </span>
                         </div>
@@ -345,8 +429,8 @@ export default function Car3DExperiencePage() {
 
                       {selectedVehicle.interiorColor && (
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-zinc-400">Interior</span>
-                          <span className="text-sm font-semibold text-white">
+                          <span className="font-paragraph text-sm text-secondary-foreground/70">Interior</span>
+                          <span className="font-heading text-sm text-secondary-foreground">
                             {selectedVehicle.interiorColor}
                           </span>
                         </div>
@@ -354,7 +438,7 @@ export default function Car3DExperiencePage() {
                     </div>
 
                     {selectedVehicle.description && (
-                      <p className="text-sm text-zinc-300 mb-6">
+                      <p className="font-paragraph text-sm text-secondary-foreground/80 mb-6">
                         {selectedVehicle.description}
                       </p>
                     )}
@@ -363,20 +447,20 @@ export default function Car3DExperiencePage() {
                     <div className="flex gap-3">
                       <button
                         onClick={handlePreviousCar}
-                        className="flex-1 flex items-center justify-center gap-2 bg-zinc-800 text-white py-3 hover:bg-red-600 transition-colors font-bold"
+                        className="flex-1 flex items-center justify-center gap-2 bg-secondary text-white py-3 hover:bg-secondary/90 transition-colors"
                       >
                         <ChevronLeft className="w-5 h-5" />
                       </button>
                       <button
                         onClick={handleNextCar}
-                        className="flex-1 flex items-center justify-center gap-2 bg-zinc-800 text-white py-3 hover:bg-red-600 transition-colors font-bold"
+                        className="flex-1 flex items-center justify-center gap-2 bg-secondary text-white py-3 hover:bg-secondary/90 transition-colors"
                       >
                         <ChevronRight className="w-5 h-5" />
                       </button>
                     </div>
 
                     {/* Counter */}
-                    <p className="text-center text-sm text-zinc-400 mt-4">
+                    <p className="text-center font-paragraph text-sm text-secondary-foreground/60 mt-4">
                       {selectedCarIndex + 1} of {vehicles.length}
                     </p>
                   </div>
@@ -386,70 +470,88 @@ export default function Car3DExperiencePage() {
           </div>
         )}
       </section>
-
-      {/* IMMERSIVE PARALLAX */}
-      <section className="w-full h-[90vh] relative overflow-clip">
-        <ParallaxImage 
-          src="https://static.wixstatic.com/media/cec0c1_b09a94124db140ad9134f72d060b0344~mv2.png?originWidth=1152&originHeight=768"
-          alt="Interior detail"
-          className="w-full h-full"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/60 to-transparent flex items-center">
-          <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 w-full">
-            <FadeIn>
-              <div className="max-w-3xl">
-                <div className="h-1 w-20 bg-red-600 mb-8" />
-                <h2 className="text-7xl md:text-8xl font-black text-white mb-8 leading-[0.95]" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                  EXPERIENCE<br/>
-                  THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">FUTURE</span>
-                </h2>
-                <p className="text-zinc-300 text-2xl leading-relaxed mb-10">
-                  Advanced 3D visualization technology brings our vehicles to life. Explore with unprecedented detail and interactivity.
-                </p>
-                <a href="/vehicles">
-                  <Button className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-12 py-7 text-lg font-bold border-b-4 border-red-900 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                    DISCOVER MORE →
-                  </Button>
-                </a>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA SECTION */}
-      <section className="w-full py-32 relative overflow-hidden bg-zinc-950">
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950" />
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-red-600/20 blur-[120px]" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-600/20 blur-[120px]" />
-
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <FadeIn>
-            <motion.h2 
-              className="text-6xl md:text-7xl font-black mb-8 text-white"
-              style={{ fontFamily: 'Orbitron, sans-serif' }}
-            >
-              READY TO FIND YOUR<br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">PERFECT MATCH?</span>
-            </motion.h2>
-            <p className="text-xl text-zinc-300 mb-12 leading-relaxed max-w-2xl mx-auto">
-              Schedule a consultation with our experts and find the vehicle of your dreams.
+      {/* Features Section */}
+      <section className="w-full bg-backgrounddark py-20 lg:py-32">
+        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-heading text-4xl lg:text-5xl text-secondary-foreground mb-6">
+              Interactive Features
+            </h2>
+            <p className="font-paragraph text-lg text-secondary-foreground/70 max-w-3xl mx-auto">
+              Experience our vehicles like never before with advanced 3D visualization
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <a href="/contact" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 px-12 py-8 text-lg font-bold rounded-none border-b-4 border-red-900 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                  BOOK CONSULTATION
-                </Button>
-              </a>
-              <a href="/vehicles" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 px-12 py-8 text-lg font-bold rounded-none transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                  EXPLORE VEHICLES
-                </Button>
-              </a>
-            </div>
-          </FadeIn>
+          </motion.div>
+
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {[
+              {
+                title: '360° Rotation',
+                description: 'Rotate vehicles smoothly to view from every angle'
+              },
+              {
+                title: 'Zoom Control',
+                description: 'Get up close to examine details or step back for full view'
+              },
+              {
+                title: 'Multiple Views',
+                description: 'Switch between exterior and interior perspectives'
+              },
+              {
+                title: 'Vehicle Gallery',
+                description: 'Browse through our entire inventory seamlessly'
+              }
+            ].map((feature, idx) => (
+              <motion.div
+                key={idx}
+                variants={fadeInUp}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-background border-2 border-secondary/10 p-6 hover:border-primary transition-colors"
+              >
+                <h3 className="font-heading text-xl text-secondary-foreground mb-3">
+                  {feature.title}
+                </h3>
+                <p className="font-paragraph text-sm text-secondary-foreground/70">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
-
+      {/* CTA Section */}
+      <section className="w-full bg-primary py-20 lg:py-32">
+        <div className="max-w-[100rem] mx-auto px-6 sm:px-12 lg:px-24 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="font-heading text-4xl lg:text-5xl text-primary-foreground mb-6">
+              Ready to Take a Test Drive?
+            </h2>
+            <p className="font-paragraph text-lg text-primary-foreground/90 max-w-2xl mx-auto mb-10">
+              Schedule your test drive today and experience the perfect vehicle in person
+            </p>
+            <a href="/contact">
+              <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-10 py-6 text-base">
+                Schedule Test Drive
+              </Button>
+            </a>
+          </motion.div>
+        </div>
+      </section>
       <Footer />
     </div>
   );
