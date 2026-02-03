@@ -1,187 +1,244 @@
-// PREMIUM 3D EXPERIENCE – ALIGNED WITH HOMEPAGE
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
+  ChevronLeft,
+  ChevronRight,
   RotateCw,
   ZoomIn,
   ZoomOut,
-  ChevronLeft,
-  ChevronRight,
-  Sparkles,
-  Gauge,
-  Shield,
-  Rocket,
-  ArrowUpRight
+  Info
 } from 'lucide-react';
-import { BaseCrudService } from '@/integrations';
-import { Vehicles } from '@/entities';
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/ui/image';
-import { Link } from 'react-router-dom';
 
-/* -------------------------------- UTIL -------------------------------- */
+import { BaseCrudService } from '@/integrations';
+import { Vehicles } from '@/entities';
 
-const FadeIn = ({
-  children,
-  delay = 0,
-  className = ''
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+/* --------------------------------------------------------
+   Types
+-------------------------------------------------------- */
 
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-};
+interface VehicleWith3D extends Vehicles {
+  sketchfabUrl?: string;
+}
 
-/* ----------------------------- MAIN PAGE ----------------------------- */
+/* --------------------------------------------------------
+   Page
+-------------------------------------------------------- */
 
 export default function Car3DExperiencePage() {
-  const [vehicles, setVehicles] = useState<Vehicles[]>([]);
+  const [vehicles, setVehicles] = useState<VehicleWith3D[]>([]);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+
   const [autoRotate, setAutoRotate] = useState(true);
+  const [zoomLevel, setZoomLevel] = useState(5);
+  const [viewMode, setViewMode] = useState<'exterior' | 'interior'>('exterior');
+
+  /* --------------------------------------------------------
+     Load vehicles
+  -------------------------------------------------------- */
 
   useEffect(() => {
-    (async () => {
+    async function load() {
+      setLoading(true);
       try {
         const res = await BaseCrudService.getAll<Vehicles>('vehicles');
-        setVehicles(res.items);
-      } catch (e) {
-        console.error(e);
+        setVehicles(res.items as VehicleWith3D[]);
+      } catch (err) {
+        console.error('Failed to load vehicles', err);
       } finally {
         setLoading(false);
       }
-    })();
+    }
+    load();
   }, []);
 
   const vehicle = vehicles[index];
 
+  /* --------------------------------------------------------
+     Navigation
+  -------------------------------------------------------- */
+
+  const prev = () =>
+    setIndex((i) => (i === 0 ? vehicles.length - 1 : i - 1));
+
+  const next = () =>
+    setIndex((i) => (i === vehicles.length - 1 ? 0 : i + 1));
+
+  /* --------------------------------------------------------
+     Render
+  -------------------------------------------------------- */
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      {/* ------------------------------ HERO ------------------------------ */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover opacity-40"
-          >
-            <source src="https://www.pexels.com/download/video/32098956/" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/70 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-zinc-950/40" />
+      {/* ----------------------------------------------------
+         HERO
+      ---------------------------------------------------- */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-backgrounddark via-backgrounddark to-primary/10 py-24 lg:py-32">
+        <div className="absolute inset-0 opacity-25">
+          <div className="absolute right-0 top-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+          <div className="absolute left-0 bottom-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative z-10 max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
-          <FadeIn>
-            <span
-              className="text-red-500 tracking-[0.35em] uppercase text-sm font-bold"
-              style={{ fontFamily: 'Orbitron, sans-serif' }}
-            >
-              // IMMERSIVE 3D EXPERIENCE
+        <div className="relative z-10 max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="font-heading text-5xl lg:text-7xl font-bold text-white mb-6"
+          >
+            3D Car <br />
+            <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+              Experience
             </span>
-            <h1
-              className="text-6xl md:text-8xl font-black mt-6 mb-8 leading-[0.95]"
-              style={{ fontFamily: 'Orbitron, sans-serif' }}
-            >
-              STEP INSIDE
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
-                THE MACHINE
-              </span>
-            </h1>
-            <p className="text-xl text-zinc-300 max-w-2xl">
-              Rotate. Zoom. Explore. Experience every curve and contour in cinematic 3D —
-              before you ever step inside.
-            </p>
-          </FadeIn>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="font-paragraph text-lg text-white/70 max-w-3xl mx-auto"
+          >
+            Rotate, zoom, and explore every vehicle in immersive 3D — just like
+            standing in the showroom.
+          </motion.p>
         </div>
       </section>
 
-      {/* ---------------------------- VIEWER ----------------------------- */}
-      <section className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-32">
+      {/* ----------------------------------------------------
+         MAIN CONTENT
+      ---------------------------------------------------- */}
+      <section className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-20">
         {loading ? (
-          <p className="text-center text-zinc-400">Loading experience…</p>
-        ) : !vehicle ? (
-          <p className="text-center text-zinc-400">No vehicles available</p>
+          <div className="text-center py-32 text-secondary/60">
+            Loading 3D experience…
+          </div>
+        ) : vehicles.length === 0 ? (
+          <div className="text-center py-32 text-secondary/60">
+            No vehicles available
+          </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* 3D */}
-            <FadeIn className="lg:col-span-2">
-              <div className="relative border border-zinc-800 bg-zinc-900 overflow-hidden min-h-[600px]">
-                <iframe
-                  title="3D Vehicle"
-                  src="https://sketchfab.com/models/f8141ecd755547989c9209784b71ad43/embed?autostart=1&preload=1"
-                  className="w-full h-full min-h-[600px]"
-                  allow="autoplay; fullscreen; xr-spatial-tracking"
-                />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            {/* ------------------ 3D VIEWER ------------------ */}
+            <div className="lg:col-span-2">
+              <div className="relative bg-black border border-secondary/20 overflow-hidden min-h-[620px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={vehicle?.id}
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute inset-0"
+                  >
+                    {vehicle?.sketchfabUrl ? (
+                      <iframe
+                        title={`${vehicle.make} ${vehicle.model} 3D`}
+                        src={`${vehicle.sketchfabUrl}?autostart=1&preload=1&ui_theme=dark`}
+                        className="w-full h-full"
+                        frameBorder={0}
+                        allow="autoplay; fullscreen; xr-spatial-tracking"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-secondary/60">
+                        3D model not available
+                      </div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
 
                 {/* Controls */}
-                <div className="absolute bottom-6 left-6 flex gap-3">
+                <div className="absolute bottom-6 left-6 flex flex-wrap gap-3">
                   <button
                     onClick={() => setAutoRotate(!autoRotate)}
-                    className="bg-red-600 text-white px-4 py-2 flex items-center gap-2 font-bold"
+                    className="bg-primary text-white px-4 py-2 flex items-center gap-2"
                   >
                     <RotateCw className="w-4 h-4" />
-                    {autoRotate ? 'PAUSE' : 'ROTATE'}
+                    {autoRotate ? 'Pause' : 'Rotate'}
                   </button>
-                  <div className="bg-zinc-800 px-4 py-2 flex gap-3">
-                    <ZoomIn className="w-4 h-4 text-white" />
-                    <ZoomOut className="w-4 h-4 text-white" />
-                  </div>
+
+                  <button
+                    onClick={() => setZoomLevel((z) => Math.max(2, z - 1))}
+                    className="bg-secondary text-white px-3 py-2"
+                  >
+                    <ZoomIn className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={() => setZoomLevel((z) => Math.min(15, z + 1))}
+                    className="bg-secondary text-white px-3 py-2"
+                  >
+                    <ZoomOut className="w-4 h-4" />
+                  </button>
+
+                  <button className="bg-secondary text-white px-3 py-2">
+                    <Info className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
-            </FadeIn>
 
-            {/* DETAILS */}
-            <FadeIn delay={0.2}>
-              <div className="bg-zinc-900 border border-zinc-800 p-8 h-full flex flex-col">
+              {/* View Mode */}
+              <div className="mt-6 flex gap-4">
+                {(['exterior', 'interior'] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    onClick={() => setViewMode(mode)}
+                    className={`flex-1 py-3 font-semibold transition ${
+                      viewMode === mode
+                        ? 'bg-primary text-white'
+                        : 'bg-secondary/10 hover:bg-secondary/20'
+                    }`}
+                  >
+                    {mode === 'exterior' ? 'Exterior View' : 'Interior View'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* ------------------ DETAILS ------------------ */}
+            <div className="space-y-6">
+              <div className="aspect-[4/3] border border-secondary/20 overflow-hidden">
                 <Image
-                  src={vehicle.mainImage}
-                  alt={vehicle.model}
-                  className="w-full h-48 object-cover mb-6"
+                  src={
+                    vehicle.mainImage ||
+                    'https://static.wixstatic.com/media/cec0c1_80c6fdf44d2543dda360a624430998d3~mv2.png'
+                  }
+                  alt={`${vehicle.make} ${vehicle.model}`}
+                  className="object-cover w-full h-full"
                 />
+              </div>
 
-                <h2
-                  className="text-3xl font-black mb-2"
-                  style={{ fontFamily: 'Orbitron, sans-serif' }}
-                >
+              <div className="bg-backgrounddark p-6 border border-secondary/20">
+                <h2 className="font-heading text-3xl text-secondary-foreground">
                   {vehicle.make} {vehicle.model}
                 </h2>
-                <p className="text-zinc-400 mb-6">{vehicle.year}</p>
+                <p className="text-secondary-foreground/60 mb-6">
+                  {vehicle.year}
+                </p>
 
-                <div className="space-y-4 text-sm mb-8">
-                  <div className="flex justify-between border-b border-zinc-700 pb-2">
-                    <span>Price</span>
-                    <span className="text-red-400 font-bold">
-                      ${vehicle.price?.toLocaleString()}
-                    </span>
-                  </div>
+                <div className="space-y-3 text-sm">
+                  {vehicle.price && (
+                    <div className="flex justify-between">
+                      <span>Price</span>
+                      <span className="text-primary font-bold">
+                        ${vehicle.price.toLocaleString()}
+                      </span>
+                    </div>
+                  )}
+
                   {vehicle.engineType && (
                     <div className="flex justify-between">
                       <span>Engine</span>
                       <span>{vehicle.engineType}</span>
                     </div>
                   )}
+
                   {vehicle.transmission && (
                     <div className="flex justify-between">
                       <span>Transmission</span>
@@ -190,101 +247,52 @@ export default function Car3DExperiencePage() {
                   )}
                 </div>
 
-                <p className="text-zinc-400 text-sm mb-8">
-                  {vehicle.description}
-                </p>
+                {vehicle.description && (
+                  <p className="mt-6 text-secondary-foreground/70 text-sm">
+                    {vehicle.description}
+                  </p>
+                )}
 
-                <div className="mt-auto flex gap-4">
+                {/* Navigation */}
+                <div className="mt-8 flex gap-3">
                   <button
-                    onClick={() =>
-                      setIndex((i) => (i === 0 ? vehicles.length - 1 : i - 1))
-                    }
-                    className="flex-1 bg-zinc-800 hover:bg-red-600 transition py-3"
+                    onClick={prev}
+                    className="flex-1 bg-secondary text-white py-3 flex items-center justify-center"
                   >
-                    <ChevronLeft className="mx-auto" />
+                    <ChevronLeft />
                   </button>
                   <button
-                    onClick={() =>
-                      setIndex((i) => (i === vehicles.length - 1 ? 0 : i + 1))
-                    }
-                    className="flex-1 bg-zinc-800 hover:bg-red-600 transition py-3"
+                    onClick={next}
+                    className="flex-1 bg-secondary text-white py-3 flex items-center justify-center"
                   >
-                    <ChevronRight className="mx-auto" />
+                    <ChevronRight />
                   </button>
                 </div>
+
+                <p className="mt-3 text-center text-xs text-secondary-foreground/50">
+                  {index + 1} of {vehicles.length}
+                </p>
               </div>
-            </FadeIn>
+            </div>
           </div>
         )}
       </section>
 
-      {/* ---------------------------- FEATURES ---------------------------- */}
-      <section className="bg-zinc-900 py-32 border-y border-zinc-800">
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
-          <FadeIn>
-            <h2
-              className="text-6xl font-black mb-16 text-center"
-              style={{ fontFamily: 'Orbitron, sans-serif' }}
-            >
-              BUILT FOR
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
-                &nbsp;CONTROL
-              </span>
-            </h2>
-          </FadeIn>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: RotateCw, title: '360° Control' },
-              { icon: Gauge, title: 'Precision Detail' },
-              { icon: Shield, title: 'Interior View' },
-              { icon: Rocket, title: 'Instant Access' }
-            ].map((f, i) => (
-              <FadeIn key={i} delay={i * 0.1}>
-                <div className="bg-zinc-950 border border-zinc-800 p-8 hover:border-red-600 transition">
-                  <f.icon className="w-8 h-8 text-red-500 mb-4" />
-                  <h3
-                    className="text-xl font-bold"
-                    style={{ fontFamily: 'Orbitron, sans-serif' }}
-                  >
-                    {f.title}
-                  </h3>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ------------------------------- CTA ------------------------------ */}
-      <section className="py-32 text-center">
-        <FadeIn>
-          <h2
-            className="text-6xl font-black mb-8"
-            style={{ fontFamily: 'Orbitron, sans-serif' }}
-          >
-            READY TO
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
-              FEEL IT FOR REAL?
-            </span>
-          </h2>
-          <p className="text-zinc-400 max-w-xl mx-auto mb-12">
-            Book a private consultation or explore the full collection today.
-          </p>
-          <div className="flex justify-center gap-6">
-            <Link to="/contact">
-              <Button className="bg-red-600 px-12 py-6 font-bold rounded-none">
-                BOOK CONSULTATION
-              </Button>
-            </Link>
-            <Link to="/vehicles">
-              <Button variant="outline" className="px-12 py-6 rounded-none">
-                VIEW COLLECTION
-              </Button>
-            </Link>
-          </div>
-        </FadeIn>
+      {/* ----------------------------------------------------
+         CTA
+      ---------------------------------------------------- */}
+      <section className="bg-primary py-24 text-center">
+        <h2 className="font-heading text-4xl lg:text-5xl text-primary-foreground mb-6">
+          Ready to Take a Test Drive?
+        </h2>
+        <p className="text-primary-foreground/90 mb-10 max-w-2xl mx-auto">
+          See it in 3D, feel it in real life.
+        </p>
+        <a href="/contact">
+          <Button className="bg-secondary text-secondary-foreground px-10 py-6">
+            Schedule Test Drive
+          </Button>
+        </a>
       </section>
 
       <Footer />
