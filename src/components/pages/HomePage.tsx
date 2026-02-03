@@ -102,7 +102,7 @@ const SERVICES_DATA = [
   },
   {
     id: 's4',
-    name: 'Executive Vehicle',
+    name: 'Executive Fleet',
     description: 'White-glove fleet management for enterprises',
     price: 1200,
     category: 'ENTERPRISE',
