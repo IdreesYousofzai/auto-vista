@@ -241,24 +241,33 @@ export default function Car3DExperiencePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               className="lg:col-span-2"
+              key={selectedVehicle?._id}
             >
               <div className="relative bg-zinc-900 border-2 border-zinc-800 overflow-hidden" style={{ minHeight: '600px' }}>
-                {/* Sketchfab 3D Model */}
+                {/* 3D Model */}
                 <div className="w-full h-full" style={{ minHeight: '600px' }}>
-                  <iframe
-                    title="3D Car Model"
-                    frameBorder="0"
-                    allowFullScreen
-                    mozAllowFullScreen={true}
-                    webkitAllowFullScreen={true}
-                    allow="autoplay; fullscreen; xr-spatial-tracking"
-                    xr-spatial-tracking="true"
-                    execution-while-out-of-viewport="true"
-                    execution-while-not-rendered="true"
-                    web-share="true"
-                    src="https://sketchfab.com/models/f8141ecd755547989c9209784b71ad43/embed?autospin=0&autostart=1&preload=1"
-                    style={{ width: '100%', height: '100%', minHeight: '600px' }}
-                  />
+                  {selectedVehicle?.model3dUrl ? (
+                    <iframe
+                      title={`3D ${selectedVehicle.make} ${selectedVehicle.model} Model`}
+                      frameBorder="0"
+                      allowFullScreen
+                      mozAllowFullScreen={true}
+                      webkitAllowFullScreen={true}
+                      allow="autoplay; fullscreen; xr-spatial-tracking"
+                      xr-spatial-tracking="true"
+                      execution-while-out-of-viewport="true"
+                      execution-while-not-rendered="true"
+                      web-share="true"
+                      src={selectedVehicle.model3dUrl}
+                      style={{ width: '100%', height: '100%', minHeight: '600px' }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-zinc-800">
+                      <p className="text-zinc-400 text-center px-4">
+                        3D model not available for this vehicle
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
