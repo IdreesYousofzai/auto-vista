@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { BaseCrudService } from '@/integrations';
 import { Vehicles } from '@/entities';
 import { Button } from '@/components/ui/button';
@@ -32,8 +32,6 @@ export default function VehiclesPage() {
       const result = await BaseCrudService.getAll<Vehicles>('vehicles');
       setVehicles(result.items);
       setFilteredVehicles(result.items);
-    } catch (error) {
-      console.error('Error loading vehicles:', error);
     } finally {
       setIsLoading(false);
     }
@@ -43,9 +41,8 @@ export default function VehiclesPage() {
     let filtered = [...vehicles];
 
     if (searchTerm) {
-      filtered = filtered.filter(v => 
-        v.make?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        v.model?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(v =>
+        `${v.make} ${v.model}`.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -57,10 +54,7 @@ export default function VehiclesPage() {
       const [min, max] = priceRange.split('-').map(Number);
       filtered = filtered.filter(v => {
         const price = v.price || 0;
-        if (max) {
-          return price >= min && price <= max;
-        }
-        return price >= min;
+        return max ? price >= min && price <= max : price >= min;
       });
     }
 
@@ -69,140 +63,134 @@ export default function VehiclesPage() {
 
   const uniqueMakes = Array.from(new Set(vehicles.map(v => v.make).filter(Boolean)));
 
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 }
-  };
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
       <Header />
 
-      {/* Hero Section */}
-      <section className="w-full bg-gradient-to-br from-backgrounddark via-backgrounddark to-primary/10 py-20 lg:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
+      {/* HERO */}
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-red-600/20 blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-600/20 blur-[120px]" />
+
+        <div className="relative max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
           >
-            <motion.div 
-              className="inline-block mb-6"
-              initial={{ width: 0 }}
-              animate={{ width: 48 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+            <span
+              className="inline-block mb-6 text-red-500 text-sm font-bold tracking-[0.3em] uppercase"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
             >
-              <div className="h-1 w-12 bg-primary" />
-            </motion.div>
-            <h1 className="font-heading text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Premium Vehicle <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Inventory</span>
+              // OUR FLEET
+            </span>
+
+            <h1
+              className="text-6xl md:text-7xl font-black mb-8"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              PERFORMANCE
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
+                INVENTORY
+              </span>
             </h1>
-            <p className="font-paragraph text-lg text-white/70 max-w-3xl mx-auto leading-relaxed">
-              Explore our curated collection of premium vehicles engineered for performance, luxury, and innovation
+
+            <p className="text-zinc-400 text-xl max-w-3xl mx-auto">
+              Hand-selected premium vehicles engineered for power, precision,
+              and long-term value.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Filters Section */}
-      <section className="w-full border-b border-secondary/5 bg-background sticky top-20 z-40 backdrop-blur-md bg-background/95">
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <motion.div 
-              className="relative"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary/50" />
-              <Input
-                type="text"
-                placeholder="Search by make or model..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-2 border-secondary/10 focus:border-primary rounded-lg transition-colors"
-              />
-            </motion.div>
-
-            <motion.select
-              value={selectedMake}
-              onChange={(e) => setSelectedMake(e.target.value)}
-              className="px-4 py-2 border-2 border-secondary/10 focus:border-primary focus:outline-none font-paragraph text-base rounded-lg transition-colors"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <option value="all">All Makes</option>
-              {uniqueMakes.map(make => (
-                <option key={make} value={make}>{make}</option>
-              ))}
-            </motion.select>
-
-            <motion.select
-              value={priceRange}
-              onChange={(e) => setPriceRange(e.target.value)}
-              className="px-4 py-2 border-2 border-secondary/10 focus:border-primary focus:outline-none font-paragraph text-base rounded-lg transition-colors"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <option value="all">All Prices</option>
-              <option value="0-30000">Under $30,000</option>
-              <option value="30000-50000">$30,000 - $50,000</option>
-              <option value="50000-75000">$50,000 - $75,000</option>
-              <option value="75000-999999">$75,000+</option>
-            </motion.select>
+      {/* FILTER BAR */}
+      <section className="sticky top-20 z-40 bg-zinc-950/90 backdrop-blur-md border-y border-zinc-800">
+        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+            <Input
+              placeholder="Search make or model"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              className="pl-10 bg-zinc-900 border border-zinc-800 focus:border-red-500 text-white rounded-none"
+            />
           </div>
+
+          <select
+            value={selectedMake}
+            onChange={e => setSelectedMake(e.target.value)}
+            className="bg-zinc-900 border border-zinc-800 px-4 py-2 text-white focus:border-red-500 rounded-none"
+          >
+            <option value="all">All Makes</option>
+            {uniqueMakes.map(make => (
+              <option key={make} value={make}>
+                {make}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={priceRange}
+            onChange={e => setPriceRange(e.target.value)}
+            className="bg-zinc-900 border border-zinc-800 px-4 py-2 text-white focus:border-red-500 rounded-none"
+          >
+            <option value="all">All Prices</option>
+            <option value="0-30000">Under $30k</option>
+            <option value="30000-50000">$30k–$50k</option>
+            <option value="50000-75000">$50k–$75k</option>
+            <option value="75000-999999">$75k+</option>
+          </select>
         </div>
       </section>
 
-      {/* Vehicles Grid */}
-      <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-20 min-h-[600px]">
-        {isLoading ? null : filteredVehicles.length > 0 ? (
-          <motion.div
-            initial="initial"
-            animate="animate"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
+      {/* VEHICLE GRID */}
+      <section className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-24">
+        {isLoading ? null : filteredVehicles.length ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredVehicles.map((vehicle, idx) => (
               <motion.div
                 key={vehicle._id}
-                variants={fadeInUp}
-                transition={{ delay: idx * 0.1 }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
               >
                 <Link to={`/vehicles/${vehicle._id}`} className="group block h-full">
-                  <motion.div 
-                    className="border border-secondary/10 hover:border-primary transition-all duration-300 overflow-hidden h-full flex flex-col bg-white hover:shadow-xl hover:shadow-primary/10"
-                    whileHover={{ y: -8 }}
+                  <motion.div
+                    whileHover={{ y: -10 }}
+                    className="h-full bg-zinc-900 border border-zinc-800 overflow-hidden transition-all duration-300 group-hover:border-red-600"
                   >
-                    <div className="aspect-[4/3] overflow-hidden bg-backgrounddark relative">
+                    <div className="relative aspect-[4/3] overflow-hidden">
                       <Image
-                        src={vehicle.mainImage || 'https://static.wixstatic.com/media/cec0c1_80c6fdf44d2543dda360a624430998d3~mv2.png?originWidth=768&originHeight=576'}
+                        src={vehicle.mainImage}
                         alt={`${vehicle.make} ${vehicle.model}`}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     </div>
-                    <div className="p-6 flex flex-col flex-grow">
-                      <h3 className="font-heading text-2xl font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
+
+                    <div className="p-6 flex flex-col h-full">
+                      <h3
+                        className="text-2xl font-bold mb-2 group-hover:text-red-400 transition-colors"
+                        style={{ fontFamily: 'Orbitron, sans-serif' }}
+                      >
                         {vehicle.make} {vehicle.model}
                       </h3>
-                      <p className="font-paragraph text-sm text-secondary/60 mb-4">
+
+                      <p className="text-sm text-zinc-400 mb-4">
                         {vehicle.year} • {vehicle.mileage?.toLocaleString()} miles
                       </p>
-                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-secondary/10">
-                        <span className="font-heading text-2xl font-bold text-primary">
+
+                      <div className="mt-auto flex items-center justify-between pt-4 border-t border-zinc-800">
+                        <span
+                          className="text-3xl font-black text-white"
+                          style={{ fontFamily: 'Orbitron, sans-serif' }}
+                        >
                           ${vehicle.price?.toLocaleString()}
                         </span>
-                        <span className="font-paragraph text-sm text-secondary group-hover:text-primary transition-colors font-semibold">
-                          View Details →
+                        <span className="text-sm text-red-500 font-bold uppercase tracking-wider">
+                          View →
                         </span>
                       </div>
                     </div>
@@ -210,12 +198,10 @@ export default function VehiclesPage() {
                 </Link>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         ) : (
-          <div className="text-center py-20">
-            <p className="font-paragraph text-lg text-secondary/60">
-              No vehicles found matching your criteria
-            </p>
+          <div className="text-center text-zinc-400 py-20">
+            No vehicles match your criteria.
           </div>
         )}
       </section>
