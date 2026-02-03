@@ -241,7 +241,7 @@ export default function HomePage() {
           <FadeIn delay={0.2}>
             <p className="text-xl sm:text-2xl text-zinc-300 max-w-2xl mb-12 leading-relaxed font-light">
               Engineered <span className="text-red-500 font-semibold">for the road.</span> Powered 
-              <span className="text-blue-400 font-semibold"> by intelligence.</span>. 
+              <span className="text-blue-400 font-semibold"> by intelligence.</span>
               This is performance, evolved.
             </p>
           </FadeIn>
