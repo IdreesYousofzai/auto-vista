@@ -79,7 +79,7 @@ export default function Header() {
                 style={{ fontFamily: 'Orbitron, sans-serif' }}
                 whileHover={{ x: 2 }}
               >
-                VELOCITY
+                ELITE MOTORS
               </motion.span>
               <span className="text-[10px] text-zinc-500 tracking-[0.2em] uppercase font-bold">
                 Premium Auto
