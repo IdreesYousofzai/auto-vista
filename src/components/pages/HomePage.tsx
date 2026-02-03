@@ -501,8 +501,7 @@ export default function HomePage() {
                 </h2>
                 
                 <p className="text-zinc-400 text-lg mb-10 leading-relaxed max-w-xl">
-                  Our proprietary analytics engine tracks global market dynamics, depreciation patterns, 
-                  and performance metrics in real-time, ensuring you make informed decisions backed by hard data.
+                  We analyze real market trends, vehicle performance, and long-term value so you don’t have to guess. Every recommendation is backed by data — not sales pressure.
                 </p>
                 
                 <div className="grid grid-cols-2 gap-6 mb-12">
