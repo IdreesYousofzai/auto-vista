@@ -834,7 +834,7 @@ export default function HomePage() {
               </Link>
               <Link to="/vehicles" className="w-full sm:w-auto">
                 <Button variant="outline" className="w-full sm:w-auto border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 px-12 py-8 text-lg font-bold rounded-none transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                  EXPLORE FLEET
+                  EXPLORE Vehicle
                 </Button>
               </Link>
             </div>
