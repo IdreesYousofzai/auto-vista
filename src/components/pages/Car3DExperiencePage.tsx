@@ -271,27 +271,7 @@ export default function Car3DExperiencePage() {
                 </div>
               </div>
             </motion.div>
-            <div className="relative bg-white border-2 border-secondary/10 overflow-hidden" style={{ minHeight: '600px' }}>
-                {/* Sketchfab 3D Model */}
-                <div className="relative bg-white border-2 border-secondary/10 overflow-hidden" style={{ minHeight: '600px' }}>
-                  {/* Sketchfab 3D Model */}
-                  <div className="w-full h-full" style={{ minHeight: '600px' }}>
-                    <iframe
-                      title="2025 BMW M4 Competition"
-                      frameBorder="0"
-                      allowFullScreen
-                      mozAllowFullScreen={true}
-                      webkitAllowFullScreen={true}
-                      allow="autoplay; fullscreen; xr-spatial-tracking"
-                      xr-spatial-tracking="true"
-                      execution-while-out-of-viewport="true"
-                      execution-while-not-rendered="true"
-                      web-share="true"
-                      src="https://sketchfab.com/models/f8141ecd755547989c9209784b71ad43/embed?autospin=0&autostart=1&preload=1"
-                      style={{ width: '100%', height: '100%', minHeight: '600px' }}
-                    />
-                  </div>
-                </div>
+            
 
             {/* Vehicle Details */}
             <motion.div
