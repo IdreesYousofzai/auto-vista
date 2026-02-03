@@ -24,7 +24,6 @@ export default function Header() {
     { href: '/vehicles', label: 'VEHICLES' },
     { href: '/3d-experience', label: '3D SHOWROOM' },
     { href: '/services', label: 'SERVICES' },
-    { href: '/analytics', label: 'DATA' },
     { href: '/about', label: 'ABOUT' },
     { href: '/contact', label: 'CONTACT' }
   ];
