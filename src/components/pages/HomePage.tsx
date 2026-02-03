@@ -257,7 +257,7 @@ export default function HomePage() {
             </Link>
             <Link to="/3d-experience">
               <Button variant="outline" className="border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 backdrop-blur-md" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                3D SHOWROOM
+                VIEW 3D SHOWROOM
               </Button>
             </Link>
           </FadeIn>
