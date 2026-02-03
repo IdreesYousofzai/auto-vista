@@ -491,7 +491,7 @@ export default function HomePage() {
                 <div className="inline-flex items-center gap-3 mb-8 px-4 py-2 bg-blue-600/10 border border-blue-600/30 rounded-full">
                   <BarChart3 className="w-4 h-4 text-blue-400" />
                   <span className="text-blue-400 text-sm font-bold tracking-widest uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                    Data Intelligence
+                    DATA-DRIVEN CONFIDENCE
                   </span>
                 </div>
                 
