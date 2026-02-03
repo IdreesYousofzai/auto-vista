@@ -518,7 +518,7 @@ export default function HomePage() {
 
                 <Link to="/analytics">
                   <Button className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-none px-10 py-6 text-base font-bold border-b-4 border-zinc-400 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                    VIEW ANALYTICS →
+                    See the Data Behind Our Cars →
                   </Button>
                 </Link>
               </FadeIn>
