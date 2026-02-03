@@ -7,7 +7,6 @@ import VehiclesPage from '@/components/pages/VehiclesPage';
 import VehicleDetailPage from '@/components/pages/VehicleDetailPage';
 import Car3DExperiencePage from '@/components/pages/Car3DExperiencePage';
 import ServicesPage from '@/components/pages/ServicesPage';
-import AnalyticsPage from '@/components/pages/AnalyticsPage';
 import AboutPage from '@/components/pages/AboutPage';
 import ContactPage from '@/components/pages/ContactPage';
 
@@ -46,10 +45,6 @@ const router = createBrowserRouter([
       {
         path: "services",
         element: <ServicesPage />,
-      },
-      {
-        path: "analytics",
-        element: <AnalyticsPage />,
       },
       {
         path: "about",
