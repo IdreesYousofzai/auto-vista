@@ -328,7 +328,7 @@ export default function HomePage() {
             <FadeIn>
               <div className="inline-block mb-6">
                 <span className="text-red-500 text-sm font-bold tracking-[0.3em] uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                  // ENGINEERED EXCELLENCE
+                  // PERFORMANCE WITHOUT COMPROMISE
                 </span>
               </div>
               <h2 className="text-6xl lg:text-7xl font-black mb-8 leading-tight" style={{ fontFamily: 'Orbitron, sans-serif' }}>
