@@ -53,7 +53,7 @@ export default function AboutPage() {
               className="inline-block mb-6 text-red-500 text-sm font-bold tracking-[0.3em] uppercase"
               style={{ fontFamily: 'Orbitron, sans-serif' }}
             >
-              // ABOUT ELITE MOTORS
+              // ABOUT VELOCITY
             </span>
 
             <h1
@@ -87,7 +87,7 @@ export default function AboutPage() {
               Our Story
             </h2>
             <p className="text-zinc-400 text-base mb-4">
-              Founded in 2011, Elite Motors emerged from a vision to revolutionize the car buying experience. We recognized that customers deserved more than traditional dealership practices—they needed transparency, data-driven insights, and genuine partnership.
+              Founded in 2011, Velocity emerged from a vision to revolutionize the car buying experience. We recognized that customers deserved more than traditional dealership practices—they needed transparency, data-driven insights, and genuine partnership.
             </p>
             <p className="text-zinc-400 text-base">
               Today, we stand as a leader in automotive retail innovation, combining cutting-edge technology with personalized service to deliver unmatched value to our customers. Our commitment to excellence has earned us recognition as one of the most trusted dealerships in the region.
@@ -103,7 +103,7 @@ export default function AboutPage() {
           >
             <Image
               src="https://static.wixstatic.com/media/cec0c1_cc0f070b051f445eae1495e96a231313~mv2.png?originWidth=896&originHeight=640"
-              alt="Elite Motors showroom"
+              alt="Velocity showroom"
               className="w-full h-full object-cover"
             />
           </motion.div>
