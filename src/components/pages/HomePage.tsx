@@ -207,7 +207,7 @@ export default function HomePage() {
         </div>
 
         {/* Content with Racing Typography */}
-        <div className="relative z-10 w-full max-w-[100rem] mx-auto px-6 sm:px-12 lg:px-24 py-24 flex flex-col justify-center items-start min-h-screen">
+        <div className="relative z-10 w-full max-w-[100rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-12 sm:py-16 md:py-24 flex flex-col justify-center items-start min-h-screen">
           <FadeIn>
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -222,14 +222,14 @@ export default function HomePage() {
                 </span>
               </div>
               
-              <h1 className="text-6xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.95] mb-8 text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.95] mb-6 sm:mb-8 text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 Drive more<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600">
                   than a car.
                 </span>
               </h1>
 
-              <p className="text-xl sm:text-2xl text-gray-300 max-w-xl mb-8">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-xl mb-6 sm:mb-8">
                 Drive a statement.
               </p>
               
@@ -244,7 +244,7 @@ export default function HomePage() {
           </FadeIn>
           
           <FadeIn delay={0.2}>
-            <p className="text-xl sm:text-2xl text-zinc-300 max-w-2xl mb-12 leading-relaxed font-light">
+            <p className="text-lg sm:text-xl md:text-2xl text-zinc-300 max-w-2xl mb-8 sm:mb-12 leading-relaxed font-light">
               Engineered <span className="text-red-500 font-semibold">for the road.</span> Powered 
               <span className="text-blue-400 font-semibold"> by intelligence.</span>
               <br />This is performance, evolved.
@@ -265,7 +265,7 @@ export default function HomePage() {
           </FadeIn>
 
           {/* Performance Stats Bar */}
-          <FadeIn delay={0.6} className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-4xl">
+          <FadeIn delay={0.6} className="mt-12 sm:mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 w-full max-w-4xl">
             {STATS.map((stat, idx) => (
               <motion.div 
                 key={idx}
@@ -274,9 +274,9 @@ export default function HomePage() {
                 transition={{ duration: 0.2 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" />
-                <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 group-hover:border-red-600/50 p-6 transition-all duration-300">
-                  <stat.icon className="w-6 h-6 text-red-500 mb-3" />
-                  <div className="text-4xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>{stat.value}</div>
+                <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 group-hover:border-red-600/50 p-4 sm:p-6 transition-all duration-300">
+                  <stat.icon className="w-5 sm:w-6 h-5 sm:h-6 text-red-500 mb-2 sm:mb-3" />
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>{stat.value}</div>
                   <div className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">{stat.label}</div>
                 </div>
               </motion.div>
@@ -306,7 +306,7 @@ export default function HomePage() {
       </div>
 
       {/* FEATURES - 3D Card Design */}
-      <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-32 relative bg-zinc-950">
+      <section className="w-full max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-16 sm:py-24 md:py-32 relative bg-zinc-950">
         {/* Ambient Glow Effects */}
         <motion.div 
           className="absolute -top-40 -right-40 w-96 h-96 bg-red-600/20 rounded-full blur-[120px]"
@@ -418,7 +418,7 @@ export default function HomePage() {
           backgroundSize: '60px 60px'
         }} />
         
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 relative">
+        <div className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             
             {/* Chart with Premium Styling */}
@@ -537,7 +537,7 @@ export default function HomePage() {
         {/* Subtle Background Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-600/5 rounded-full blur-[120px] pointer-events-none" />
         
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
+        <div className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 relative z-10">
           <div className="text-center mb-20">
             <FadeIn>
               <span className="text-red-500 text-sm font-bold tracking-[0.3em] uppercase mb-6 inline-block" style={{ fontFamily: 'Orbitron, sans-serif' }}>
@@ -612,7 +612,7 @@ export default function HomePage() {
           className="w-full h-full"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/60 to-transparent flex items-center">
-          <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 w-full">
+          <div className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 w-full">
             <FadeIn>
               <div className="max-w-3xl">
                 <div className="h-1 w-20 bg-red-600 mb-8" />

@@ -34,12 +34,12 @@ export default function Footer() {
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-red-600/20 blur-[120px]" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600/20 blur-[120px]" />
 
-      <div className="relative max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-24">
+      <div className="relative w-full max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-12 sm:py-16 md:py-24">
         
         {/* Top Racing Stripe */}
-        <div className="h-1 w-full bg-gradient-to-r from-red-600 via-orange-500 to-transparent mb-20" />
+        <div className="h-1 w-full bg-gradient-to-r from-red-600 via-orange-500 to-transparent mb-12 sm:mb-16 md:mb-20" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-14 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 md:gap-14 mb-12 sm:mb-16 md:mb-20">
 
           {/* Brand */}
           <motion.div
@@ -49,7 +49,7 @@ export default function Footer() {
             transition={{ duration: 0.6 }}
           >
             <h3
-              className="text-3xl font-black text-white mb-5 tracking-tight"
+              className="text-2xl sm:text-3xl font-black text-white mb-4 sm:mb-5 tracking-tight"
               style={{ fontFamily: 'Orbitron, sans-serif' }}
             >
               ELITE
@@ -58,7 +58,7 @@ export default function Footer() {
               </span>
             </h3>
 
-            <p className="text-sm text-zinc-400 leading-relaxed mb-6 max-w-sm">
+            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-4 sm:mb-6 max-w-sm">
               Precision-engineered vehicles, data-driven confidence, and
               uncompromising performance — built for those who demand more.
             </p>
@@ -100,13 +100,13 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h4
-              className="text-lg font-bold text-white mb-6 tracking-wider"
+              className="text-base sm:text-lg font-bold text-white mb-4 sm:mb-6 tracking-wider"
               style={{ fontFamily: 'Orbitron, sans-serif' }}
             >
               Get in Touch
             </h4>
 
-            <ul className="space-y-4 text-sm text-zinc-400">
+            <ul className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-zinc-400">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-red-500 mt-0.5" />
                 123 Auto Drive, Innovation City
@@ -124,12 +124,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-zinc-500 uppercase tracking-wider">
+        <div className="border-t border-zinc-800 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+          <p className="text-xs text-zinc-500 uppercase tracking-wider text-center sm:text-left">
             © 2026 Elite Motors — All Rights Reserved
           </p>
 
-          <div className="flex gap-6 text-xs uppercase tracking-wider">
+          <div className="flex gap-4 sm:gap-6 text-xs uppercase tracking-wider">
             <a className="hover:text-red-500 transition-colors" href="#">
               Privacy Policy
             </a>
@@ -162,7 +162,7 @@ function FooterColumn({
       transition={{ duration: 0.6 }}
     >
       <h4
-        className="text-lg font-bold text-white mb-6 tracking-wider"
+        className="text-base sm:text-lg font-bold text-white mb-4 sm:mb-6 tracking-wider"
         style={{ fontFamily: 'Orbitron, sans-serif' }}
       >
         {title}
@@ -177,7 +177,7 @@ function FooterLink({ href, label }: { href: string; label: string }) {
     <li>
       <Link
         to={href}
-        className="group flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
+        className="group flex items-center gap-2 text-xs sm:text-sm text-zinc-400 hover:text-white transition-colors"
       >
         <span className="relative">
           {label}

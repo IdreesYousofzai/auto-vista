@@ -92,7 +92,7 @@ export default function VehiclesPage() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-24 text-center">
+        <div className="relative z-10 w-full max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-12 sm:py-16 md:py-24 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ export default function VehiclesPage() {
 
       {/* FILTER BAR */}
       <section className="sticky top-20 z-40 bg-zinc-950/95 backdrop-blur-xl border-y border-zinc-800 shadow-2xl">
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-6">
+        <div className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-4 sm:py-6">
           <div className="flex items-center gap-3 mb-4">
             <SlidersHorizontal className="w-5 h-5 text-red-500" />
             <span className="text-sm font-bold text-zinc-400 uppercase tracking-wider" style={{ fontFamily: 'Orbitron, sans-serif' }}>
@@ -221,7 +221,7 @@ export default function VehiclesPage() {
       </section>
 
       {/* RESULTS COUNT */}
-      <section className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 pt-12">
+      <section className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 pt-8 sm:pt-12">
         <div className="flex items-center justify-between pb-6 border-b border-zinc-800">
           <div>
             <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
@@ -235,7 +235,7 @@ export default function VehiclesPage() {
       </section>
 
       {/* VEHICLE GRID */}
-      <section className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-12 pb-24">
+      <section className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-8 sm:py-12 pb-16 sm:pb-24">
         {isLoading ? (
           <div className="text-center py-20">
             <div className="inline-block w-12 h-12 border-4 border-zinc-800 border-t-red-600 rounded-full animate-spin" />
@@ -338,8 +338,8 @@ export default function VehiclesPage() {
       </section>
 
       {/* CTA SECTION */}
-      <section className="w-full bg-zinc-900 py-24 border-t border-zinc-800">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="w-full bg-zinc-900 py-16 sm:py-24 border-t border-zinc-800">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
