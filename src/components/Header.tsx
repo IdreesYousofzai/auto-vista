@@ -1,251 +1,171 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const { scrollY } = useScroll();
-  
-  // Track scroll position for header effects
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { href: '/', label: 'HOME' },
-    { href: '/vehicles', label: 'VEHICLES' },
-    { href: '/3d-experience', label: '3D SHOWROOM' },
-    { href: '/services', label: 'SERVICES' },
-    { href: '/about', label: 'ABOUT' },
-    { href: '/contact', label: 'CONTACT' }
+    { href: '/', label: 'Home' },
+    { href: '/vehicles', label: 'Inventory' },
+    { href: '/3d-experience', label: '3D Showroom' },
+    { href: '/services', label: 'Services' },
+    { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' }
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <motion.header 
+    <header
       className={`w-full sticky top-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-zinc-950/95 backdrop-blur-xl border-b border-red-600/20 shadow-2xl shadow-red-600/5' 
-          : 'bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/50'
+        scrolled
+          ? 'bg-zinc-950/98 backdrop-blur-lg shadow-lg shadow-black/50'
+          : 'bg-zinc-950/95 backdrop-blur-md'
       }`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+      style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
     >
-      {/* Racing Stripe Accent */}
-      <motion.div 
-        className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-red-600 to-transparent"
-        animate={{ 
-          opacity: scrolled ? [0.3, 1, 0.3] : 0.5,
-        }}
-        transition={{ 
-          duration: 2, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
+      <div className="border-b border-zinc-800/60">
+        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
+          <div className="flex items-center justify-between h-20">
 
-      <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
-        <div className="flex items-center justify-between h-20">
-          
-          {/* Premium Logo - Text Only */}
-          <Link to="/" className="group relative">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-              className="relative"
-            >
-              <motion.span 
-                className="font-black text-3xl lg:text-4xl tracking-tighter text-white group-hover:text-red-400 transition-colors"
-                style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '-0.02em' }}
-                whileHover={{ x: 2 }}
-              >
-                ELITE MOTORS
-              </motion.span>
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="relative">
+                {/* Logo Icon */}
+                <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
 
-              {/* Animated Underline */}
-              <motion.div 
-                className="absolute -bottom-2 left-0 h-0.5 bg-gradient-to-r from-red-600 to-transparent"
-                initial={{ width: 0 }}
-                whileHover={{ width: '100%' }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link, index) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="relative group px-4 py-2"
-              >
-                <motion.div
-                  className="relative"
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.2 }}
+              {/* Logo Text */}
+              <div className="flex flex-col">
+                <span
+                  className="text-xl font-black text-white tracking-tight group-hover:text-red-400 transition-colors"
+                  style={{ fontFamily: 'Orbitron, sans-serif' }}
                 >
-                  <span className={`text-xs font-bold tracking-wider transition-all duration-300 ${
-                    isActive(link.href)
-                      ? 'text-red-500'
-                      : 'text-zinc-400 group-hover:text-white'
-                  }`}
-                  style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                    {link.label}
-                  </span>
-                  
-                  {/* Active Indicator - Racing Stripe */}
-                  {isActive(link.href) && (
-                    <motion.div
-                      className="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-red-600 via-orange-500 to-red-600"
-                      layoutId="activeNav"
-                      transition={{ type: 'spring', stiffness: 380, damping: 40 }}
-                    />
-                  )}
-                  
-                  {/* Hover Effect - Subtle Glow */}
-                  <motion.div 
-                    className="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-red-600/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    initial={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.div>
-              </Link>
-            ))}
-          </nav>
-
-          {/* CTA Button + Mobile Menu */}
-          <div className="flex items-center gap-4">
-            {/* CTA Button - Desktop Only */}
-            <Link to="/contact" className="hidden lg:block">
-              <Button 
-                className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-6 py-2.5 text-xs font-bold border-b-2 border-red-900 hover:scale-105 transition-all duration-300 shadow-lg shadow-red-600/20 hover:shadow-2xl hover:shadow-red-600/40"
-                style={{ fontFamily: 'Orbitron, sans-serif' }}
-              >
-                <span className="flex items-center gap-2">
-                  BOOK NOW
-                  <ChevronRight className="w-4 h-4" />
+                  VELOCITY
                 </span>
-              </Button>
+                <span className="text-[9px] text-zinc-500 uppercase tracking-[0.2em] font-semibold -mt-0.5">
+                  Automotive
+                </span>
+              </div>
             </Link>
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              className="lg:hidden relative w-10 h-10 bg-zinc-900 border border-zinc-800 flex items-center justify-center hover:border-red-600 hover:bg-red-600/10 transition-all duration-300"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-              whileTap={{ scale: 0.95 }}
-            >
-              <motion.div
-                animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
-                transition={{ duration: 0.3 }}
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="relative group"
+                >
+                  <span className={`text-sm font-medium transition-colors ${
+                    isActive(link.href)
+                      ? 'text-white'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}>
+                    {link.label}
+                  </span>
+
+                  {/* Active Indicator */}
+                  {isActive(link.href) && (
+                    <motion.div
+                      className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-red-600"
+                      layoutId="activeTab"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              ))}
+            </nav>
+
+            {/* CTA + Mobile Menu */}
+            <div className="flex items-center gap-4">
+              {/* Desktop CTA */}
+              <Link to="/contact" className="hidden lg:block">
+                <Button
+                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 text-sm font-semibold rounded-sm transition-colors"
+                  style={{ fontFamily: 'Orbitron, sans-serif' }}
+                >
+                  Book Appointment
+                </Button>
+              </Link>
+
+              {/* Mobile Menu Toggle */}
+              <button
+                className="lg:hidden w-10 h-10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-5 h-5 text-red-500" />
+                  <X className="w-6 h-6" />
                 ) : (
-                  <Menu className="w-5 h-5 text-zinc-400" />
+                  <Menu className="w-6 h-6" />
                 )}
-              </motion.div>
-              
-              {/* Pulse effect when open */}
-              {mobileMenuOpen && (
-                <motion.div
-                  className="absolute inset-0 border-2 border-red-600"
-                  initial={{ scale: 1, opacity: 1 }}
-                  animate={{ scale: 1.2, opacity: 0 }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                />
-              )}
-            </motion.button>
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Mobile Navigation Menu */}
-        {mobileMenuOpen && (
-          <motion.nav 
-            className="lg:hidden py-6 border-t border-zinc-800"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
-          >
-            <div className="flex flex-col gap-2">
-              {navLinks.map((link, index) => (
-                <motion.div
+      {/* Mobile Navigation */}
+      {mobileMenuOpen && (
+        <motion.div
+          className="lg:hidden border-b border-zinc-800/60 bg-zinc-950"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-6">
+            <div className="flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <Link
                   key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  to={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-3 rounded-sm text-sm font-medium transition-colors ${
+                    isActive(link.href)
+                      ? 'text-white bg-zinc-900'
+                      : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                  }`}
                 >
-                  <Link
-                    to={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`group relative flex items-center justify-between py-4 px-5 transition-all duration-300 border-l-2 ${
-                      isActive(link.href)
-                        ? 'text-red-500 bg-red-600/10 border-red-600'
-                        : 'text-zinc-400 hover:text-white bg-zinc-900/50 hover:bg-zinc-800 border-transparent hover:border-red-600/50'
-                    }`}
-                  >
-                    <span className="text-sm font-bold tracking-wider" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                      {link.label}
-                    </span>
-                    
-                    <ChevronRight className={`w-4 h-4 transition-all duration-300 ${
-                      isActive(link.href) 
-                        ? 'text-red-500 translate-x-1' 
-                        : 'text-zinc-600 group-hover:text-red-500 group-hover:translate-x-1'
-                    }`} />
-                  </Link>
-                </motion.div>
+                  {link.label}
+                </Link>
               ))}
 
               {/* Mobile CTA */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.05 + 0.1, duration: 0.3 }}
-                className="mt-4 pt-4 border-t border-zinc-800"
+              <Link
+                to="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-4"
               >
-                <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
-                  <Button 
-                    className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-6 py-4 text-sm font-bold border-b-4 border-red-900 shadow-xl shadow-red-600/30"
-                    style={{ fontFamily: 'Orbitron, sans-serif' }}
-                  >
-                    <span className="flex items-center justify-center gap-2">
-                      BOOK CONSULTATION
-                      <ChevronRight className="w-5 h-5" />
-                    </span>
-                  </Button>
-                </Link>
-              </motion.div>
+                <Button
+                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3 text-sm font-semibold rounded-sm"
+                  style={{ fontFamily: 'Orbitron, sans-serif' }}
+                >
+                  Book Appointment
+                </Button>
+              </Link>
             </div>
-          </motion.nav>
-        )}
-      </div>
-
-      {/* Bottom Racing Glow Effect */}
-      <motion.div 
-        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-600/50 to-transparent"
-        animate={{ 
-          opacity: [0.2, 0.5, 0.2],
-        }}
-        transition={{ 
-          duration: 3, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-    </motion.header>
+          </div>
+        </motion.div>
+      )}
+    </header>
   );
 }
