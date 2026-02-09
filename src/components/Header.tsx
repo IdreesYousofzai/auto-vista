@@ -42,13 +42,13 @@ export default function Header() {
               <div className="flex items-baseline gap-0.5">
                 <span
                   className="text-lg sm:text-2xl md:text-[32px] font-black text-white tracking-[-0.04em] transition-colors group-hover:text-red-500"
-                  style={{ fontFamily: '\"Bebas Neue\", sans-serif' }}
+                  style={{ fontFamily: '\"trxdxnt\", sans-serif' }}
                 >
                   VELOCITY
                 </span>
                 <span
                   className="text-lg sm:text-2xl md:text-[32px] font-black text-red-600 tracking-[-0.04em]"
-                  style={{ fontFamily: '\"Bebas Neue\", sans-serif' }}
+                  style={{ fontFamily: '\"trxdxnt\", sans-serif' }}
                 >
                   .
                 </span>
