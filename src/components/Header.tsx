@@ -1,6 +1,4 @@
-import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -30,63 +28,57 @@ export default function Header() {
     <header
       className={`w-full sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-zinc-950/98 backdrop-blur-lg shadow-lg shadow-black/50'
+          ? 'bg-zinc-950/98 backdrop-blur-xl shadow-2xl shadow-black/50'
           : 'bg-zinc-950/95 backdrop-blur-md'
       }`}
-      style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
     >
-      <div className="border-b border-zinc-800/60">
-        <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
+      <div className="border-b border-zinc-800/50">
+        <div className="max-w-[1920px] mx-auto px-6 sm:px-12 lg:px-24">
           <div className="flex items-center justify-between h-20">
 
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="relative">
-                {/* Logo Icon */}
-                <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-
-              {/* Logo Text */}
-              <div className="flex flex-col">
+            {/* Logo - Pure Typography */}
+            <Link to="/" className="group flex items-center gap-0">
+              {/* Brand Name */}
+              <div className="flex items-baseline gap-0.5">
                 <span
-                  className="text-xl font-black text-white tracking-tight group-hover:text-red-400 transition-colors"
-                  style={{ fontFamily: 'Orbitron, sans-serif' }}
+                  className="text-[32px] font-black text-white tracking-[-0.04em] transition-colors group-hover:text-red-500"
+                  style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   VELOCITY
                 </span>
-                <span className="text-[9px] text-zinc-500 uppercase tracking-[0.2em] font-semibold -mt-0.5">
-                  Automotive
+                <span
+                  className="text-[32px] font-black text-red-600 tracking-[-0.04em]"
+                  style={{ fontFamily: '"Bebas Neue", sans-serif' }}
+                >
+                  .
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="relative group"
+                  className="relative px-5 py-2 group"
                 >
-                  <span className={`text-sm font-medium transition-colors ${
-                    isActive(link.href)
-                      ? 'text-white'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}>
+                  <span
+                    className={`text-[13px] font-semibold tracking-wide transition-all duration-300 ${
+                      isActive(link.href)
+                        ? 'text-white'
+                        : 'text-zinc-500 group-hover:text-white'
+                    }`}
+                    style={{ fontFamily: '"Inter", sans-serif' }}
+                  >
                     {link.label}
                   </span>
 
                   {/* Active Indicator */}
                   {isActive(link.href) && (
                     <motion.div
-                      className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-red-600"
-                      layoutId="activeTab"
+                      className="absolute bottom-0 left-5 right-5 h-[2px] bg-red-600"
+                      layoutId="activeIndicator"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -94,29 +86,44 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* CTA + Mobile Menu */}
+            {/* Right Section */}
             <div className="flex items-center gap-4">
               {/* Desktop CTA */}
               <Link to="/contact" className="hidden lg:block">
-                <Button
-                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 text-sm font-semibold rounded-sm transition-colors"
-                  style={{ fontFamily: 'Orbitron, sans-serif' }}
+                <motion.button
+                  className="relative bg-red-600 text-white px-7 py-2.5 text-sm font-bold overflow-hidden group"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{ fontFamily: '"Inter", sans-serif' }}
                 >
-                  Book Appointment
-                </Button>
+                  <span className="relative z-10">Book Now</span>
+                  <motion.div
+                    className="absolute inset-0 bg-red-700"
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.button>
               </Link>
 
-              {/* Mobile Menu Toggle */}
+              {/* Mobile Menu Button */}
               <button
-                className="lg:hidden w-10 h-10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+                className="lg:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-1.5 group"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Toggle menu"
               >
-                {mobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
+                <motion.span
+                  className="w-6 h-0.5 bg-zinc-400 group-hover:bg-white transition-colors"
+                  animate={mobileMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                />
+                <motion.span
+                  className="w-6 h-0.5 bg-zinc-400 group-hover:bg-white transition-colors"
+                  animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                />
+                <motion.span
+                  className="w-6 h-0.5 bg-zinc-400 group-hover:bg-white transition-colors"
+                  animate={mobileMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                />
               </button>
             </div>
           </div>
@@ -126,43 +133,46 @@ export default function Header() {
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <motion.div
-          className="lg:hidden border-b border-zinc-800/60 bg-zinc-950"
+          className="lg:hidden bg-zinc-950 border-b border-zinc-800/50"
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-6">
-            <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
+          <div className="px-6 py-6">
+            <nav className="flex flex-col gap-1 mb-6">
+              {navLinks.map((link, index) => (
+                <motion.div
                   key={link.href}
-                  to={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`px-4 py-3 rounded-sm text-sm font-medium transition-colors ${
-                    isActive(link.href)
-                      ? 'text-white bg-zinc-900'
-                      : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
-                  }`}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    to={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-4 py-3 text-base font-semibold rounded transition-all ${
+                      isActive(link.href)
+                        ? 'text-white bg-zinc-900'
+                        : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                    }`}
+                    style={{ fontFamily: '"Inter", sans-serif' }}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
               ))}
+            </nav>
 
-              {/* Mobile CTA */}
-              <Link
-                to="/contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="mt-4"
+            {/* Mobile CTA */}
+            <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
+              <button
+                className="w-full bg-red-600 hover:bg-red-700 text-white py-3.5 text-base font-bold transition-colors"
+                style={{ fontFamily: '"Inter", sans-serif' }}
               >
-                <Button
-                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3 text-sm font-semibold rounded-sm"
-                  style={{ fontFamily: 'Orbitron, sans-serif' }}
-                >
-                  Book Appointment
-                </Button>
-              </Link>
-            </div>
+                Book Now
+              </button>
+            </Link>
           </div>
         </motion.div>
       )}
