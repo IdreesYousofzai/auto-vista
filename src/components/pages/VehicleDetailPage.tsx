@@ -114,7 +114,7 @@ export default function VehicleDetailPage() {
           >
             <div className="aspect-[4/3] bg-zinc-900 border border-zinc-800 overflow-hidden">
               <Image
-                src={vehicle.mainImage || 'https://purepng.com/public/uploads/large/purepng.com-honda-carshondacarshonda-manufacturingvehicle-honda-1701527486092fnkn1.png'}
+                src={vehicle.mainImage || 'https://static.wixstatic.com/media/cec0c1_5b45e47791214e1fbc7fa54c930bf5b3~mv2.png?originWidth=1152&originHeight=896'}
                 alt={`${vehicle.make} ${vehicle.model}`}
                 className="w-full h-full object-cover"
               />
