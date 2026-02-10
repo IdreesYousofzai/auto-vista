@@ -26,9 +26,9 @@ import {
 
 // --- PREMIUM AUTOMOTIVE DATA ---
 const STATS = [
-  { value: '500+', label: 'Premium Vehicles', icon: Sparkles },
+  { value: '100+', label: 'Premium Vehicles', icon: Sparkles },
   { value: '98%', label: 'Client Satisfaction', icon: Award },
-  { value: '15+', label: 'Years Excellence', icon: TrendingUp },
+  { value: '10+', label: 'Years Excellence', icon: TrendingUp },
   { value: '24/7', label: 'Concierge Service', icon: Rocket }
 ];
 
