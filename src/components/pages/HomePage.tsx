@@ -342,33 +342,67 @@ export default function HomePage() {
             </FadeIn>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div className="w-full bg-zinc-900 border border-zinc-800 p-4">
-              <Image
-                src="https://pngimg.com/uploads/bmw/bmw_PNG1713.png" // BMW PNG URL [web:7]
-                alt="BMW performance coupe"
-                className="w-full h-auto object-contain"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {FEATURES.map((feature, idx) => (
+              <FadeIn key={idx} delay={idx * 0.1}>
+                <motion.div
+                  className="group relative h-full bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 overflow-hidden"
+                  whileHover={{
+                    y: -10,
+                    borderColor: 'rgb(239, 68, 68)',
+                    boxShadow: '0 20px 60px -12px rgba(239, 68, 68, 0.3)'
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {/* Gradient Background on Hover */}
+                  <motion.div
+                    className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                  />
 
-            <div className="space-y-4">
-              <h3
-                className="text-3xl font-black text-white"
-                style={{ fontFamily: 'Orbitron, sans-serif' }}
-              >
-                BMW M Performance
-              </h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                3.0L TwinPower Turbo inline‑6, 0–62 mph in 3.9s, advanced M xDrive all‑wheel drive,
-                and a cockpit with digital driver‑focused displays. [web:6]
-              </p>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Designed to blend everyday usability with track‑ready handling, this BMW delivers a
-                sharp, confident driving experience. [web:6]
-              </p>
-            </div>
-          </div>
+                  {/* Top Racing Stripe */}
+                  <motion.div
+                    className={`absolute top-0 left-0 h-1 bg-gradient-to-r ${feature.color} w-0 group-hover:w-full transition-all duration-500`}
+                  />
 
+                  <div className="relative z-10 p-8 h-full flex flex-col">
+                    {/* Icon with 3D Effect */}
+                    <motion.div
+                      className="mb-6"
+                      whileHover={{ scale: 1.1, rotateY: 15 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-red-600/30 group-hover:shadow-2xl group-hover:shadow-red-600/50 transition-all duration-300">
+                        <feature.icon className="w-8 h-8 text-white" />
+                      </div>
+                    </motion.div>
+
+                    {/* Stat Badge */}
+                    <div className="inline-flex self-start mb-4 px-3 py-1 bg-zinc-800/50 border border-zinc-700 rounded-full">
+                      <span className="text-red-400 text-xs font-bold tracking-wider" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                        {feature.stat}
+                      </span>
+                    </div>
+
+                    <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-red-400 transition-colors" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                      {feature.title}
+                    </h3>
+                    <p className="text-zinc-400 leading-relaxed text-sm">
+                      {feature.desc}
+                    </p>
+
+                    {/* Bottom Accent Line */}
+                    <div className="mt-auto pt-6">
+                      <motion.div
+                        className="h-0.5 bg-gradient-to-r from-red-600 to-transparent"
+                        initial={{ width: '30%' }}
+                        whileHover={{ width: '100%' }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>
