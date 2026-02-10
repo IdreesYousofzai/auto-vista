@@ -107,7 +107,7 @@ export default function ContactPage() {
                   <h3 className="text-xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>Visit Us</h3>
                   <p className="text-zinc-400 text-base">
                     123 Auto Drive<br />
-                    Innovation City, IC 12345<br />
+                    Innovation City, PR2 <br />
                     United Kingdom
                   </p>
                 </div>
