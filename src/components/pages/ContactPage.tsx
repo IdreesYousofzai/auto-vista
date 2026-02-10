@@ -27,7 +27,7 @@ export default function ContactPage() {
       setIsSubmitting(false);
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-      
+
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
@@ -108,7 +108,7 @@ export default function ContactPage() {
                   <p className="text-zinc-400 text-base">
                     123 Auto Drive<br />
                     Innovation City, IC 12345<br />
-                    United States
+                    United Kingdom
                   </p>
                 </div>
               </div>
