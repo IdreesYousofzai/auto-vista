@@ -8,12 +8,9 @@ import {
   ArrowUpRight,
   Award,
   BarChart3,
-  Gauge,
   Rocket,
-  Shield,
   Sparkles,
-  TrendingUp,
-  Zap
+  TrendingUp
 } from 'lucide-react';
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -28,37 +25,6 @@ import {
 } from 'recharts';
 
 // --- PREMIUM AUTOMOTIVE DATA ---
-const FEATURES = [
-  {
-    icon: Gauge,
-    title: 'Raw Power',
-    desc: 'Engineering excellence meets uncompromising performance',
-    stat: '0-60 in 2.9s',
-    color: 'from-red-600 to-orange-500'
-  },
-  {
-    icon: Zap,
-    title: 'Tech Forward',
-    desc: 'Next-generation AI-powered driving systems',
-    stat: 'Level 3 Auto',
-    color: 'from-blue-600 to-cyan-500'
-  },
-  {
-    icon: Shield,
-    title: 'Built to Last',
-    desc: '10-year comprehensive protection program',
-    stat: '10yr Warranty',
-    color: 'from-emerald-600 to-teal-500'
-  },
-  {
-    icon: Award,
-    title: 'Premium Value',
-    desc: 'Industry-leading resale and trade-in guarantees',
-    stat: '95% Resale',
-    color: 'from-amber-600 to-yellow-500'
-  }
-];
-
 const STATS = [
   { value: '500+', label: 'Premium Vehicles', icon: Sparkles },
   { value: '98%', label: 'Client Satisfaction', icon: Award },
@@ -299,10 +265,7 @@ export default function HomePage() {
         </motion.div>
       </div>
 
-
-
-
-      {/* FEATURES - 3D Card Design */}
+      {/* FEATURES - BMW IMAGE SECTION */}
       <section className="w-full max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-16 sm:py-24 md:py-32 relative bg-zinc-950">
         {/* Ambient Glow Effects */}
         <motion.div
@@ -342,68 +305,46 @@ export default function HomePage() {
             </FadeIn>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {FEATURES.map((feature, idx) => (
-              <FadeIn key={idx} delay={idx * 0.1}>
-                <motion.div
-                  className="group relative h-full bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 overflow-hidden"
-                  whileHover={{
-                    y: -10,
-                    borderColor: 'rgb(239, 68, 68)',
-                    boxShadow: '0 20px 60px -12px rgba(239, 68, 68, 0.3)'
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {/* Gradient Background on Hover */}
-                  <motion.div
-                    className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-                  />
+          {/* BMW IMAGE BLOCK - REPLACES FEATURES GRID */}
+          <FadeIn delay={0.2}>
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <div className="w-full bg-zinc-900 border border-zinc-800 p-8 rounded-lg group hover:border-red-600 transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/30">
+                <Image
+                  src="https://pngimg.com/uploads/bmw/bmw_PNG1713.png"
+                  alt="BMW M Performance Coupe"
+                  className="w-full h-auto max-h-[500px] object-contain group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
 
-                  {/* Top Racing Stripe */}
-                  <motion.div
-                    className={`absolute top-0 left-0 h-1 bg-gradient-to-r ${feature.color} w-0 group-hover:w-full transition-all duration-500`}
-                  />
-
-                  <div className="relative z-10 p-8 h-full flex flex-col">
-                    {/* Icon with 3D Effect */}
-                    <motion.div
-                      className="mb-6"
-                      whileHover={{ scale: 1.1, rotateY: 15 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-red-600/30 group-hover:shadow-2xl group-hover:shadow-red-600/50 transition-all duration-300">
-                        <feature.icon className="w-8 h-8 text-white" />
-                      </div>
-                    </motion.div>
-
-                    {/* Stat Badge */}
-                    <div className="inline-flex self-start mb-4 px-3 py-1 bg-zinc-800/50 border border-zinc-700 rounded-full">
-                      <span className="text-red-400 text-xs font-bold tracking-wider" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                        {feature.stat}
-                      </span>
-                    </div>
-
-                    <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-red-400 transition-colors" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                      {feature.title}
-                    </h3>
-                    <p className="text-zinc-400 leading-relaxed text-sm">
-                      {feature.desc}
-                    </p>
-
-                    {/* Bottom Accent Line */}
-                    <div className="mt-auto pt-6">
-                      <motion.div
-                        className="h-0.5 bg-gradient-to-r from-red-600 to-transparent"
-                        initial={{ width: '30%' }}
-                        whileHover={{ width: '100%' }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    </div>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-4xl lg:text-5xl font-black text-white mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                    BMW M Performance
+                  </h3>
+                  <div className="inline-flex px-4 py-2 bg-zinc-800/50 border border-zinc-700 rounded-full mb-6">
+                    <span className="text-red-400 text-sm font-bold tracking-wider uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                      0-62 MPH IN 3.9s
+                    </span>
                   </div>
-                </motion.div>
-              </FadeIn>
-            ))}
-          </div>
+                </div>
+                <div className="space-y-3">
+                  <p className="text-zinc-300 text-lg leading-relaxed">
+                    3.0L TwinPower Turbo inline-6 engine with advanced M xDrive all-wheel drive.
+                  </p>
+                  <p className="text-zinc-400 text-lg leading-relaxed">
+                    Precision handling meets everyday luxury in a cockpit packed with next-gen digital instrumentation.
+                  </p>
+                </div>
+                <div className="pt-4 border-t border-zinc-800">
+                  <Link to="/vehicles">
+                    <Button className="bg-gradient-to-r from-red-600 to-orange-500 text-white hover:from-red-700 hover:to-orange-600 px-8 py-4 text-lg font-bold rounded-none border-b-4 border-red-800 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                      EXPLORE BMW MODELS →
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
