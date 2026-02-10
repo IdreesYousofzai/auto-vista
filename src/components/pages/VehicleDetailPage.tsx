@@ -1,26 +1,25 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  Calendar, 
-  Gauge, 
-  Fuel, 
-  Settings, 
-  Palette, 
-  Zap,
-  Shield,
-  Award,
-  Phone,
-  Mail
-} from 'lucide-react';
-import { BaseCrudService } from '@/integrations';
-import { Vehicles } from '@/entities';
-import { Button } from '@/components/ui/button';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Image } from '@/components/ui/image';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { Button } from '@/components/ui/button';
+import { Image } from '@/components/ui/image';
+import { Vehicles } from '@/entities';
+import { BaseCrudService } from '@/integrations';
+import { motion } from 'framer-motion';
+import {
+  ArrowLeft,
+  Award,
+  Calendar,
+  Fuel,
+  Gauge,
+  Mail,
+  Palette,
+  Phone,
+  Settings,
+  Shield,
+  Zap
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 export default function VehicleDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -91,8 +90,8 @@ export default function VehicleDetailPage() {
 
       {/* BACK BUTTON */}
       <div className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 pt-8">
-        <Link 
-          to="/vehicles" 
+        <Link
+          to="/vehicles"
           className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -105,7 +104,7 @@ export default function VehicleDetailPage() {
       {/* HERO IMAGE & DETAILS */}
       <section className="w-full max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          
+
           {/* IMAGE */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -115,7 +114,7 @@ export default function VehicleDetailPage() {
           >
             <div className="aspect-[4/3] bg-zinc-900 border border-zinc-800 overflow-hidden">
               <Image
-                src={vehicle.mainImage || 'https://static.wixstatic.com/media/cec0c1_5b45e47791214e1fbc7fa54c930bf5b3~mv2.png?originWidth=1152&originHeight=896'}
+                src={vehicle.mainImage || 'https://purepng.com/public/uploads/large/purepng.com-honda-carshondacarshonda-manufacturingvehicle-honda-1701527486092fnkn1.png'}
                 alt={`${vehicle.make} ${vehicle.model}`}
                 className="w-full h-full object-cover"
               />
@@ -212,16 +211,16 @@ export default function VehicleDetailPage() {
                 </Button>
               </Link>
               <div className="grid grid-cols-2 gap-4">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="border-2 border-zinc-700 text-white hover:bg-zinc-800 hover:border-red-500 rounded-none px-6 py-6 text-base font-bold transition-all duration-300"
                   style={{ fontFamily: 'Orbitron, sans-serif' }}
                 >
                   <Phone className="w-5 h-5 mr-2" />
                   CALL US
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="border-2 border-zinc-700 text-white hover:bg-zinc-800 hover:border-red-500 rounded-none px-6 py-6 text-base font-bold transition-all duration-300"
                   style={{ fontFamily: 'Orbitron, sans-serif' }}
                 >

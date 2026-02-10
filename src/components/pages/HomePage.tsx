@@ -310,7 +310,7 @@ export default function HomePage() {
             <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
               <div className="w-full bg-zinc-900 border border-zinc-800 p-8 rounded-lg group hover:border-red-600 transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/30">
                 <Image
-                  src="https://pngimg.com/uploads/bmw/bmw_PNG1713.png"
+                  src="https://freepngimg.com/thumb/bmw/58042-car-coupe-m6-bmw-m3-m2-white.png"
                   alt="BMW M Performance Coupe"
                   className="w-full h-auto max-h-[500px] object-contain group-hover:scale-105 transition-transform duration-300"
                 />
