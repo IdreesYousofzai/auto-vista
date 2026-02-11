@@ -106,7 +106,7 @@ export default function Footer() {
             <ul className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-zinc-400">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-red-500 mt-0.5" />
-                Navigation way, PR2 2YF, Preston
+                123 Fishergate, Preston, PR1 2NJ
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-red-500" />
