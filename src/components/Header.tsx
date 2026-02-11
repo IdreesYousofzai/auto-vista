@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Chatbot from '@/components/Chatbot';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -25,13 +26,15 @@ export default function Header() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header
-      className={`w-full sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-zinc-950/98 backdrop-blur-xl shadow-2xl shadow-black/50'
-          : 'bg-zinc-950/95 backdrop-blur-md'
-      }`}
-    >
+    <>
+      <Chatbot />
+      <header
+        className={`w-full sticky top-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-zinc-950/98 backdrop-blur-xl shadow-2xl shadow-black/50'
+            : 'bg-zinc-950/95 backdrop-blur-md'
+        }`}
+      >
       <div className="border-b border-zinc-800/50">
         <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
           <div className="flex items-center justify-between h-16 sm:h-20">
@@ -177,5 +180,6 @@ export default function Header() {
         </motion.div>
       )}
     </header>
+    </>
   );
 }
