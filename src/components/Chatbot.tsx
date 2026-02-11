@@ -10,26 +10,28 @@ interface Message {
 
 interface Option {
   label: string;
-  value: string;
+  action: string;
 }
-
-type Step =
-  | "main"
-  | "browse"
-  | "sports"
-  | "luxury"
-  | "suv"
-  | "budget"
-  | "services"
-  | "booking"
-  | "end";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [currentStep, setCurrentStep] = useState<Step>("main");
   const [options, setOptions] = useState<Option[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const addBotMessage = (text: string) => {
+    setMessages(prev => [
+      ...prev,
+      { id: Date.now().toString(), text, sender: "bot" }
+    ]);
+  };
+
+  const addUserMessage = (text: string) => {
+    setMessages(prev => [
+      ...prev,
+      { id: Date.now().toString(), text, sender: "user" }
+    ]);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -41,118 +43,194 @@ export default function Chatbot() {
 
   useEffect(() => {
     if (messages.length === 0) {
-      botMessage(
-        "Hi 👋 Welcome to Velocity.\nHow can I assist you today?"
-      );
-      setOptions([
-        { label: "🚗 Browse Vehicles", value: "browse" },
-        { label: "💰 Pricing & Budget", value: "budget" },
-        { label: "🛠 Services", value: "services" },
-        { label: "📅 Book Test Drive", value: "booking" },
-      ]);
+      showMainMenu();
     }
   }, []);
 
-  const botMessage = (text: string) => {
-    setMessages((prev) => [
-      ...prev,
-      { id: Date.now().toString(), text, sender: "bot" },
+  const showMainMenu = () => {
+    addBotMessage("Welcome to Velocity AI 👋\nWhat would you like to explore today?");
+    setOptions([
+      { label: "🚗 Browse Vehicles", action: "browse" },
+      { label: "💰 Pricing & Financing", action: "pricing" },
+      { label: "🛠 Services", action: "services" },
+      { label: "🔄 Trade-In", action: "trade" },
+      { label: "📅 Book Appointment", action: "booking" }
     ]);
   };
 
-  const userMessage = (text: string) => {
-    setMessages((prev) => [
-      ...prev,
-      { id: Date.now().toString(), text, sender: "user" },
-    ]);
-  };
+  const handleAction = (action: string, label: string) => {
+    addUserMessage(label);
 
-  const handleOptionClick = (option: Option) => {
-    userMessage(option.label);
-
-    switch (option.value) {
+    switch (action) {
+      // ================= VEHICLES =================
       case "browse":
-        setCurrentStep("browse");
-        botMessage("What type of vehicle are you looking for?");
+        addBotMessage("What type of vehicle fits your lifestyle?");
         setOptions([
-          { label: "🏎 Sports Cars", value: "sports" },
-          { label: "✨ Luxury Sedans", value: "luxury" },
-          { label: "🚙 SUVs", value: "suv" },
+          { label: "🏎 Performance", action: "performance" },
+          { label: "✨ Luxury", action: "luxury" },
+          { label: "🚙 SUV", action: "suv" },
+          { label: "💎 Most Popular", action: "popular" }
         ]);
         break;
 
-      case "sports":
-        setCurrentStep("sports");
-        botMessage(
-          "🔥 Our Top Sports Cars:\n\n• VXR-8 — 0-60 in 3.1s\n• Phantom GT — Track Ready Performance\n\nWould you like specs or pricing?"
+      case "performance":
+        addBotMessage(
+          "🔥 Performance Picks:\n\n• VXR-8 (0–60 in 3.1s)\n• Phantom GT (Track Tuned)\n\nWhat matters most?"
         );
         setOptions([
-          { label: "View Pricing", value: "budget" },
-          { label: "Book Test Drive", value: "booking" },
+          { label: "Top Speed", action: "speed" },
+          { label: "Acceleration", action: "acceleration" },
+          { label: "See Pricing", action: "pricing" }
         ]);
         break;
 
       case "luxury":
-        setCurrentStep("luxury");
-        botMessage(
-          "✨ Our Premium Sedans:\n\n• Aurox LX — Executive Comfort\n• Velar Prestige — Advanced Tech & Luxury\n\nInterested in pricing?"
+        addBotMessage(
+          "✨ Luxury Collection:\n\n• Aurox LX – Executive Comfort\n• Velar Prestige – Tech Focused\n\nWhat do you value most?"
         );
         setOptions([
-          { label: "See Pricing", value: "budget" },
-          { label: "Schedule Viewing", value: "booking" },
+          { label: "Interior Comfort", action: "comfort" },
+          { label: "Technology", action: "technology" },
+          { label: "See Pricing", action: "pricing" }
         ]);
         break;
 
       case "suv":
-        setCurrentStep("suv");
-        botMessage(
-          "🚙 Our Luxury SUVs:\n\n• Titan X — Performance SUV\n• Urban Elite — Family & Style\n\nWould you like pricing or to schedule a test drive?"
+        addBotMessage(
+          "🚙 SUV Options:\n\n• Titan X – Performance SUV\n• Urban Elite – Family & Style\n\nInterested in specs or pricing?"
         );
         setOptions([
-          { label: "View Pricing", value: "budget" },
-          { label: "Book Test Drive", value: "booking" },
+          { label: "View Specs", action: "specs" },
+          { label: "See Pricing", action: "pricing" }
         ]);
         break;
 
-      case "budget":
-        setCurrentStep("budget");
-        botMessage(
-          "💰 Our vehicles range from $45,000 to $51,000+ depending on specifications.\n\nWe also offer flexible financing options tailored to you."
+      case "popular":
+        addBotMessage(
+          "💎 Our Most Popular Model:\n\nPhantom GT – Balanced luxury & performance.\n\nWould you like to schedule a test drive?"
         );
         setOptions([
-          { label: "Browse Vehicles", value: "browse" },
-          { label: "Book Consultation", value: "booking" },
+          { label: "Book Test Drive", action: "booking" },
+          { label: "See Pricing", action: "pricing" }
         ]);
         break;
 
+      // ================= PRICING =================
+      case "pricing":
+        addBotMessage(
+          "Our vehicles range from $45,000 to $51,000+.\n\nWhat's your budget range?"
+        );
+        setOptions([
+          { label: "Under $50k", action: "budget_low" },
+          { label: "$50k–$80k", action: "budget_mid" },
+          { label: "$80k+", action: "budget_high" },
+          { label: "Financing Options", action: "financing" }
+        ]);
+        break;
+
+      case "budget_low":
+        addBotMessage(
+          "Under $50k Recommendation:\n\nUrban Elite SUV – Practical & stylish."
+        );
+        setOptions([
+          { label: "Book Consultation", action: "booking" },
+          { label: "Back to Menu", action: "menu" }
+        ]);
+        break;
+
+      case "budget_mid":
+        addBotMessage(
+          "$50k–$80k Recommendation:\n\nAurox LX – Premium comfort & tech."
+        );
+        setOptions([
+          { label: "Book Test Drive", action: "booking" },
+          { label: "Back to Menu", action: "menu" }
+        ]);
+        break;
+
+      case "budget_high":
+        addBotMessage(
+          "$80k+ Recommendation:\n\nPhantom GT – Elite performance."
+        );
+        setOptions([
+          { label: "Schedule Viewing", action: "booking" },
+          { label: "Back to Menu", action: "menu" }
+        ]);
+        break;
+
+      case "financing":
+        addBotMessage(
+          "We offer flexible financing:\n\n• Low monthly payments\n• Lease options\n• Custom plans\n\nWould you like to speak with our finance team?"
+        );
+        setOptions([
+          { label: "Yes, Connect Me", action: "booking" },
+          { label: "Back to Menu", action: "menu" }
+        ]);
+        break;
+
+      // ================= SERVICES =================
       case "services":
-        setCurrentStep("services");
-        botMessage(
-          "🛠 Our Elite Services:\n\n• Performance Diagnostics\n• Track-Ready Tuning\n• Ceramic Shield Pro\n• Executive Fleet Management\n\nWould you like to schedule a service?"
+        addBotMessage(
+          "🛠 Our Elite Services:\n\n• Performance Tuning\n• Diagnostics\n• Ceramic Coating\n• Fleet Management\n\nWhich interests you?"
         );
         setOptions([
-          { label: "Schedule Service", value: "booking" },
-          { label: "Back to Menu", value: "main" },
+          { label: "Performance Tuning", action: "tuning" },
+          { label: "Ceramic Coating", action: "ceramic" },
+          { label: "Fleet Management", action: "fleet" }
         ]);
         break;
 
+      case "tuning":
+        addBotMessage(
+          "Track-ready upgrades available.\n\nIncrease horsepower & optimize performance."
+        );
+        setOptions([
+          { label: "Schedule Service", action: "booking" },
+          { label: "Back to Menu", action: "menu" }
+        ]);
+        break;
+
+      case "ceramic":
+        addBotMessage(
+          "Ceramic Shield Pro:\n\n• Long-term paint protection\n• Gloss finish\n• UV resistance"
+        );
+        setOptions([
+          { label: "Schedule Application", action: "booking" },
+          { label: "Back to Menu", action: "menu" }
+        ]);
+        break;
+
+      case "fleet":
+        addBotMessage(
+          "Executive Fleet Solutions:\n\nFull management & maintenance for business vehicles."
+        );
+        setOptions([
+          { label: "Contact Fleet Team", action: "booking" },
+          { label: "Back to Menu", action: "menu" }
+        ]);
+        break;
+
+      // ================= TRADE =================
+      case "trade":
+        addBotMessage(
+          "We accept trade-ins.\n\nWould you like a valuation for your current vehicle?"
+        );
+        setOptions([
+          { label: "Get Valuation", action: "booking" },
+          { label: "Back to Menu", action: "menu" }
+        ]);
+        break;
+
+      // ================= BOOKING =================
       case "booking":
-        setCurrentStep("booking");
-        botMessage(
-          "📅 Perfect! Our team is available 24/7.\n\nPlease visit our Contact page to book your test drive or consultation."
+        addBotMessage(
+          "📅 Perfect.\n\nPlease visit our Contact page to schedule your appointment. Our concierge team is available 24/7."
         );
-        setOptions([{ label: "Back to Main Menu", value: "main" }]);
+        setOptions([{ label: "Back to Main Menu", action: "menu" }]);
         break;
 
-      case "main":
-        setCurrentStep("main");
-        botMessage("How else can I assist you?");
-        setOptions([
-          { label: "🚗 Browse Vehicles", value: "browse" },
-          { label: "💰 Pricing & Budget", value: "budget" },
-          { label: "🛠 Services", value: "services" },
-          { label: "📅 Book Test Drive", value: "booking" },
-        ]);
+      case "menu":
+        showMainMenu();
         break;
 
       default:
@@ -162,7 +240,6 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-red-600 to-red-700 text-white flex items-center justify-center shadow-lg"
@@ -172,24 +249,21 @@ export default function Chatbot() {
         {isOpen ? <X /> : <MessageCircle />}
       </motion.button>
 
-      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-32px)] bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
-            {/* Header */}
             <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
               <h3 className="text-white font-bold">VELOCITY AI</h3>
-              <p className="text-red-100 text-xs">Smart Assistant</p>
+              <p className="text-red-100 text-xs">Smart Concierge</p>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96">
-              {messages.map((msg) => (
+              {messages.map(msg => (
                 <div
                   key={msg.id}
                   className={`flex ${
@@ -210,16 +284,15 @@ export default function Chatbot() {
                 </div>
               ))}
 
-              {/* Options */}
               {options.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {options.map((option, index) => (
+                  {options.map((opt, i) => (
                     <button
-                      key={index}
-                      onClick={() => handleOptionClick(option)}
+                      key={i}
+                      onClick={() => handleAction(opt.action, opt.label)}
                       className="bg-zinc-800 hover:bg-red-600 text-white text-xs px-3 py-2 rounded-full transition-colors"
                     >
-                      {option.label}
+                      {opt.label}
                     </button>
                   ))}
                 </div>
