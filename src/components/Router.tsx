@@ -2,20 +2,25 @@ import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
-import HomePage from '@/components/pages/HomePage';
-import VehiclesPage from '@/components/pages/VehiclesPage';
-import VehicleDetailPage from '@/components/pages/VehicleDetailPage';
-import Car3DExperiencePage from '@/components/pages/Car3DExperiencePage';
-import ServicesPage from '@/components/pages/ServicesPage';
-import AboutPage from '@/components/pages/AboutPage';
-import ContactPage from '@/components/pages/ContactPage';
+import { lazy, Suspense } from 'react';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+
+const HomePage = lazy(() => import('@/components/pages/HomePage'));
+const VehiclesPage = lazy(() => import('@/components/pages/VehiclesPage'));
+const VehicleDetailPage = lazy(() => import('@/components/pages/VehicleDetailPage'));
+const Car3DExperiencePage = lazy(() => import('@/components/pages/Car3DExperiencePage'));
+const ServicesPage = lazy(() => import('@/components/pages/ServicesPage'));
+const AboutPage = lazy(() => import('@/components/pages/AboutPage'));
+const ContactPage = lazy(() => import('@/components/pages/ContactPage'));
 
 // Layout component that includes ScrollToTop
 function Layout() {
   return (
     <>
       <ScrollToTop />
-      <Outlet />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Outlet />
+      </Suspense>
     </>
   );
 }
@@ -28,31 +33,59 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <HomePage />
+          </Suspense>
+        ),
       },
       {
         path: "vehicles",
-        element: <VehiclesPage />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <VehiclesPage />
+          </Suspense>
+        ),
       },
       {
         path: "vehicles/:id",
-        element: <VehicleDetailPage />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <VehicleDetailPage />
+          </Suspense>
+        ),
       },
       {
         path: "3d-experience",
-        element: <Car3DExperiencePage />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Car3DExperiencePage />
+          </Suspense>
+        ),
       },
       {
         path: "services",
-        element: <ServicesPage />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <ServicesPage />
+          </Suspense>
+        ),
       },
       {
         path: "about",
-        element: <AboutPage />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <AboutPage />
+          </Suspense>
+        ),
       },
       {
         path: "contact",
-        element: <ContactPage />,
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <ContactPage />
+          </Suspense>
+        ),
       },
       {
         path: "*",
