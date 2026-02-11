@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Target, Award, Users, Linkedin, Mail } from 'lucide-react';
-import { BaseCrudService } from '@/integrations';
-import { TeamMembers } from '@/entities';
-import { Image } from '@/components/ui/image';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { Image } from '@/components/ui/image';
+import { TeamMembers } from '@/entities';
+import { BaseCrudService } from '@/integrations';
+import { motion } from 'framer-motion';
+import { Award, Linkedin, Mail, Target, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function AboutPage() {
   const [teamMembers, setTeamMembers] = useState<TeamMembers[]>([]);
@@ -87,7 +87,7 @@ export default function AboutPage() {
               Our Story
             </h2>
             <p className="text-zinc-400 text-base mb-4">
-              Founded in 2011, Velocity emerged from a vision to revolutionize the car buying experience. We recognized that customers deserved more than traditional dealership practices—they needed transparency, data-driven insights, and genuine partnership.
+              Founded in 2016, Velocity emerged from a vision to revolutionize the car buying experience. We recognized that customers deserved more than traditional dealership practices—they needed transparency, data-driven insights, and genuine partnership.
             </p>
             <p className="text-zinc-400 text-base">
               Today, we stand as a leader in automotive retail innovation, combining cutting-edge technology with personalized service to deliver unmatched value to our customers. Our commitment to excellence has earned us recognition as one of the most trusted dealerships in the region.
