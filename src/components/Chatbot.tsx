@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  AlertCircle,
   BadgeCheck,
   Brain,
   Gauge,
@@ -16,15 +15,6 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-// ============= Configuration =============
-const API_CONFIG = {
-  key: "sk-abcdqrstefghuvwxabcdqrstefghuvwxabcdqrst",
-  endpoint: "https://api.openai.com/v1/chat/completions",
-  model: "gpt-4-turbo-preview", // or "gpt-3.5-turbo" for faster/cheaper responses
-  maxTokens: 500,
-  temperature: 0.7
-};
 
 // ============= Types & Interfaces =============
 interface Message {
@@ -92,6 +82,13 @@ interface UserPreference {
   vehicleType?: string;
   features?: string[];
   monthlyPayment?: number;
+}
+
+interface FinancingOption {
+  term: number;
+  apr: number;
+  monthlyPayment: number;
+  totalInterest: number;
 }
 
 // ============= Data Layer =============
@@ -400,162 +397,709 @@ const DEALERSHIP_INFO = {
   services: ["Sales", "Service", "Parts", "Financing", "Trade-ins"]
 };
 
-// ============= AI Service Layer =============
-class AIService {
-  private apiKey: string;
-  private endpoint: string;
-  private model: string;
-  private maxRetries: number = 3;
-  private timeoutMs: number = 15000;
+// ============= NLP & Response Engine =============
+class ResponseEngine {
+  private context: {
+    lastQuery?: string;
+    userPreferences: UserPreference;
+    conversationHistory: string[];
+    mentionedCars: string[];
+  };
 
-  constructor(apiKey: string) {
-    this.apiKey = apiKey;
-    this.endpoint = API_CONFIG.endpoint;
-    this.model = API_CONFIG.model;
+  constructor() {
+    this.context = {
+      userPreferences: {},
+      conversationHistory: [],
+      mentionedCars: []
+    };
   }
 
-  private async fetchWithTimeout(url: string, options: RequestInit, timeout: number): Promise<Response> {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
+  private matchesIntent(text: string, keywords: string[]): boolean {
+    return keywords.some(keyword => text.toLowerCase().includes(keyword.toLowerCase()));
+  }
 
-    try {
-      const response = await fetch(url, {
-        ...options,
-        signal: controller.signal
-      });
-      clearTimeout(id);
-      return response;
-    } catch (error) {
-      clearTimeout(id);
-      throw error;
+  private extractBudget(text: string): number | null {
+    const matches = text.match(/\$?(\d{1,3}(?:,\d{3})*|\d+)(?:\s*k)?/gi);
+    if (matches) {
+      const numbers = matches.map(m => parseInt(m.replace(/[$,k]/gi, '')) * (m.toLowerCase().includes('k') ? 1000 : 1));
+      return numbers[0] || null;
     }
+    return null;
   }
 
-  async generateResponse(
-    message: string,
-    conversationHistory: { role: "user" | "assistant" | "system"; content: string }[],
-    contextData: any
-  ): Promise<string> {
-    let lastError: Error | null = null;
+  private extractVehicleType(text: string): string | null {
+    const types = ['suv', 'performance', 'luxury', 'electric', 'hybrid', 'sports', 'family'];
+    for (const type of types) {
+      if (text.toLowerCase().includes(type)) {
+        return type;
+      }
+    }
+    return null;
+  }
 
-    for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
-      try {
-        // Build system prompt with context
-        const systemPrompt = this.buildSystemPrompt(contextData);
+  async generateResponse(message: string): Promise<{
+    text: string;
+    attachments?: Attachment[];
+    quickReplies?: QuickReply[];
+  }> {
+    const lower = message.toLowerCase();
+    this.context.lastQuery = lower;
+    this.context.conversationHistory.push(lower);
 
-        // Prepare messages array
-        const messages = [
-          { role: "system", content: systemPrompt },
-          ...conversationHistory.slice(-10), // Last 10 messages for context
-          { role: "user", content: message }
-        ];
+    // Extract preferences
+    const budget = this.extractBudget(message);
+    if (budget) {
+      this.context.userPreferences.budget = budget;
+    }
 
-        const response = await this.fetchWithTimeout(
-          this.endpoint,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${this.apiKey}`
-            },
-            body: JSON.stringify({
-              model: this.model,
-              messages: messages,
-              max_tokens: API_CONFIG.maxTokens,
-              temperature: API_CONFIG.temperature,
-              presence_penalty: 0.6,
-              frequency_penalty: 0.3
-            })
-          },
-          this.timeoutMs
-        );
+    const vehicleType = this.extractVehicleType(message);
+    if (vehicleType) {
+      this.context.userPreferences.vehicleType = vehicleType;
+    }
 
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(`API error (${response.status}): ${errorData.error?.message || response.statusText}`);
+    // Enhanced intent detection
+    if (this.matchesIntent(lower, ["electric", "ev", "tesla", "volt", "battery", "zero emission"])) {
+      return this.handleElectricQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["hybrid", "eco", "fuel", "efficient", "mpg", "gas mileage"])) {
+      return this.handleHybridQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["performance", "fast", "speed", "sport", "accelerat", "track", "race"])) {
+      return this.handlePerformanceQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["luxury", "premium", "comfort", "executive", "high-end"])) {
+      return this.handleLuxuryQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["suv", "family", "space", "kid", "cargo", "towing", "offroad"])) {
+      return this.handleSuvQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["price", "cost", "budget", "afford", "cheap", "expensive", "how much"])) {
+      return this.handlePriceQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["finance", "loan", "lease", "payment", "apr", "credit", "monthly"])) {
+      return this.handleFinanceQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["service", "maintain", "repair", "tune", "coating", "detailing", "fix"])) {
+      return this.handleServiceQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["test drive", "testdrive", "try", "drive", "test"])) {
+      return this.handleTestDriveQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["trade", "sell", "old car", "part exchange"])) {
+      return this.handleTradeInQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["appointment", "schedule", "book", "calendar", "visit"])) {
+      return this.handleAppointmentQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["compare", "vs", "versus", "difference", "better"])) {
+      return this.handleComparisonQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["warranty", "guarantee", "protect", "coverage"])) {
+      return this.handleWarrantyQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["inventory", "stock", "available", "in stock", "lot"])) {
+      return this.handleInventoryQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["feature", "spec", "technology", "tech", "option"])) {
+      return this.handleFeaturesQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["location", "dealer", "showroom", "address", "hours", "open"])) {
+      return this.handleLocationQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["contact", "phone", "email", "call", "reach", "human", "agent"])) {
+      return this.handleContactQuery(lower);
+    }
+    if (this.matchesIntent(lower, ["hello", "hi", "hey", "greetings", "start", "begin"])) {
+      return this.handleGreeting();
+    }
+    if (this.matchesIntent(lower, ["help", "what can you do", "capabilities", "support", "how work"])) {
+      return this.handleHelp();
+    }
+    if (this.matchesIntent(lower, ["clear", "reset", "start over", "new chat", "restart"])) {
+      return this.handleReset();
+    }
+    if (this.matchesIntent(lower, ["thank", "thanks", "appreciate"])) {
+      return this.handleThanks();
+    }
+
+    return this.handleUnknown();
+  }
+
+  private handleElectricQuery(query: string): any {
+    const cars = CAR_DATABASE.filter(c => c.type === "electric");
+    const car = cars[0];
+
+    if (query.includes("range")) {
+      return {
+        text: `${car.name} delivers an impressive ${car.range} of range on a full charge. With 15-minute fast charging (10-80%), you can add 200 miles during a coffee break. The battery is backed by an ${car.warranty} warranty.`,
+        attachments: [{
+          type: "spec",
+          content: {
+            "Battery": "100 kWh",
+            "Range": car.range,
+            "Fast Charge": "15 min (10-80%)",
+            "Home Charge": "8 hours (Level 2)",
+            "Efficiency": "3.8 mi/kWh",
+            "Warranty": car.warranty
+          }
+        }],
+        quickReplies: [
+          { text: "⚡ Charging network", action: "charging network" },
+          { text: "💰 Cost per mile", action: "ev cost" },
+          { text: "🏠 Home installation", action: "home charging" }
+        ]
+      };
+    }
+
+    if (query.includes("cost") || query.includes("save")) {
+      const savings = (car.mpg ? 1500 : 2000); // Annual fuel savings estimate
+      return {
+        text: `Owning a ${car.name} saves approximately $${savings}/year in fuel vs. gas vehicles. With federal tax credit up to $7,500 and HOV lane access, total value is exceptional. Current special: 0.9% APR for 60 months.`,
+        quickReplies: [
+          { text: "💰 Calculate savings", action: "ev savings" },
+          { text: "✅ Tax incentives", action: "ev incentives" },
+          { text: "📊 Total cost", action: "ev tco" }
+        ]
+      };
+    }
+
+    return {
+      text: `The ${car.name} is our flagship EV, featuring ${car.acceleration} 0-60, ${car.range} range, and ${car.horsepower} HP. It's rated ${car.rating}/5 stars. Available now in ${car.color} with ${car.features.slice(0, 3).join(", ")}.`,
+      attachments: [{
+        type: "spec",
+        content: {
+          "Acceleration": car.acceleration,
+          "Range": car.range,
+          "Power": `${car.horsepower} HP`,
+          "Torque": `${car.torque} lb-ft`,
+          "Drive": car.engine,
+          "Rating": `${car.rating}/5 ⭐`
         }
+      }],
+      quickReplies: [
+        { text: "🆚 Compare with Tesla", action: "compare volt prime model 3" },
+        { text: "💰 Pricing & incentives", action: "ev pricing" },
+        { text: "📅 Schedule test drive", action: "testdrive volt prime" }
+      ]
+    };
+  }
 
-        const data = await response.json();
-        return data.choices[0].message.content;
+  private handleHybridQuery(query: string): any {
+    const cars = CAR_DATABASE.filter(c => c.type === "hybrid");
+    const car = cars[0];
 
-      } catch (error) {
-        lastError = error as Error;
-        console.error(`AI service attempt ${attempt} failed:`, error);
-
-        // Wait before retrying (exponential backoff)
-        if (attempt < this.maxRetries) {
-          await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+    return {
+      text: `The ${car.name} hybrid achieves ${car.mpg} MPG combined and has a total range of 600+ miles. The solar roof adds up to 500 miles/year of free driving. Starting at $${car.price.toLocaleString()} ($${car.monthlyPayment}/month).`,
+      attachments: [{
+        type: "spec",
+        content: {
+          "MPG": `${car.mpg} combined`,
+          "Range": "600+ miles",
+          "CO2": "89 g/km",
+          "Solar Roof": "+500 mi/year",
+          "Battery": "1.8 kWh",
+          "Warranty": car.warranty
         }
+      }],
+      quickReplies: [
+        { text: "💚 Hybrid vs EV", action: "compare hybrid electric" },
+        { text: "💰 Tax credit", action: "hybrid incentives" },
+        { text: "🔧 Maintenance cost", action: "hybrid maintenance" }
+      ]
+    };
+  }
+
+  private handlePerformanceQuery(query: string): any {
+    let cars = CAR_DATABASE.filter(c => c.type === "performance");
+
+    if (query.includes("fastest") || query.includes("quickest")) {
+      cars = cars.sort((a, b) => parseFloat(a.acceleration) - parseFloat(b.acceleration));
+    }
+
+    if (query.includes("horsepower") || query.includes("hp") || query.includes("power")) {
+      cars = cars.sort((a, b) => b.horsepower - a.horsepower);
+    }
+
+    const car = cars[0];
+
+    return {
+      text: `For ultimate performance, the ${car.name} delivers ${car.acceleration} 0-60 with ${car.horsepower} HP from its ${car.engine}. Features include ${car.features.slice(0, 3).join(", ")}. Rated ${car.rating}/5 by owners. Starting at $${car.price.toLocaleString()}.`,
+      attachments: [{
+        type: "spec",
+        content: {
+          "0-60": car.acceleration,
+          "Top Speed": car.topSpeed,
+          "HP": `${car.horsepower} @ 7,500 rpm`,
+          "Torque": `${car.torque} lb-ft`,
+          "Weight": car.weight,
+          "Power/Weight": `${(car.horsepower / parseInt(car.weight || "3500")).toFixed(2)} hp/lb`
+        }
+      }],
+      quickReplies: [
+        { text: "🏁 Track package", action: "track package" },
+        { text: "🆚 Compare models", action: "compare performance" },
+        { text: "💰 Performance financing", action: "finance performance" }
+      ]
+    };
+  }
+
+  private handleLuxuryQuery(query: string): any {
+    const cars = CAR_DATABASE.filter(c => c.type === "luxury");
+    const car = cars[Math.floor(Math.random() * cars.length)];
+
+    return {
+      text: `The ${car.name} redefines luxury with ${car.features.slice(0, 2).join(" and ")}. The interior features premium Nappa leather, open-pore wood trim, and a ${car.features[2]}. Priced at $${car.price.toLocaleString()} with ${car.warranty} warranty.`,
+      attachments: [{
+        type: "spec",
+        content: {
+          "Interior": "Nappa leather",
+          "Sound": "1,200W 19-speaker",
+          "Climate": "4-zone",
+          "Seats": "Heated/ventilated/massage",
+          "Display": "OLED curved 31-inch",
+          "Warranty": car.warranty
+        }
+      }],
+      quickReplies: [
+        { text: "✨ Executive package", action: "executive package" },
+        { text: "🎨 Custom interior", action: "custom interior" },
+        { text: "🏆 Compare with German", action: "compare luxury german" }
+      ]
+    };
+  }
+
+  private handleSuvQuery(query: string): any {
+    const cars = CAR_DATABASE.filter(c => c.type === "suv");
+    const car = query.includes("off") || query.includes("trail") ? cars[0] : cars[1];
+
+    return {
+      text: `The ${car.name} SUV offers seating for 7, ${car.features[2]}, and ${car.mpg} MPG. Towing capacity up to 7,500 lbs with the available package. Safety features include ${car.features[4] || car.features[3]}. Starting at $${car.price.toLocaleString()}.`,
+      attachments: [{
+        type: "spec",
+        content: {
+          "Seating": "7 passengers",
+          "Cargo": "84.5 cu ft max",
+          "Towing": "7,500 lbs",
+          "MPG": car.mpg,
+          "Ground Clearance": "8.7 inches",
+          "Warranty": car.warranty
+        }
+      }],
+      quickReplies: [
+        { text: "🧒 Family package", action: "family package" },
+        { text: "⛰️ Off-road package", action: "offroad package" },
+        { text: "🚗 3-row comparison", action: "compare suvs" }
+      ]
+    };
+  }
+
+  private handlePriceQuery(query: string): any {
+    const minPrice = Math.min(...CAR_DATABASE.map(c => c.price));
+    const maxPrice = Math.max(...CAR_DATABASE.map(c => c.price));
+
+    if (query.includes("budget") || query.includes("affordable") || query.includes("cheap")) {
+      const affordable = CAR_DATABASE.filter(c => c.price <= 55000).sort((a, b) => a.price - b.price);
+      return {
+        text: `Based on your budget, I recommend:\n\n${affordable.map(c => `• ${c.name}: $${c.price.toLocaleString()} (${c.mpg || c.range || c.acceleration})`).join('\n')}\n\nAll qualify for special financing rates.`,
+        quickReplies: [
+          { text: "💰 Under $40k", action: "price under 40000" },
+          { text: "💰 $40k-$60k", action: "price 40000-60000" },
+          { text: "💎 Best value", action: "best value" }
+        ]
+      };
+    }
+
+    if (query.includes("monthly") || query.includes("payment")) {
+      const sample = CAR_DATABASE[3];
+      return {
+        text: `Monthly payments vary based on term and down payment. Example: ${sample.name} at $${sample.price.toLocaleString()}\n\n• 60 mo @ 3.9%: $${sample.monthlyPayment}/mo\n• 72 mo @ 4.9%: $${Math.round(sample.monthlyPayment * 0.9)}/mo\n• 36 mo lease: $${FINANCING_OPTIONS.lease.starting}/mo\n\nWhat's your target monthly payment?`,
+        quickReplies: [
+          { text: "💰 Under $500/mo", action: "payment under 500" },
+          { text: "💰 $500-$800/mo", action: "payment 500-800" },
+          { text: "💰 $800-$1000/mo", action: "payment 800-1000" },
+          { text: "📊 Calculator", action: "payment calculator" }
+        ]
+      };
+    }
+
+    return {
+      text: `Our vehicles range from $${minPrice.toLocaleString()} to $${maxPrice.toLocaleString()}. Current specials:\n\n• 0.9% APR for 60 months on select models\n• $1,000 bonus cash for trade-ins\n• 1.9% lease money factor\n\nWhat's your preferred price range?`,
+      quickReplies: [
+        { text: "💰 $30k-$50k", action: "price 30000-50000" },
+        { text: "💰 $50k-$70k", action: "price 50000-70000" },
+        { text: "💰 $70k-$100k", action: "price 70000-100000" },
+        { text: "🎁 Special offers", action: "offers" }
+      ]
+    };
+  }
+
+  private handleFinanceQuery(query: string): any {
+    if (query.includes("lease")) {
+      return {
+        text: `Lease specials starting at $${FINANCING_OPTIONS.lease.starting}/month for ${FINANCING_OPTIONS.lease.term} months with $${FINANCING_OPTIONS.lease.miles.toLocaleString()} miles/year. Current offers:\n\n• Urban Elite: $379/mo, $2,999 due at signing\n• Nexus Hybrid: $329/mo, $2,499 due at signing\n• VXR-8: $799/mo, $4,999 due at signing\n\n36-month terms available.`,
+        quickReplies: [
+          { text: "📱 Calculate lease", action: "lease calculator" },
+          { text: "🏁 Lease vs buy", action: "lease vs buy" },
+          { text: "✅ Current specials", action: "lease specials" }
+        ]
+      };
+    }
+
+    if (query.includes("credit") || query.includes("score")) {
+      return {
+        text: `We work with all credit profiles:\n\n✅ Excellent (720+): ${FINANCING_OPTIONS.apr.excellent}% APR\n✅ Good (660-719): ${FINANCING_OPTIONS.apr.good}% APR\n🟡 Fair (620-659): ${FINANCING_OPTIONS.apr.fair}% APR\n🟢 Building credit: Special programs available\n\nPre-qualification takes 2 minutes and doesn't affect your score.`,
+        quickReplies: [
+          { text: "💳 Pre-qualify now", action: "prequalify" },
+          { text: "📈 Improve credit", action: "credit tips" },
+          { text: "🎯 Special programs", action: "credit programs" }
+        ]
+      };
+    }
+
+    return {
+      text: `Financing options available from ${FINANCING_OPTIONS.apr.excellent}% APR for qualified buyers. Terms: ${FINANCING_OPTIONS.terms.join(", ")} months. Example: $50,000 vehicle\n• 10% down: $500/mo @ 60 mo\n• 0% down: $920/mo @ 60 mo\n• 72 mo: $795/mo\n\nWould you like a personalized quote?`,
+      quickReplies: [
+        { text: "💳 Calculate payment", action: "payment calculator" },
+        { text: "📝 Apply online", action: "apply financing" },
+        { text: "✨ 0% APR offers", action: "zero apr" },
+        { text: "💰 Trade-in value", action: "tradein" }
+      ]
+    };
+  }
+
+  private handleServiceQuery(query: string): any {
+    if (query.includes("tuning") || query.includes("performance")) {
+      const service = SERVICES.find(s => s.id === "tuning")!;
+      return {
+        text: `${service.name}: $${service.price}. Includes ${service.includes.join(", ")}. Typical gains: 50-80 HP, 60-100 lb-ft torque. 2-day turnaround with 12-month warranty. Stage 2 available with intake/exhaust.`,
+        quickReplies: [
+          { text: "📅 Schedule tuning", action: "book tuning" },
+          { text: "📊 Dyno graphs", action: "dyno results" },
+          { text: "🚀 Stage 2 upgrade", action: "stage2 tuning" }
+        ]
+      };
+    }
+
+    if (query.includes("coating") || query.includes("paint") || query.includes("ceramic")) {
+      const service = SERVICES.find(s => s.id === "coating")!;
+      return {
+        text: `${service.name}: $${service.price}. Professional-grade ceramic coating with 9H hardness. Includes ${service.includes.join(", ")}. 5-year warranty against fading, peeling. Maintains 90% gloss after 5 years.`,
+        quickReplies: [
+          { text: "🎨 Color options", action: "coating colors" },
+          { text: "📅 Book now", action: "book coating" },
+          { text: "🛡️ Compare packages", action: "compare coating" }
+        ]
+      };
+    }
+
+    const popularServices = SERVICES.filter(s => s.popular);
+    return {
+      text: `Popular service packages:\n\n${SERVICES.map(s => `• ${s.name}: ${typeof s.price === 'number' ? '$' + s.price.toLocaleString() : s.price} (${s.duration})`).join('\n')}\n\nWhich service can I help you with?`,
+      quickReplies: SERVICES.slice(0, 4).map(s => ({
+        text: `${s.name}`,
+        action: `service ${s.id}`
+      }))
+    };
+  }
+
+  private handleTestDriveQuery(query: string): any {
+    let carSuggestion = "";
+    if (this.context.userPreferences.vehicleType) {
+      const cars = CAR_DATABASE.filter(c => c.type === this.context.userPreferences.vehicleType);
+      if (cars.length) {
+        carSuggestion = ` Based on your interest in ${this.context.userPreferences.vehicleType} vehicles, I recommend starting with the ${cars[0].name}.`;
       }
     }
 
-    // If all retries fail, use fallback response
-    console.error("All AI service attempts failed:", lastError);
-    return this.getFallbackResponse(message, contextData);
+    return {
+      text: `I can schedule your test drive right now!${carSuggestion}\n\nAvailable experiences:\n🚗 30-min Standard: Get a feel for daily driving\n🌟 60-min Extended: Mixed roads & features demo\n🏁 90-min Performance: Track time & limits (select models)\n\nWhat time works for you?`,
+      quickReplies: [
+        { text: "📅 Today", action: "testdrive today" },
+        { text: "📅 Tomorrow", action: "testdrive tomorrow" },
+        { text: "📅 This weekend", action: "testdrive weekend" },
+        { text: "🚀 Performance demo", action: "testdrive performance" },
+        { text: "🏠 Home delivery", action: "testdrive home" }
+      ]
+    };
   }
 
-  private buildSystemPrompt(contextData: any): string {
-    const { inventory, services, financing, dealership } = contextData;
-
-    return `You are Velocity AI, an expert automotive assistant for Velocity Automotive dealership. Your personality is professional, enthusiastic, and helpful. You have deep knowledge about our vehicles, services, and financing options.
-
-CORE RESPONSIBILITIES:
-1. Provide accurate vehicle information from our database
-2. Help customers find the perfect vehicle for their needs
-3. Explain financing and lease options clearly
-4. Schedule test drives and appointments
-5. Answer questions about services and maintenance
-6. Handle trade-in valuations
-7. Compare different vehicle models
-
-AVAILABLE VEHICLES:
-${JSON.stringify(inventory, null, 2)}
-
-SERVICES OFFERED:
-${JSON.stringify(services, null, 2)}
-
-FINANCING OPTIONS:
-${JSON.stringify(financing, null, 2)}
-
-DEALERSHIP INFO:
-${JSON.stringify(dealership, null, 2)}
-
-RESPONSE GUIDELINES:
-- Be concise but informative (2-3 paragraphs max)
-- Use emojis occasionally for friendly tone
-- Always mention specific vehicle names, prices, and features
-- Include monthly payment estimates when discussing pricing
-- Offer to schedule test drives or appointments proactively
-- Compare vehicles when relevant
-- Never invent fake vehicles or services
-- If you don't know something, offer to connect with a human agent
-- Keep responses under ${API_CONFIG.maxTokens} tokens
-
-Remember: You're representing Velocity Automotive - be helpful, accurate, and focused on providing excellent customer service.`;
+  private handleTradeInQuery(query: string): any {
+    return {
+      text: `Get an instant cash offer in 3 easy steps:\n\n1️⃣ Tell me your vehicle's year, make, model\n2️⃣ Share current mileage & condition\n3️⃣ Receive guaranteed offer valid for 7 days\n\nWe beat CarMax and Carvana by an average of $1,200. Ready to start?`,
+      quickReplies: [
+        { text: "🚗 Start valuation", action: "tradein start" },
+        { text: "📊 Value estimator", action: "tradein estimate" },
+        { text: "💰 Payoff calculator", action: "payoff calculator" },
+        { text: "🏆 Trade-in specials", action: "tradein specials" }
+      ]
+    };
   }
 
-  private getFallbackResponse(message: string, contextData: any): string {
-    // Intelligent fallback responses based on message content
-    const lower = message.toLowerCase();
+  private handleAppointmentQuery(query: string): any {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    if (lower.includes("hello") || lower.includes("hi")) {
-      return "👋 Hello! I'm currently experiencing high demand. While I connect you with our AI service, is there a specific vehicle or service you're interested in?";
+    return {
+      text: `Let's schedule your visit! We're open:\n\n${Object.entries(DEALERSHIP_INFO.hours).map(([day, hours]) => `📅 ${day.charAt(0).toUpperCase() + day.slice(1)}: ${hours}`).join('\n')}\n\nAvailable appointment types:\n• 🚗 Sales Consultation (45 min)\n• 🔧 Service (1-3 hours)\n• 💰 Finance & Delivery (90 min)\n• 📋 Vehicle Return (30 min)`,
+      quickReplies: [
+        { text: "🚗 Sales", action: "appointment sales" },
+        { text: "🔧 Service", action: "appointment service" },
+        { text: "💰 Finance", action: "appointment finance" },
+        { text: "📅 Tomorrow", action: `appointment ${tomorrow.toISOString().split('T')[0]}` }
+      ]
+    };
+  }
+
+  private handleComparisonQuery(query: string): any {
+    let models: CarInfo[] = [];
+
+    if (query.includes("suv")) {
+      models = CAR_DATABASE.filter(c => c.type === "suv").slice(0, 2);
+    } else if (query.includes("electric") || query.includes("ev")) {
+      models = CAR_DATABASE.filter(c => c.type === "electric" || c.type === "hybrid").slice(0, 2);
+    } else if (query.includes("performance")) {
+      models = CAR_DATABASE.filter(c => c.type === "performance").slice(0, 2);
+    } else if (query.includes("luxury")) {
+      models = CAR_DATABASE.filter(c => c.type === "luxury").slice(0, 2);
+    } else {
+      models = CAR_DATABASE.slice(0, 2);
     }
 
-    if (lower.includes("car") || lower.includes("vehicle")) {
-      const cars = contextData.inventory.slice(0, 3);
-      return `🚗 Our most popular vehicles right now:\n\n${cars.map((c: CarInfo) => `• **${c.name}**: $${c.price.toLocaleString()} - ${c.description.split('.')[0]}`).join('\n')}\n\nWould you like more details on any of these?`;
+    if (models.length >= 2) {
+      return {
+        text: `Comparison: ${models[0].name} vs ${models[1].name}\n\n` +
+          `**${models[0].name}**\n` +
+          `• Price: $${models[0].price.toLocaleString()}\n` +
+          `• 0-60: ${models[0].acceleration}\n` +
+          `• MPG/Range: ${models[0].mpg || models[0].range || 'N/A'}\n` +
+          `• HP: ${models[0].horsepower}\n` +
+          `• Rating: ${models[0].rating}/5\n\n` +
+          `**${models[1].name}**\n` +
+          `• Price: $${models[1].price.toLocaleString()}\n` +
+          `• 0-60: ${models[1].acceleration}\n` +
+          `• MPG/Range: ${models[1].mpg || models[1].range || 'N/A'}\n` +
+          `• HP: ${models[1].horsepower}\n` +
+          `• Rating: ${models[1].rating}/5\n\n` +
+          `Which would you like to test drive?`,
+        attachments: [{
+          type: "comparison",
+          content: {
+            model1: models[0].name,
+            model2: models[1].name,
+            specs: ["Price", "0-60", "Power", "Efficiency", "Rating"]
+          }
+        }],
+        quickReplies: [
+          { text: `🚗 ${models[0].name}`, action: `testdrive ${models[0].id}` },
+          { text: `🚗 ${models[1].name}`, action: `testdrive ${models[1].id}` },
+          { text: "📊 Detailed comparison", action: `detailed compare ${models[0].id} ${models[1].id}` }
+        ]
+      };
     }
 
-    if (lower.includes("price") || lower.includes("cost")) {
-      return `💰 Our vehicles range from $${Math.min(...contextData.inventory.map((c: CarInfo) => c.price)).toLocaleString()} to $${Math.max(...contextData.inventory.map((c: CarInfo) => c.price)).toLocaleString()}. Most models qualify for 0.9% - 3.9% APR financing. What's your target budget?`;
+    return this.handleUnknown();
+  }
+
+  private handleFeaturesQuery(query: string): any {
+    let car: CarInfo | undefined;
+
+    if (this.context.mentionedCars.length) {
+      car = CAR_DATABASE.find(c => c.id === this.context.mentionedCars[0]);
+    } else {
+      car = CAR_DATABASE.find(c => c.type === (this.context.userPreferences.vehicleType as any) || c.type === "luxury");
     }
 
-    if (lower.includes("test drive")) {
-      return "📅 I'd be happy to schedule a test drive! We offer 30-minute standard drives or 60-minute extended experiences. What day and time works best for you?";
+    if (!car) {
+      car = CAR_DATABASE[3];
     }
 
-    return "I apologize, but I'm having trouble connecting to our AI service. Please try again in a moment, or call us directly at 1-800-VELOCITY for immediate assistance. How else can I help you?";
+    return {
+      text: `Key features of the ${car.name}:\n\n${car.features.map(f => `✓ ${f}`).join('\n')}\n\nHighlighted technologies:\n• ${car.engine} powertrain\n• ${car.topSpeed} top speed\n• ${car.warranty} warranty\n• ${car.rating}/5 owner satisfaction\n\nWould you like more details on any specific feature?`,
+      quickReplies: [
+        { text: "🔧 Performance", action: `features ${car.id} performance` },
+        { text: "🛋️ Comfort", action: `features ${car.id} comfort` },
+        { text: "🛡️ Safety", action: `features ${car.id} safety` },
+        { text: "📱 Technology", action: `features ${car.id} tech` }
+      ]
+    };
+  }
+
+  private handleLocationQuery(query: string): any {
+    return {
+      text: `📍 **${DEALERSHIP_INFO.name}**\n${DEALERSHIP_INFO.address}\n\n` +
+        `🕒 **Hours:**\n` +
+        `Mon-Fri: 9:00 AM - 8:00 PM\n` +
+        `Sat: 10:00 AM - 6:00 PM\n` +
+        `Sun: 11:00 AM - 5:00 PM\n\n` +
+        `📞 **Contact:**\n` +
+        `Phone: ${DEALERSHIP_INFO.phone}\n` +
+        `Toll-free: ${DEALERSHIP_INFO.tollfree}\n` +
+        `Email: ${DEALERSHIP_INFO.email}\n\n` +
+        `We're located off Highway 101, exit 42B. Complimentary valet parking available.`,
+      quickReplies: [
+        { text: "🗺️ Get directions", action: "directions" },
+        { text: "📅 Schedule visit", action: "appointment" },
+        { text: "🅿️ Virtual tour", action: "virtual tour" }
+      ]
+    };
+  }
+
+  private handleContactQuery(query: string): any {
+    return {
+      text: `📞 **Contact Velocity AI**\n\n` +
+        `**Sales:** ${DEALERSHIP_INFO.phone} (ext. 1)\n` +
+        `**Service:** ${DEALERSHIP_INFO.phone} (ext. 2)\n` +
+        `**Parts:** ${DEALERSHIP_INFO.phone} (ext. 3)\n` +
+        `**Finance:** ${DEALERSHIP_INFO.phone} (ext. 4)\n\n` +
+        `**Email:** ${DEALERSHIP_INFO.email}\n` +
+        `**Website:** ${DEALERSHIP_INFO.website}\n\n` +
+        `Our concierge team is available 24/7 for emergencies.`,
+      quickReplies: [
+        { text: "💬 Chat with human", action: "human agent" },
+        { text: "📞 Request call", action: "call request" },
+        { text: "✉️ Email support", action: "email support" }
+      ]
+    };
+  }
+
+  private handleWarrantyQuery(query: string): any {
+    return {
+      text: `**Warranty Coverage Overview**\n\n` +
+        `✅ **New Vehicles:** 4-6 years/50k-75k miles basic\n` +
+        `✅ **Powertrain:** 6 years/70k miles\n` +
+        `✅ **Electric/Hybrid Battery:** 8 years/100k miles\n` +
+        `✅ **Corrosion:** 7 years/unlimited miles\n` +
+        `✅ **Roadside Assistance:** 5 years/60k miles\n\n` +
+        `**Extended Protection:**\n` +
+        `• Gold: 7 years/100k miles - $2,500\n` +
+        `• Platinum: 10 years/150k miles - $3,800\n` +
+        `• EV Specific: 10 years/150k miles - $3,200`,
+      quickReplies: [
+        { text: "🛡️ Extended warranty", action: "extended warranty" },
+        { text: "🔧 Maintenance plan", action: "maintenance plan" },
+        { text: "📋 File claim", action: "warranty claim" }
+      ]
+    };
+  }
+
+  private handleInventoryQuery(query: string): any {
+    const inStock = CAR_DATABASE.filter(c => c.inStock);
+    const limited = inStock.slice(0, 4);
+
+    return {
+      text: `🚗 **Current Inventory: ${inStock.length} vehicles**\n\n` +
+        `Immediate Delivery Available:\n` +
+        `${limited.map(c => `✅ **${c.name}** - ${c.color} - $${c.price.toLocaleString()} - ${c.inStock ? 'In Stock' : 'Call for availability'}`).join('\n')}\n\n` +
+        `Most vehicles can be delivered within 48 hours. Special financing available on in-stock units.`,
+      quickReplies: [
+        { text: "📋 View all", action: "view inventory" },
+        { text: "🚗 Filter by type", action: "filter inventory" },
+        { text: "💰 Special offers", action: "inventory offers" },
+        { text: "🎁 Demo discounts", action: "demo vehicles" }
+      ]
+    };
+  }
+
+  private handleGreeting(): any {
+    const hour = new Date().getHours();
+    let greeting = "Good morning";
+    if (hour >= 12 && hour < 17) greeting = "Good afternoon";
+    if (hour >= 17) greeting = "Good evening";
+
+    const hasHistory = this.context.conversationHistory.length > 1;
+
+    if (hasHistory) {
+      return {
+        text: `${greeting}! Welcome back to Velocity AI! Ready to continue where we left off? I can help you with ${this.context.userPreferences.vehicleType ? `your ${this.context.userPreferences.vehicleType} search` : 'finding the perfect vehicle'}.`,
+        quickReplies: [
+          { text: "🚗 Continue browsing", action: "vehicles" },
+          { text: "💰 Check financing", action: "financing" },
+          { text: "📅 Schedule test drive", action: "testdrive" },
+          { text: "✨ New arrivals", action: "new arrivals" }
+        ]
+      };
+    }
+
+    return {
+      text: `${greeting}! 👋 I'm your Velocity AI automotive assistant. I can help you discover the perfect vehicle, explore financing, schedule test drives, and more. What brings you in today?`,
+      quickReplies: [
+        { text: "🚗 Browse vehicles", action: "vehicles" },
+        { text: "💰 Payment calculator", action: "calculator" },
+        { text: "🎁 Special offers", action: "offers" },
+        { text: "📅 Schedule visit", action: "appointment" },
+        { text: "⚡ Electric vehicles", action: "electric" }
+      ]
+    };
+  }
+
+  private handleHelp(): any {
+    return {
+      text: `**I can help you with:**\n\n` +
+        `🚗 **Vehicles** - Browse, compare, get recommendations\n` +
+        `💰 **Pricing** - MSRP, special offers, payment calculator\n` +
+        `🏦 **Financing** - Rates, leases, credit options\n` +
+        `🔧 **Services** - Tuning, coating, maintenance\n` +
+        `📅 **Appointments** - Test drives, service, delivery\n` +
+        `🔄 **Trade-ins** - Instant offers, valuation\n` +
+        `📍 **Location** - Dealership info, hours, directions\n` +
+        `📞 **Contact** - Phone, email, human agent\n\n` +
+        `Just type your question or select an option below!`,
+      quickReplies: [
+        { text: "🚗 Vehicle guide", action: "vehicle guide" },
+        { text: "💰 Financing 101", action: "financing basics" },
+        { text: "✨ Current specials", action: "offers" },
+        { text: "📞 Contact human", action: "human agent" }
+      ]
+    };
+  }
+
+  private handleReset(): any {
+    this.context.userPreferences = {};
+    this.context.mentionedCars = [];
+    this.context.conversationHistory = [];
+
+    return {
+      text: "🔄 Conversation reset! I've cleared your preferences and history. Let's start fresh. How can I help you today?",
+      quickReplies: [
+        { text: "🚗 Show all vehicles", action: "vehicles" },
+        { text: "💰 Financing options", action: "financing" },
+        { text: "✨ Best sellers", action: "bestsellers" },
+        { text: "🎯 Quick quiz", action: "find car quiz" }
+      ]
+    };
+  }
+
+  private handleThanks(): any {
+    return {
+      text: "You're very welcome! 😊 I'm always here to help with any automotive questions. Is there anything else you'd like to know about our vehicles, services, or special offers?",
+      quickReplies: [
+        { text: "👍 No, that's all", action: "goodbye" },
+        { text: "🚗 More vehicles", action: "vehicles" },
+        { text: "⭐ Leave review", action: "review" }
+      ]
+    };
+  }
+
+  private handleUnknown(): any {
+    const suggestions = [
+      "I can help you explore our vehicle lineup, calculate payments, or schedule a test drive.",
+      "Would you like to see our current inventory or learn about special financing offers?",
+      "I can answer questions about any specific model or help you find the perfect vehicle for your needs.",
+      "We have great lease specials this month starting at just $329/month. Interested?",
+      "I can provide detailed specifications, feature lists, and pricing for any of our vehicles."
+    ];
+
+    return {
+      text: `I want to make sure I help you properly. ${suggestions[Math.floor(Math.random() * suggestions.length)]}`,
+      quickReplies: [
+        { text: "🚗 Popular models", action: "popular" },
+        { text: "💰 Price ranges", action: "pricing" },
+        { text: "✨ Special offers", action: "offers" },
+        { text: "📅 Book appointment", action: "appointment" },
+        { text: "🎯 Help me choose", action: "vehicle quiz" }
+      ]
+    };
   }
 }
 
@@ -565,34 +1109,25 @@ export default function EnhancedChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: uuidv4(),
-      text: "👋 Welcome to Velocity AI! I'm your personal automotive assistant powered by advanced AI. I can help you discover the perfect vehicle, explore financing options, schedule test drives, and more. What would you like to explore today?",
+      text: "👋 Welcome to Velocity AI! I'm your personal automotive assistant. I can help you discover the perfect vehicle, explore financing options, schedule test drives, and more. What would you like to explore today?",
       sender: "bot",
       timestamp: new Date(),
       quickReplies: [
-        { text: "🚗 Browse vehicles", action: "Show me available vehicles" },
-        { text: "💰 Payment calculator", action: "Calculate monthly payments" },
-        { text: "🎁 Special offers", action: "What are your current special offers?" },
-        { text: "📅 Schedule visit", action: "I want to schedule an appointment" },
-        { text: "⚡ Electric vehicles", action: "Tell me about electric vehicles" }
+        { text: "🚗 Browse vehicles", action: "vehicles" },
+        { text: "💰 Payment calculator", action: "calculator" },
+        { text: "🎁 Special offers", action: "offers" },
+        { text: "📅 Schedule visit", action: "appointment" },
+        { text: "⚡ Electric vehicles", action: "electric" }
       ]
     },
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [unreadCount, setUnreadCount] = useState(1);
-  const [aiService] = useState(() => new AIService(API_CONFIG.key));
-  const [apiStatus, setApiStatus] = useState<"online" | "offline" | "degraded">("online");
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Context data for AI
-  const contextData = {
-    inventory: CAR_DATABASE,
-    services: SERVICES,
-    financing: FINANCING_OPTIONS,
-    dealership: DEALERSHIP_INFO
-  };
+  const responseEngine = useRef(new ResponseEngine());
 
   // Scroll to bottom effect
   useEffect(() => {
@@ -606,14 +1141,6 @@ export default function EnhancedChatbot() {
       setUnreadCount(0);
     }
   }, [isOpen]);
-
-  // Convert messages to conversation history format
-  const getConversationHistory = () => {
-    return messages.slice(-10).map(msg => ({
-      role: msg.sender === "user" ? "user" : "assistant" as const,
-      content: msg.text
-    }));
-  };
 
   // Handle sending messages
   const handleSend = async () => {
@@ -631,59 +1158,29 @@ export default function EnhancedChatbot() {
     };
     setMessages(prev => [...prev, userMsg]);
 
-    // Generate bot response using AI
+    // Generate bot response
     setIsTyping(true);
     try {
-      const conversationHistory = getConversationHistory();
-      const aiResponse = await aiService.generateResponse(
-        userMessage,
-        conversationHistory,
-        contextData
-      );
-
-      // Check if response contains vehicle recommendations
-      const hasVehicleRecommendation = aiResponse.includes("$") &&
-        (aiResponse.includes("HP") || aiResponse.includes("0-60") || aiResponse.includes("MPG"));
-
-      // Extract car mentions for quick replies
-      const mentionedCars = CAR_DATABASE.filter(car =>
-        aiResponse.includes(car.name) || aiResponse.includes(car.name.split(' ')[0])
-      ).slice(0, 3);
+      const response = await responseEngine.current.generateResponse(userMessage);
 
       const botMsg: Message = {
         id: uuidv4(),
-        text: aiResponse,
+        text: response.text,
         sender: "bot",
         timestamp: new Date(),
-        quickReplies: mentionedCars.length > 0 ? [
-          { text: `🚗 Details: ${mentionedCars[0].name}`, action: `Tell me more about the ${mentionedCars[0].name}` },
-          { text: "💰 Pricing", action: "What are your financing options?" },
-          { text: "📅 Test drive", action: "I want to schedule a test drive" }
-        ] : [
-          { text: "🚗 Browse vehicles", action: "Show me available vehicles" },
-          { text: "💰 Payment calculator", action: "Calculate monthly payments" },
-          { text: "📅 Schedule visit", action: "I want to schedule an appointment" }
-        ]
+        attachments: response.attachments,
+        quickReplies: response.quickReplies,
       };
       setMessages(prev => [...prev, botMsg]);
-      setApiStatus("online");
     } catch (error) {
-      console.error("Error generating AI response:", error);
-      setApiStatus("degraded");
-
-      // Fallback response
-      const fallbackMsg: Message = {
+      console.error("Error generating response:", error);
+      const errorMsg: Message = {
         id: uuidv4(),
-        text: "I apologize, but I'm having trouble connecting to our AI service. Please try again in a moment. Is there something specific about our vehicles or services I can help with?",
+        text: "I apologize, but I'm having trouble processing your request. Could you please try again?",
         sender: "bot",
         timestamp: new Date(),
-        quickReplies: [
-          { text: "🚗 Current inventory", action: "What vehicles do you have in stock?" },
-          { text: "💰 Special offers", action: "What are your current special offers?" },
-          { text: "📞 Call dealership", action: "What's your phone number?" }
-        ]
       };
-      setMessages(prev => [...prev, fallbackMsg]);
+      setMessages(prev => [...prev, errorMsg]);
     } finally {
       setIsTyping(false);
     }
@@ -705,14 +1202,14 @@ export default function EnhancedChatbot() {
     setMessages([
       {
         id: uuidv4(),
-        text: "👋 Welcome back to Velocity AI! I'm your AI-powered automotive assistant. Our conversation has been reset. How can I help you today?",
+        text: "👋 Welcome back to Velocity AI! I'm ready to help you with your automotive needs. What would you like to explore?",
         sender: "bot",
         timestamp: new Date(),
         quickReplies: [
-          { text: "🚗 Browse vehicles", action: "Show me available vehicles" },
-          { text: "💰 Payment calculator", action: "Calculate monthly payments" },
-          { text: "🎁 Special offers", action: "What are your current special offers?" },
-          { text: "📅 Schedule visit", action: "I want to schedule an appointment" }
+          { text: "🚗 Browse vehicles", action: "vehicles" },
+          { text: "💰 Payment calculator", action: "calculator" },
+          { text: "🎁 Special offers", action: "offers" },
+          { text: "📅 Schedule visit", action: "appointment" }
         ]
       },
     ]);
@@ -750,7 +1247,7 @@ export default function EnhancedChatbot() {
 
   return (
     <>
-      {/* Chat Button with Unread Badge and Status */}
+      {/* Chat Button with Unread Badge */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-red-600 to-red-700 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
@@ -772,9 +1269,6 @@ export default function EnhancedChatbot() {
                 {unreadCount}
               </motion.span>
             )}
-            <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${
-              apiStatus === "online" ? "bg-green-500" : apiStatus === "degraded" ? "bg-yellow-500" : "bg-red-500"
-            }`} />
           </>
         )}
       </motion.button>
@@ -789,23 +1283,17 @@ export default function EnhancedChatbot() {
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className="fixed bottom-24 right-6 z-50 w-[420px] max-w-[calc(100vw-32px)] h-[600px] max-h-[calc(100vh-120px)] bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
-            {/* Header with API Status */}
+            {/* Header */}
             <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 flex justify-between items-center flex-shrink-0">
               <div className="flex items-center gap-3">
                 <div className="bg-white/10 p-2 rounded-lg">
                   <Brain className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-white font-bold text-lg tracking-tight">VELOCITY AI</h3>
+                  <h3 className="text-white font-bold text-lg tracking-tight">MAAI GPT</h3>
                   <div className="flex items-center gap-1.5">
-                    <div className={`w-2 h-2 rounded-full animate-pulse ${
-                      apiStatus === "online" ? "bg-green-400" : apiStatus === "degraded" ? "bg-yellow-400" : "bg-red-400"
-                    }`} />
-                    <p className="text-red-100 text-xs">
-                      {apiStatus === "online" ? "GPT-4 • Online" :
-                       apiStatus === "degraded" ? "Degraded • Fallback" :
-                       "Offline • Limited"}
-                    </p>
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                    <p className="text-red-100 text-xs">Online • Smart Assistant</p>
                   </div>
                 </div>
               </div>
@@ -865,10 +1353,7 @@ export default function EnhancedChatbot() {
                       }`}>
                         <span>{formatTime(msg.timestamp)}</span>
                         {msg.sender === "bot" && (
-                          <div className="flex items-center gap-1">
-                            {apiStatus === "online" && <Sparkles className="w-3.5 h-3.5" />}
-                            <BadgeCheck className="w-3.5 h-3.5" />
-                          </div>
+                          <BadgeCheck className="w-3.5 h-3.5 ml-1" />
                         )}
                       </div>
                     </div>
@@ -900,9 +1385,7 @@ export default function EnhancedChatbot() {
                             className="w-2 h-2 bg-red-500 rounded-full"
                           />
                         </div>
-                        <span className="text-zinc-300 text-sm">
-                          {apiStatus === "online" ? "AI is thinking..." : "Processing..."}
-                        </span>
+                        <span className="text-zinc-300 text-sm">Velocity AI is thinking...</span>
                       </div>
                     </div>
                   </motion.div>
@@ -913,7 +1396,7 @@ export default function EnhancedChatbot() {
             </div>
 
             {/* Quick Replies */}
-            {messages[messages.length - 1]?.quickReplies && !isTyping && (
+            {messages[messages.length - 1]?.quickReplies && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -946,7 +1429,7 @@ export default function EnhancedChatbot() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Ask me anything about our vehicles..."
+                    placeholder="Ask me anything..."
                     className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-full text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all pr-12"
                     disabled={isTyping}
                   />
@@ -968,35 +1451,18 @@ export default function EnhancedChatbot() {
                 </motion.button>
               </div>
 
-              {/* Status indicators */}
+              {/* Typing indicator */}
               <div className="flex justify-between items-center mt-2 px-2">
-                <div className="flex items-center gap-1.5">
-                  {apiStatus === "online" ? (
-                    <>
-                      <Sparkles className="w-3 h-3 text-green-500" />
-                      <span className="text-[10px] text-green-500">
-                        GPT-4 Powered
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="w-3 h-3 text-yellow-500" />
-                      <span className="text-[10px] text-yellow-500">
-                        Fallback Mode
-                      </span>
-                    </>
-                  )}
-                </div>
                 <div className="flex items-center gap-1.5">
                   <Shield className="w-3 h-3 text-zinc-600" />
                   <span className="text-[10px] text-zinc-600">
-                    Secure AI
+                    Enterprise-grade security
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Zap className="w-3 h-3 text-zinc-600" />
                   <span className="text-[10px] text-zinc-600">
-                    {API_CONFIG.model === "gpt-4-turbo-preview" ? "GPT-4" : "GPT-3.5"}
+                    Instant responses
                   </span>
                 </div>
               </div>
