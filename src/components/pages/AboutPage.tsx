@@ -2,7 +2,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { Image } from '@/components/ui/image';
 import { motion } from 'framer-motion';
-import { Award, Target, Users, Zap } from 'lucide-react';
+import { Award, Target, Users } from 'lucide-react';
 
 export default function AboutPage() {
   const fadeInUp = {
@@ -226,8 +226,8 @@ export default function AboutPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-8"
           >
             {[
-              { value: '15+', label: 'Years in Business' },
-              { value: '5,000+', label: 'Vehicles Sold' },
+              { value: '10+', label: 'Years in Business' },
+              { value: '5,00+', label: 'Vehicles Sold' },
               { value: '98%', label: 'Customer Satisfaction' },
               { value: '50+', label: 'Team Members' }
             ].map((stat, idx) => (
