@@ -1,37 +1,46 @@
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { Image } from '@/components/ui/image';
-import { TeamMembers } from '@/entities';
-import { BaseCrudService } from '@/integrations';
 import { motion } from 'framer-motion';
-import { Award, Linkedin, Mail, Target, Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Award, Target, Users, Zap, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
 
 export default function AboutPage() {
-  const [teamMembers, setTeamMembers] = useState<TeamMembers[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    loadTeamMembers();
-  }, []);
-
-  const loadTeamMembers = async () => {
-    setIsLoading(true);
-    try {
-      const result = await BaseCrudService.getAll<TeamMembers>('teammembers');
-      setTeamMembers(result.items);
-    } catch (error) {
-      console.error('Error loading team members:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [activeTimelineItem, setActiveTimelineItem] = useState(0);
 
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.5 }
   };
+
+  const timelineItems = [
+    {
+      year: '2016',
+      title: 'Founded',
+      description: 'Velocity was born with a vision to revolutionize automotive retail through innovation and transparency.'
+    },
+    {
+      year: '2018',
+      title: 'Expansion',
+      description: 'Opened our flagship showroom and launched our advanced vehicle analytics platform.'
+    },
+    {
+      year: '2020',
+      title: 'Digital Transformation',
+      description: 'Introduced virtual showroom tours and AI-powered vehicle recommendations.'
+    },
+    {
+      year: '2022',
+      title: 'Market Leader',
+      description: 'Achieved recognition as the region\'s most trusted automotive retailer.'
+    },
+    {
+      year: '2024',
+      title: 'Innovation Peak',
+      description: 'Launched 3D vehicle experience and expanded our premium inventory.'
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
@@ -99,11 +108,11 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="aspect-[4/3] bg-zinc-900 border border-zinc-800 overflow-hidden"
+            className="aspect-[4/3] bg-gradient-to-br from-zinc-900 via-red-900/20 to-zinc-900 border border-zinc-800 overflow-hidden relative"
           >
             <Image
-              src="https://static.wixstatic.com/media/cec0c1_cc0f070b051f445eae1495e96a231313~mv2.png?originWidth=896&originHeight=640"
-              alt="Velocity showroom"
+              src="https://static.wixstatic.com/media/cec0c1_331b85da6d2f4082bcabeef092feb4e4~mv2.png?originWidth=1152&originHeight=896"
+              alt="Velocity automotive innovation"
               className="w-full h-full object-cover"
             />
           </motion.div>
@@ -147,8 +156,8 @@ export default function AboutPage() {
         </motion.div>
       </section>
 
-      {/* Team Section */}
-      <section className="w-full bg-zinc-950 py-20 lg:py-32">
+      {/* Interactive Timeline Section */}
+      <section className="w-full bg-gradient-to-b from-zinc-950 to-zinc-900 py-20 lg:py-32">
         <div className="max-w-[120rem] mx-auto px-6 sm:px-12 lg:px-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -158,83 +167,86 @@ export default function AboutPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl lg:text-5xl font-black mb-6" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-              Meet Our Team
+              Our Journey
             </h2>
             <p className="text-zinc-400 text-lg max-w-3xl mx-auto">
-              Experienced professionals dedicated to delivering exceptional automotive solutions
+              From vision to market leadership—explore the milestones that shaped Velocity
             </p>
           </motion.div>
 
-          <div className="min-h-[400px]">
-            {isLoading ? null : teamMembers.length > 0 ? (
-              <motion.div
-                initial="initial"
-                animate="animate"
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-              >
-                {teamMembers.map((member, idx) => (
-                  <motion.div
-                    key={member._id}
-                    variants={fadeInUp}
-                    transition={{ delay: idx * 0.1 }}
-                    className="bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-red-600 transition-all duration-300"
-                  >
-                    {member.photo && (
-                      <div className="aspect-square bg-zinc-800 overflow-hidden">
-                        <Image
-                          src={member.photo}
-                          alt={member.name || 'Team member'}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <h3 className="text-2xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                        {member.name}
-                      </h3>
-                      {member.jobTitle && (
-                        <p className="text-sm text-red-500 font-bold mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                          {member.jobTitle}
-                        </p>
-                      )}
-                      {member.bio && (
-                        <p className="text-zinc-400 text-base mb-4">
-                          {member.bio}
-                        </p>
-                      )}
-                      <div className="flex gap-3 mt-4">
-                        {member.email && (
-                          <a
-                            href={`mailto:${member.email}`}
-                            className="text-zinc-400 hover:text-red-500 transition-colors"
-                            aria-label={`Email ${member.name}`}
-                          >
-                            <Mail className="w-5 h-5" />
-                          </a>
-                        )}
-                        {member.linkedInProfile && (
-                          <a
-                            href={member.linkedInProfile}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-zinc-400 hover:text-red-500 transition-colors"
-                            aria-label={`${member.name} LinkedIn profile`}
-                          >
-                            <Linkedin className="w-5 h-5" />
-                          </a>
-                        )}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            {/* Timeline Navigation */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-1 space-y-3"
+            >
+              {timelineItems.map((item, idx) => (
+                <motion.button
+                  key={idx}
+                  onClick={() => setActiveTimelineItem(idx)}
+                  whileHover={{ x: 4 }}
+                  className={`w-full text-left p-4 rounded-lg border transition-all duration-300 ${
+                    activeTimelineItem === idx
+                      ? 'bg-red-600/20 border-red-600 shadow-lg shadow-red-600/20'
+                      : 'bg-zinc-900 border-zinc-800 hover:border-zinc-700'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className={`w-5 h-5 flex-shrink-0 ${activeTimelineItem === idx ? 'text-red-500' : 'text-zinc-600'}`} />
+                    <div>
+                      <div className="text-sm font-bold text-red-500">{item.year}</div>
+                      <div className="text-base font-black text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                        {item.title}
                       </div>
                     </div>
-                  </motion.div>
-                ))}
+                  </div>
+                </motion.button>
+              ))}
+            </motion.div>
+
+            {/* Timeline Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-2"
+            >
+              <motion.div
+                key={activeTimelineItem}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 p-8 lg:p-12 rounded-lg"
+              >
+                <div className="mb-6">
+                  <div className="inline-block px-4 py-2 bg-red-600/20 border border-red-600 rounded-full mb-4">
+                    <span className="text-red-500 font-bold text-sm" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                      {timelineItems[activeTimelineItem].year}
+                    </span>
+                  </div>
+                  <h3 className="text-3xl lg:text-4xl font-black text-white mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                    {timelineItems[activeTimelineItem].title}
+                  </h3>
+                  <p className="text-zinc-300 text-lg leading-relaxed">
+                    {timelineItems[activeTimelineItem].description}
+                  </p>
+                </div>
+
+                {/* Visual Timeline Indicator */}
+                <div className="mt-8 pt-8 border-t border-zinc-700">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-1 bg-gradient-to-r from-red-600 to-orange-600 rounded-full" style={{ width: `${((activeTimelineItem + 1) / timelineItems.length) * 100}%` }} />
+                    <span className="text-sm text-zinc-400 font-bold">
+                      {activeTimelineItem + 1} / {timelineItems.length}
+                    </span>
+                  </div>
+                </div>
               </motion.div>
-            ) : (
-              <div className="text-center py-20">
-                <p className="text-zinc-400 text-lg">
-                  Team information coming soon
-                </p>
-              </div>
-            )}
+            </motion.div>
           </div>
         </div>
       </section>
