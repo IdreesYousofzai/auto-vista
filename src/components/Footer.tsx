@@ -1,15 +1,15 @@
-import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
-  Mail,
-  Phone,
-  MapPin,
+  ArrowUpRight,
   Facebook,
-  Twitter,
   Instagram,
   Linkedin,
-  ArrowUpRight
+  Mail,
+  MapPin,
+  Phone,
+  Twitter
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const footerLinks = [
@@ -29,13 +29,13 @@ export default function Footer() {
 
   return (
     <footer className="relative w-full bg-zinc-950 text-zinc-300 overflow-hidden border-t border-zinc-800">
-      
+
       {/* Ambient Glows */}
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-red-600/20 blur-[120px]" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600/20 blur-[120px]" />
 
       <div className="relative w-full max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-12 sm:py-16 md:py-24">
-        
+
         {/* Top Racing Stripe */}
         <div className="h-1 w-full bg-gradient-to-r from-red-600 via-orange-500 to-transparent mb-12 sm:mb-16 md:mb-20" />
 
@@ -106,7 +106,7 @@ export default function Footer() {
             <ul className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-zinc-400">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-red-500 mt-0.5" />
-                123 Auto Drive, Innovation City
+                Navigation way, PR, Preston
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-red-500" />
