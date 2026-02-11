@@ -9,36 +9,157 @@ interface Message {
   timestamp: Date;
 }
 
-const CHATBOT_RESPONSES: Record<string, string> = {
-  'hello': 'Hey there! 👋 Welcome to Velocity. How can I help you today? Feel free to ask about our vehicles, services, or anything else!',
-  'hi': 'Hey there! 👋 Welcome to Velocity. How can I help you today? Feel free to ask about our vehicles, services, or anything else!',
-  'vehicles': 'We have an amazing collection of premium vehicles! Check out our Inventory page to browse our latest models. Each vehicle is carefully selected and maintained to the highest standards.',
-  'services': 'We offer elite services including Performance Diagnostics, Track-Ready Tuning, Ceramic Shield Pro, and Executive Fleet management. Visit our Services page to learn more!',
-  'price': 'Our vehicles range from $45,000 to $51,000+. For specific pricing on a vehicle you\'re interested in, visit our Inventory page or contact us for a consultation.',
-  '3d': 'We have an immersive 3D Showroom experience! You can explore vehicles in stunning detail. Check out our 3D Experience page to get started.',
-  'contact': 'You can reach us through our Contact page or book a consultation directly. Our team is available 24/7 to assist you!',
-  'about': 'Velocity is a premium automotive dealership with 10+ years of excellence. We pride ourselves on 98% client satisfaction and a collection of 100+ premium vehicles.',
-  'performance': 'Our vehicles are engineered for peak performance. We offer track-ready tuning and performance diagnostics to unlock the full potential of your car.',
-  'financing': 'For financing options and details, please contact our team directly through the Contact page. We\'ll be happy to discuss flexible payment plans.',
-  'warranty': 'All our vehicles come with comprehensive coverage. For specific warranty details, please reach out to our team!',
-  'trade-in': 'We accept trade-ins! Contact us to discuss your current vehicle and get a valuation.',
-  'appointment': 'You can book a consultation through our Contact page or call our 24/7 concierge service. We\'re here to help!',
-  'hours': 'We\'re available 24/7 for consultations and support. Visit our Contact page to reach out anytime!',
-  'location': 'For location details, please visit our Locations page or contact us directly.',
-  'default': 'That\'s a great question! I\'m here to help with information about our vehicles, services, and more. Feel free to ask about our inventory, services, pricing, or anything else related to Velocity!'
-};
+interface ResponsePattern {
+  keywords: string[];
+  response: string;
+  priority: number;
+}
 
-function findBestResponse(userMessage: string): string {
-  const lowerMessage = userMessage.toLowerCase();
+const CHATBOT_PATTERNS: ResponsePattern[] = [
+  // Greeting patterns
+  {
+    keywords: ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening', 'what\'s up', 'howdy'],
+    response: 'Hey there! 👋 Welcome to Velocity. I\'m your AI assistant. How can I help you today? Feel free to ask about our vehicles, services, 3D experience, or anything else!',
+    priority: 10
+  },
   
-  for (const [keyword, response] of Object.entries(CHATBOT_RESPONSES)) {
-    if (keyword === 'default') continue;
-    if (lowerMessage.includes(keyword)) {
-      return response;
+  // Inventory & Vehicles
+  {
+    keywords: ['inventory', 'vehicles', 'cars', 'models', 'browse', 'collection', 'available', 'what cars', 'show me', 'see vehicles', 'vehicle list'],
+    response: 'We have an amazing collection of premium vehicles! 🚗 Check out our Vehicles page to browse our latest models. Each vehicle is carefully selected and maintained to the highest standards. We have 100+ premium vehicles ranging from sports cars to luxury sedans.',
+    priority: 9
+  },
+  
+  // Services
+  {
+    keywords: ['services', 'service', 'what do you offer', 'offerings', 'packages', 'maintenance', 'tuning', 'diagnostics', 'ceramic', 'fleet', 'detailing'],
+    response: 'We offer elite services including:\n• Performance Diagnostics - Unlock your vehicle\'s full potential\n• Track-Ready Tuning - Professional performance enhancement\n• Ceramic Shield Pro - Premium protective coating\n• Executive Fleet Management - Comprehensive fleet solutions\n\nVisit our Services page to learn more about each service!',
+    priority: 9
+  },
+  
+  // Pricing & Cost
+  {
+    keywords: ['price', 'cost', 'how much', 'expensive', 'affordable', 'payment', 'financing', 'payment plan', 'monthly', 'lease', 'budget'],
+    response: 'Our vehicles range from $45,000 to $51,000+, depending on the model and specifications. For specific pricing on a vehicle you\'re interested in, visit our Vehicles page or contact us for a personalized consultation. We also offer flexible financing options - reach out to our team to discuss payment plans!',
+    priority: 8
+  },
+  
+  // 3D Experience
+  {
+    keywords: ['3d', 'experience', 'showroom', 'virtual', 'immersive', 'explore', 'interactive', 'model viewer', 'three dimensional'],
+    response: 'We have an immersive 3D Showroom experience! 🎮 You can explore vehicles in stunning detail from every angle. Check out our 3D Experience page to get started - it\'s an amazing way to see our vehicles up close!',
+    priority: 9
+  },
+  
+  // Contact & Support
+  {
+    keywords: ['contact', 'reach', 'call', 'email', 'support', 'help', 'assistance', 'talk to', 'speak with', 'customer service', 'get in touch'],
+    response: 'You can reach us through our Contact page or book a consultation directly. Our team is available 24/7 to assist you! We\'re here to answer any questions and help you find the perfect vehicle.',
+    priority: 8
+  },
+  
+  // About Company
+  {
+    keywords: ['about', 'company', 'who are you', 'history', 'background', 'team', 'experience', 'reputation', 'velocity'],
+    response: 'Velocity is a premium automotive dealership with 10+ years of excellence in the industry. We pride ourselves on:\n• 98% client satisfaction rate\n• 100+ premium vehicles in our collection\n• Expert team with decades of combined experience\n• Commitment to quality and customer service\n\nWe\'re passionate about connecting you with the perfect vehicle!',
+    priority: 8
+  },
+  
+  // Performance & Features
+  {
+    keywords: ['performance', 'speed', 'engine', 'horsepower', 'acceleration', 'power', 'specs', 'specifications', 'features', 'capability'],
+    response: 'Our vehicles are engineered for peak performance! 🏁 We offer:\n• Track-ready tuning for enhanced performance\n• Performance diagnostics to optimize your vehicle\n• Detailed specifications for each model\n• Expert consultation on performance upgrades\n\nVisit our Vehicles page to see detailed specs, or contact us for personalized performance recommendations!',
+    priority: 8
+  },
+  
+  // Warranty & Coverage
+  {
+    keywords: ['warranty', 'guarantee', 'coverage', 'protection', 'insurance', 'covered', 'protection plan', 'guarantee'],
+    response: 'All our vehicles come with comprehensive coverage and warranty protection. For specific warranty details and coverage options, please reach out to our team through the Contact page. We\'ll be happy to explain all the protection benefits included with your purchase!',
+    priority: 7
+  },
+  
+  // Trade-in
+  {
+    keywords: ['trade', 'trade-in', 'trade in', 'exchange', 'current vehicle', 'old car', 'valuation', 'sell my car'],
+    response: 'We accept trade-ins! 🔄 Contact us to discuss your current vehicle and get a professional valuation. Our team will work with you to ensure you get the best value for your trade-in. Visit our Contact page to start the process!',
+    priority: 7
+  },
+  
+  // Appointment & Booking
+  {
+    keywords: ['appointment', 'book', 'schedule', 'reserve', 'test drive', 'visit', 'meeting', 'consultation', 'viewing'],
+    response: 'You can book a consultation or test drive through our Contact page or call our 24/7 concierge service. We\'re here to help! Simply let us know your preferred time, and we\'ll arrange everything for you.',
+    priority: 8
+  },
+  
+  // Hours & Availability
+  {
+    keywords: ['hours', 'open', 'closed', 'available', 'when', 'timing', 'schedule', 'open hours', 'operating hours'],
+    response: 'We\'re available 24/7 for consultations and support! Whether you\'re an early bird or a night owl, our team is ready to assist you. Visit our Contact page to reach out anytime, and we\'ll get back to you promptly.',
+    priority: 7
+  },
+  
+  // Location
+  {
+    keywords: ['location', 'where', 'address', 'office', 'showroom', 'find us', 'directions', 'located'],
+    response: 'For location details and directions to our showroom, please visit our Locations page or contact us directly. We\'re conveniently located and easy to find!',
+    priority: 7
+  },
+
+  // Comparison & Recommendations
+  {
+    keywords: ['compare', 'comparison', 'which', 'recommend', 'recommendation', 'best', 'better', 'difference'],
+    response: 'Great question! 🤔 To help you find the perfect vehicle, I\'d love to know more about your preferences:\n• What\'s your budget range?\n• Are you looking for performance, luxury, or practicality?\n• Do you prefer sports cars, sedans, or SUVs?\n\nVisit our Vehicles page to browse our collection, or contact us for personalized recommendations!',
+    priority: 8
+  },
+
+  // Delivery & Shipping
+  {
+    keywords: ['delivery', 'shipping', 'deliver', 'ship', 'transport', 'how do you deliver'],
+    response: 'We offer convenient delivery options for our vehicles! For details about delivery, shipping, and logistics, please contact our team through the Contact page. We\'ll arrange everything to get your vehicle to you safely and on time.',
+    priority: 7
+  }
+];
+
+function calculateSimilarity(text: string, keywords: string[]): number {
+  const lowerText = text.toLowerCase();
+  let matchCount = 0;
+  
+  for (const keyword of keywords) {
+    if (lowerText.includes(keyword)) {
+      matchCount++;
     }
   }
   
-  return CHATBOT_RESPONSES.default;
+  return matchCount > 0 ? matchCount / keywords.length : 0;
+}
+
+function findBestResponse(userMessage: string): string {
+  let bestMatch: ResponsePattern | null = null;
+  let bestScore = 0;
+  
+  for (const pattern of CHATBOT_PATTERNS) {
+    const similarity = calculateSimilarity(userMessage, pattern.keywords);
+    const score = similarity * pattern.priority;
+    
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = pattern;
+    }
+  }
+  
+  if (bestMatch && bestScore > 0) {
+    return bestMatch.response;
+  }
+  
+  // Smart fallback based on message length and content
+  const messageLength = userMessage.length;
+  if (messageLength < 5) {
+    return 'I didn\'t quite catch that. Could you tell me more about what you\'re looking for? I can help with vehicles, services, pricing, 3D experience, or anything else about Velocity!';
+  }
+  
+  return 'That\'s a great question! 🤔 I\'m here to help with information about our premium vehicles, services, 3D showroom experience, pricing, and more. Feel free to ask about our inventory, services, or anything else related to Velocity. What would you like to know?';
 }
 
 export default function Chatbot() {
@@ -80,7 +201,8 @@ export default function Chatbot() {
     setInputValue('');
     setIsLoading(true);
 
-    // Simulate bot thinking time
+    // Simulate bot thinking time with variable delay based on response complexity
+    const delay = Math.random() * 800 + 300; // 300-1100ms for more natural feel
     setTimeout(() => {
       const botResponse = findBestResponse(inputValue);
       const botMessage: Message = {
@@ -91,7 +213,7 @@ export default function Chatbot() {
       };
       setMessages(prev => [...prev, botMessage]);
       setIsLoading(false);
-    }, 500);
+    }, delay);
   };
 
   return (
@@ -165,7 +287,7 @@ export default function Chatbot() {
                         : 'bg-zinc-800 text-zinc-100 rounded-bl-none'
                     }`}
                   >
-                    <p className="text-sm leading-relaxed">{message.text}</p>
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
                     <span className="text-xs opacity-70 mt-1 block">
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
