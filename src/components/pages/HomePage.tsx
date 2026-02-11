@@ -1,4 +1,4 @@
-// HPI 2.0 - PREMIUM AUTOMOTIVE EDITION - MOBILE OPTIMIZED
+// HPI 2.0 - PREMIUM AUTOMOTIVE EDITION
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
@@ -119,14 +119,18 @@ const ParallaxImage = ({ src, alt, className }: { src: string, alt: string, clas
 // --- MAIN PAGE COMPONENT ---
 export default function HomePage() {
   const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
   return (
     <div ref={containerRef} className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-red-600 selection:text-white overflow-x-hidden" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
       <Header />
 
-      {/* HERO SECTION - Mobile Optimized */}
-      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-zinc-950">
-        {/* Video Background */}
+      {/* HERO SECTION - Split Screen Design */}
+      <section className="relative w-full min-h-screen flex items-center justify-center overflow-clip bg-zinc-950">
+        {/* Video Background with Vignette */}
         <div className="absolute inset-0 w-full h-full">
           <motion.div
             initial={{ scale: 1.05, opacity: 0 }}
@@ -145,22 +149,24 @@ export default function HomePage() {
             </video>
           </motion.div>
 
-          {/* Overlays */}
+          {/* Premium Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/60 to-zinc-950/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-zinc-950/40" />
 
+          {/* Racing Red Accent Glow */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-blue-600/10"
             animate={{ opacity: [0.2, 0.4, 0.2] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           />
 
+          {/* Carbon Fiber Texture Overlay */}
           <div className="absolute inset-0 opacity-5" style={{
             backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,.05) 2px, rgba(255,255,255,.05) 4px)`
           }} />
         </div>
 
-        {/* Content - Mobile Responsive */}
+        {/* Content with Racing Typography */}
         <div className="relative z-10 w-full max-w-[100rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-12 sm:py-16 md:py-24 flex flex-col justify-center items-start min-h-screen">
           <FadeIn>
             <motion.div
@@ -168,60 +174,58 @@ export default function HomePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
             >
-              {/* Badge - Mobile Friendly */}
-              <div className="inline-flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-3 sm:px-5 py-2 sm:py-2.5 bg-red-600/10 border border-red-600/30 backdrop-blur-md rounded-full">
-                <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full animate-pulse" />
-                <span className="text-red-400 text-xs sm:text-sm font-bold tracking-widest uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              {/* Racing Badge */}
+              <div className="inline-flex items-center gap-3 mb-8 px-5 py-2.5 bg-red-600/10 border border-red-600/30 backdrop-blur-md rounded-full">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <span className="text-red-400 text-sm font-bold tracking-widest uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                   Premium Collection 2026
                 </span>
               </div>
 
-              {/* Main Heading - Responsive */}
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.95] mb-6 sm:mb-8 text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.95] mb-6 sm:mb-8 text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 Drive more<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600">
                   than a car.
                 </span>
               </h1>
 
-              <p className="text-base sm:text-xl md:text-2xl text-gray-300 max-w-xl mb-6 sm:mb-8">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-xl mb-6 sm:mb-8">
                 Drive a statement.
               </p>
 
-              {/* Racing Stripe */}
+              {/* Racing Stripe Accent */}
               <motion.div
-                className="h-1 sm:h-1.5 bg-gradient-to-r from-red-600 via-orange-500 to-transparent mb-6 sm:mb-8"
+                className="h-1.5 bg-gradient-to-r from-red-600 via-orange-500 to-transparent mb-8"
                 initial={{ width: 0 }}
-                animate={{ width: '200px' }}
+                animate={{ width: '300px' }}
                 transition={{ duration: 1, delay: 0.5 }}
               />
             </motion.div>
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-zinc-300 max-w-2xl mb-6 sm:mb-8 md:mb-12 leading-relaxed font-light">
+            <p className="text-lg sm:text-xl md:text-2xl text-zinc-300 max-w-2xl mb-8 sm:mb-12 leading-relaxed font-light">
               Engineered <span className="text-red-500 font-semibold">for the road.</span> Powered
               <span className="text-blue-400 font-semibold"> by intelligence.</span>
-              <br className="hidden sm:block" />This is performance, evolved.
+              <br />This is performance, evolved.
             </p>
           </FadeIn>
 
-          {/* Buttons - Mobile Stacked */}
-          <FadeIn delay={0.4} className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-5 w-full sm:w-auto">
-            <Link to="/vehicles" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-8 sm:px-12 py-5 sm:py-7 text-base sm:text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/50 border-b-4 border-red-800 hover:scale-105" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                EXPLORE COLLECTION
+          <FadeIn delay={0.4} className="flex flex-wrap gap-5">
+            <Link to="/vehicles">
+              <Button className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/50 border-b-4 border-red-800 hover:scale-105" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                EXPLORE OUR COLLECTION
               </Button>
             </Link>
-            <Link to="/3d-experience" className="w-full sm:w-auto">
-              <Button variant="outline" className="w-full sm:w-auto border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 rounded-none px-8 sm:px-12 py-5 sm:py-7 text-base sm:text-lg font-bold transition-all duration-300 backdrop-blur-md" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                3D SHOWROOM
+            <Link to="/3d-experience">
+              <Button variant="outline" className="border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 rounded-none px-12 py-7 text-lg font-bold transition-all duration-300 backdrop-blur-md" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                VIEW 3D SHOWROOM
               </Button>
             </Link>
           </FadeIn>
 
-          {/* Stats - Mobile 2x2 Grid */}
-          <FadeIn delay={0.6} className="mt-8 sm:mt-12 md:mt-16 lg:mt-20 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8 w-full max-w-4xl">
+          {/* Performance Stats Bar */}
+          <FadeIn delay={0.6} className="mt-12 sm:mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 w-full max-w-4xl">
             {STATS.map((stat, idx) => (
               <motion.div
                 key={idx}
@@ -230,10 +234,10 @@ export default function HomePage() {
                 transition={{ duration: 0.2 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" />
-                <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 group-hover:border-red-600/50 p-3 sm:p-4 md:p-6 transition-all duration-300">
-                  <stat.icon className="w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6 text-red-500 mb-2 sm:mb-3" />
-                  <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white mb-1 sm:mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>{stat.value}</div>
-                  <div className="text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider font-semibold leading-tight">{stat.label}</div>
+                <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 group-hover:border-red-600/50 p-4 sm:p-6 transition-all duration-300">
+                  <stat.icon className="w-5 sm:w-6 h-5 sm:h-6 text-red-500 mb-2 sm:mb-3" />
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>{stat.value}</div>
+                  <div className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">{stat.label}</div>
                 </div>
               </motion.div>
             ))}
@@ -241,29 +245,29 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* RACING TICKER - Mobile Optimized */}
-      <div className="w-full bg-gradient-to-r from-red-600 to-orange-600 py-3 sm:py-4 overflow-hidden border-y-2 border-red-800">
+      {/* RACING TICKER */}
+      <div className="w-full bg-gradient-to-r from-red-600 to-orange-600 py-4 overflow-hidden border-y-2 border-red-800">
         <motion.div
-          className="inline-flex items-center gap-8 sm:gap-12"
+          className="inline-flex items-center gap-12"
           animate={{ x: ["0%", "-50%"] }}
           transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
         >
           {[...Array(6)].map((_, i) => (
             <React.Fragment key={i}>
-              <span className="text-white font-black text-xl sm:text-2xl md:text-3xl uppercase tracking-widest whitespace-nowrap" style={{ fontFamily: 'Orbitron, sans-serif' }}>PERFORMANCE</span>
-              <span className="text-white/40 font-black text-xl sm:text-2xl md:text-3xl">●</span>
-              <span className="text-white font-black text-xl sm:text-2xl md:text-3xl uppercase tracking-widest whitespace-nowrap" style={{ fontFamily: 'Orbitron, sans-serif' }}>PRECISION</span>
-              <span className="text-white/40 font-black text-xl sm:text-2xl md:text-3xl">●</span>
-              <span className="text-white font-black text-xl sm:text-2xl md:text-3xl uppercase tracking-widest whitespace-nowrap" style={{ fontFamily: 'Orbitron, sans-serif' }}>POWER</span>
-              <span className="text-white/40 font-black text-xl sm:text-2xl md:text-3xl">●</span>
+              <span className="text-white font-black text-3xl uppercase tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>PERFORMANCE</span>
+              <span className="text-white/40 font-black text-3xl">●</span>
+              <span className="text-white font-black text-3xl uppercase tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>PRECISION</span>
+              <span className="text-white/40 font-black text-3xl">●</span>
+              <span className="text-white font-black text-3xl uppercase tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>POWER</span>
+              <span className="text-white/40 font-black text-3xl">●</span>
             </React.Fragment>
           ))}
         </motion.div>
       </div>
 
-      {/* BMW SECTION - Mobile Responsive */}
-      <section className="w-full max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-12 sm:py-16 md:py-24 lg:py-32 relative bg-zinc-950">
-        {/* Ambient Glows */}
+      {/* FEATURES - BMW IMAGE SECTION */}
+      <section className="w-full max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-16 sm:py-24 md:py-32 relative bg-zinc-950">
+        {/* Ambient Glow Effects */}
         <motion.div
           className="absolute -top-40 -right-40 w-96 h-96 bg-red-600/20 rounded-full blur-[120px]"
           animate={{
@@ -284,59 +288,56 @@ export default function HomePage() {
         />
 
         <div className="relative z-10">
-          {/* Section Header */}
-          <div className="text-center mb-12 sm:mb-16 md:mb-20">
+          <div className="text-center mb-20">
             <FadeIn>
-              <div className="inline-block mb-4 sm:mb-6">
-                <span className="text-red-500 text-xs sm:text-sm font-bold tracking-[0.2em] sm:tracking-[0.3em] uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              <div className="inline-block mb-6">
+                <span className="text-red-500 text-sm font-bold tracking-[0.3em] uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                   // PERFORMANCE WITHOUT COMPROMISE
                 </span>
               </div>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 sm:mb-8 leading-tight" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              <h2 className="text-6xl lg:text-7xl font-black mb-8 leading-tight" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 PURE <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">ADRENALINE</span>
               </h2>
-              <p className="text-zinc-400 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed px-4">
+              <p className="text-zinc-400 text-xl max-w-3xl mx-auto leading-relaxed">
                 Every vehicle in our collection represents the pinnacle of automotive engineering,
                 backed by cutting-edge technology and uncompromising performance standards.
               </p>
             </FadeIn>
           </div>
 
-          {/* BMW Content - Mobile Stack */}
+          {/* BMW IMAGE BLOCK - REPLACES FEATURES GRID */}
           <FadeIn delay={0.2}>
-            <div className="mt-6 sm:mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10 items-center">
-              {/* Image */}
-              <div className="w-full bg-zinc-900 border border-zinc-800 p-4 sm:p-6 md:p-8 rounded-lg group hover:border-red-600 transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/30">
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <div className="w-full bg-zinc-900 border border-zinc-800 p-8 rounded-lg group hover:border-red-600 transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/30">
                 <Image
                   src="https://freepngimg.com/thumb/bmw/58042-car-coupe-m6-bmw-m3-m2-white.png"
                   alt="BMW M Performance Coupe"
-                  className="w-full h-auto max-h-[300px] sm:max-h-[400px] md:max-h-[500px] object-contain group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-auto max-h-[500px] object-contain group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
 
-              {/* Text */}
-              <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-6">
                 <div>
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-3 sm:mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                  <h3 className="text-4xl lg:text-5xl font-black text-white mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                     BMW M Performance
                   </h3>
-                  <div className="inline-flex px-3 sm:px-4 py-1.5 sm:py-2 bg-zinc-800/50 border border-zinc-700 rounded-full mb-4 sm:mb-6">
-                    <span className="text-red-400 text-xs sm:text-sm font-bold tracking-wider uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                  <div className="inline-flex px-4 py-2 bg-zinc-800/50 border border-zinc-700 rounded-full mb-6">
+                    <span className="text-red-400 text-sm font-bold tracking-wider uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                       0-62 MPH IN 3.9s
                     </span>
                   </div>
                 </div>
-                <div className="space-y-2 sm:space-y-3">
-                  <p className="text-zinc-300 text-base sm:text-lg leading-relaxed">
+                <div className="space-y-3">
+                  <p className="text-zinc-300 text-lg leading-relaxed">
                     3.0L TwinPower Turbo inline-6 engine with advanced M xDrive all-wheel drive.
                   </p>
-                  <p className="text-zinc-400 text-base sm:text-lg leading-relaxed">
+                  <p className="text-zinc-400 text-lg leading-relaxed">
                     Precision handling meets everyday luxury in a cockpit packed with next-gen digital instrumentation.
                   </p>
                 </div>
                 <div className="pt-4 border-t border-zinc-800">
-                  <Link to="/vehicles" className="block sm:inline-block">
-                    <Button className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-orange-500 text-white hover:from-red-700 hover:to-orange-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold rounded-none border-b-4 border-red-800 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                  <Link to="/vehicles">
+                    <Button className="bg-gradient-to-r from-red-600 to-orange-500 text-white hover:from-red-700 hover:to-orange-600 px-8 py-4 text-lg font-bold rounded-none border-b-4 border-red-800 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                       EXPLORE BMW MODELS →
                     </Button>
                   </Link>
@@ -347,30 +348,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ANALYTICS SECTION - Mobile Responsive */}
-      <section className="w-full bg-zinc-900 py-16 sm:py-24 md:py-32 overflow-hidden relative border-y border-zinc-800">
+      {/* ANALYTICS SECTION - Premium Dark */}
+      <section className="w-full bg-zinc-900 py-32 overflow-hidden relative border-y border-zinc-800">
+        {/* Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(239, 68, 68, 0.1) 25%, rgba(239, 68, 68, 0.1) 26%, transparent 27%, transparent 74%, rgba(239, 68, 68, 0.1) 75%, rgba(239, 68, 68, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(239, 68, 68, 0.1) 25%, rgba(239, 68, 68, 0.1) 26%, transparent 27%, transparent 74%, rgba(239, 68, 68, 0.1) 75%, rgba(239, 68, 68, 0.1) 76%, transparent 77%, transparent)',
           backgroundSize: '60px 60px'
         }} />
 
         <div className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 md:gap-16 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 
-            {/* Chart - Mobile First */}
+            {/* Chart with Premium Styling */}
             <FadeIn className="relative order-2 lg:order-1">
-              <div className="bg-zinc-950 border border-zinc-800 p-4 sm:p-6 md:p-8 shadow-2xl">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-3 sm:gap-0">
+              <div className="bg-zinc-950 border border-zinc-800 p-8 shadow-2xl">
+                <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>MARKET TRAJECTORY</h3>
-                    <p className="text-xs sm:text-sm text-zinc-500 uppercase tracking-wider font-semibold">7-Month Performance Index</p>
+                    <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>MARKET TRAJECTORY</h3>
+                    <p className="text-sm text-zinc-500 uppercase tracking-wider font-semibold">7-Month Performance Index</p>
                   </div>
-                  <div className="flex items-center gap-2 text-emerald-400 text-xs sm:text-sm font-bold bg-emerald-500/10 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-emerald-500/30 whitespace-nowrap">
-                    <TrendingUp className="w-4 sm:w-5 h-4 sm:h-5" /> +12.5%
+                  <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/30">
+                    <TrendingUp className="w-5 h-5" /> +12.5%
                   </div>
                 </div>
 
-                <div className="h-[250px] sm:h-[280px] md:h-[320px] w-full">
+                <div className="h-[320px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={PRICE_TRENDS_DATA}>
                       <defs>
@@ -383,13 +385,13 @@ export default function HomePage() {
                       <XAxis
                         dataKey="month"
                         stroke="#52525b"
-                        tick={{fill: '#71717a', fontSize: 10, fontFamily: 'Orbitron, sans-serif'}}
+                        tick={{fill: '#71717a', fontSize: 12, fontFamily: 'Orbitron, sans-serif'}}
                         axisLine={false}
                         tickLine={false}
                       />
                       <YAxis
                         stroke="#52525b"
-                        tick={{fill: '#71717a', fontSize: 10, fontFamily: 'Orbitron, sans-serif'}}
+                        tick={{fill: '#71717a', fontSize: 12, fontFamily: 'Orbitron, sans-serif'}}
                         axisLine={false}
                         tickLine={false}
                         tickFormatter={(value) => `$${value/1000}k`}
@@ -400,8 +402,7 @@ export default function HomePage() {
                           borderColor: '#3f3f46',
                           color: '#fff',
                           borderRadius: '0',
-                          fontFamily: 'Orbitron, sans-serif',
-                          fontSize: '12px'
+                          fontFamily: 'Orbitron, sans-serif'
                         }}
                         itemStyle={{ color: '#EF4444' }}
                       />
@@ -409,7 +410,7 @@ export default function HomePage() {
                         type="monotone"
                         dataKey="price"
                         stroke="#EF4444"
-                        strokeWidth={2}
+                        strokeWidth={3}
                         fillOpacity={1}
                         fill="url(#colorPrice)"
                       />
@@ -417,7 +418,7 @@ export default function HomePage() {
                         type="monotone"
                         dataKey="market"
                         stroke="#52525b"
-                        strokeWidth={1.5}
+                        strokeWidth={2}
                         strokeDasharray="5 5"
                         fill="transparent"
                       />
@@ -430,36 +431,36 @@ export default function HomePage() {
             {/* Text Content */}
             <div className="order-1 lg:order-2">
               <FadeIn delay={0.2}>
-                <div className="inline-flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-600/10 border border-blue-600/30 rounded-full">
-                  <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 text-blue-400" />
-                  <span className="text-blue-400 text-xs sm:text-sm font-bold tracking-wider sm:tracking-widest uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                <div className="inline-flex items-center gap-3 mb-8 px-4 py-2 bg-blue-600/10 border border-blue-600/30 rounded-full">
+                  <BarChart3 className="w-4 h-4 text-blue-400" />
+                  <span className="text-blue-400 text-sm font-bold tracking-widest uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                     DATA-DRIVEN CONFIDENCE
                   </span>
                 </div>
 
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-6 sm:mb-8 leading-tight" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                <h2 className="text-5xl lg:text-6xl font-black mb-8 leading-tight" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                   POWERED BY<br/>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-400">REAL DATA</span>
                 </h2>
 
-                <p className="text-zinc-400 text-base sm:text-lg mb-6 sm:mb-8 md:mb-10 leading-relaxed max-w-xl">
+                <p className="text-zinc-400 text-lg mb-10 leading-relaxed max-w-xl">
                   We analyze real market trends, vehicle performance, and long-term value so you don't have to guess. Every recommendation is backed by data — not sales pressure.
                 </p>
 
-                <div className="grid grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-10 md:mb-12">
+                <div className="grid grid-cols-2 gap-6 mb-12">
                   {STATS.slice(0, 2).map((stat, idx) => (
                     <div key={idx} className="relative group">
                       <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" />
-                      <div className="relative bg-zinc-950 border-l-2 border-red-600 pl-4 sm:pl-6 py-3 sm:py-4">
-                        <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1 sm:mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>{stat.value}</div>
-                        <div className="text-[10px] sm:text-xs text-zinc-500 uppercase tracking-wider font-bold">{stat.label}</div>
+                      <div className="relative bg-zinc-950 border-l-2 border-red-600 pl-6 py-4">
+                        <div className="text-4xl font-black text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>{stat.value}</div>
+                        <div className="text-xs text-zinc-500 uppercase tracking-wider font-bold">{stat.label}</div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <Link to="/3d-experience" className="block sm:inline-block">
-                  <Button className="w-full sm:w-auto bg-white text-zinc-950 hover:bg-zinc-200 rounded-none px-8 sm:px-10 py-4 sm:py-6 text-sm sm:text-base font-bold border-b-4 border-zinc-400 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                <Link to="/3d-experience">
+                  <Button className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-none px-10 py-6 text-base font-bold border-b-4 border-zinc-400 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                     Explore 3D Experience →
                   </Button>
                 </Link>
@@ -469,32 +470,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PREMIUM SERVICES - Mobile Grid */}
-      <section className="w-full py-16 sm:py-24 md:py-32 bg-zinc-950 relative overflow-hidden">
+      {/* PREMIUM SERVICES - FIXED */}
+      <section className="w-full py-32 bg-zinc-950 relative overflow-hidden">
+        {/* Subtle Background Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-600/5 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 relative z-10">
-          <div className="text-center mb-12 sm:mb-16 md:mb-20">
+          <div className="text-center mb-20">
             <FadeIn>
-              <span className="text-red-500 text-xs sm:text-sm font-bold tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-4 sm:mb-6 inline-block" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              <span className="text-red-500 text-sm font-bold tracking-[0.3em] uppercase mb-6 inline-block" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 // PREMIUM SERVICES
               </span>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 sm:mb-6" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              <h2 className="text-6xl font-black mb-6" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 ELITE <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">OFFERINGS</span>
               </h2>
-              <p className="text-zinc-400 text-base sm:text-lg md:text-xl max-w-3xl mx-auto px-4">
+              <p className="text-zinc-400 text-xl max-w-3xl mx-auto">
                 Concierge-level services engineered for the discerning automotive enthusiast
               </p>
             </FadeIn>
           </div>
 
-          {/* Services Grid - 1 col mobile, 2 col tablet, 4 col desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {SERVICES_DATA.map((service, idx) => (
               <FadeIn key={service.id} delay={idx * 0.1}>
                 <Link to="/services" className="group relative h-full block no-underline">
                   <motion.div
-                    className="relative h-full bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 p-6 sm:p-8 flex flex-col justify-between min-h-[350px] sm:min-h-[400px] overflow-hidden"
+                    className="relative h-full bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 p-8 flex flex-col justify-between min-h-[400px] overflow-hidden"
                     whileHover={{
                       y: -8,
                       borderColor: 'rgb(239, 68, 68)',
@@ -502,17 +503,21 @@ export default function HomePage() {
                     }}
                     transition={{ duration: 0.3 }}
                   >
+                    {/* Gradient Overlay - Only on Hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10`} />
+
+                    {/* Solid Dark Background */}
                     <div className="absolute inset-0 bg-zinc-900 -z-20" />
 
+                    {/* Icon & Category */}
                     <div className="relative z-10">
-                      <div className="text-4xl sm:text-5xl mb-4 sm:mb-6">{service.icon}</div>
-                      <div className="inline-block px-2.5 sm:px-3 py-1 bg-zinc-800/80 border border-zinc-700 rounded-full mb-4 sm:mb-6">
-                        <span className="text-red-400 text-[10px] sm:text-xs font-bold tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                      <div className="text-5xl mb-6">{service.icon}</div>
+                      <div className="inline-block px-3 py-1 bg-zinc-800/80 border border-zinc-700 rounded-full mb-6">
+                        <span className="text-red-400 text-xs font-bold tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                           {service.category}
                         </span>
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-red-400 transition-colors" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                      <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-red-400 transition-colors" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                         {service.name}
                       </h3>
                       <p className="text-zinc-400 leading-relaxed text-sm">
@@ -520,12 +525,13 @@ export default function HomePage() {
                       </p>
                     </div>
 
-                    <div className="relative z-10 flex items-center justify-between border-t border-zinc-800 pt-4 sm:pt-6 mt-6 sm:mt-8">
-                      <span className="text-2xl sm:text-3xl font-black text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                    {/* Price Footer */}
+                    <div className="relative z-10 flex items-center justify-between border-t border-zinc-800 pt-6 mt-8">
+                      <span className="text-3xl font-black text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                         ${service.price}
                       </span>
-                      <div className="w-10 sm:w-12 h-10 sm:h-12 bg-zinc-800 group-hover:bg-red-600 rounded-full flex items-center justify-center transition-all duration-300 group-hover:shadow-lg group-hover:shadow-red-600/50">
-                        <ArrowUpRight className="w-5 sm:w-6 h-5 sm:h-6 text-white" />
+                      <div className="w-12 h-12 bg-zinc-800 group-hover:bg-red-600 rounded-full flex items-center justify-center transition-all duration-300 group-hover:shadow-lg group-hover:shadow-red-600/50">
+                        <ArrowUpRight className="w-6 h-6 text-white" />
                       </div>
                     </div>
                   </motion.div>
@@ -536,8 +542,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PARALLAX - Mobile Optimized */}
-      <section className="w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] relative overflow-clip">
+      {/* IMMERSIVE PARALLAX */}
+      <section className="w-full h-[90vh] relative overflow-clip">
         <ParallaxImage
           src="https://static.wixstatic.com/media/cec0c1_b09a94124db140ad9134f72d060b0344~mv2.png?originWidth=1152&originHeight=768"
           alt="Interior detail"
@@ -547,16 +553,16 @@ export default function HomePage() {
           <div className="max-w-[120rem] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 w-full">
             <FadeIn>
               <div className="max-w-3xl">
-                <div className="h-0.5 sm:h-1 w-12 sm:w-20 bg-red-600 mb-6 sm:mb-8" />
-                <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white mb-6 sm:mb-8 leading-[0.95]" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                <div className="h-1 w-20 bg-red-600 mb-8" />
+                <h2 className="text-7xl md:text-8xl font-black text-white mb-8 leading-[0.95]" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                   UNLEASH<br/>
                   THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">BEAST</span>
                 </h2>
-                <p className="text-zinc-300 text-lg sm:text-xl md:text-2xl leading-relaxed mb-8 sm:mb-10">
+                <p className="text-zinc-300 text-2xl leading-relaxed mb-10">
                   Where raw power meets refined elegance. Experience automotive excellence reimagined.
                 </p>
-                <Link to="/vehicles" className="block sm:inline-block">
-                  <Button className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-8 sm:px-12 py-5 sm:py-7 text-base sm:text-lg font-bold border-b-4 border-red-900 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                <Link to="/vehicles">
+                  <Button className="bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 rounded-none px-12 py-7 text-lg font-bold border-b-4 border-red-900 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                     DISCOVER MORE →
                   </Button>
                 </Link>
@@ -566,28 +572,206 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA SECTION - Mobile Optimized */}
-      <section className="w-full py-16 sm:py-24 md:py-32 relative overflow-hidden bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950">
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      {/* CTA - INTERACTIVE CAR */}
+      <section
+        className="w-full py-32 relative overflow-hidden cursor-none"
+        onMouseMove={(e) => {
+          const section = e.currentTarget;
+          const rect = section.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          section.style.setProperty('--mouse-x', `${x}px`);
+          section.style.setProperty('--mouse-y', `${y}px`);
+        }}
+      >
+        {/* Racing Track Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950">
+          <motion.div
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 40px,
+                rgba(239, 68, 68, 0.3) 40px,
+                rgba(239, 68, 68, 0.3) 60px
+              )`
+            }}
+            animate={{
+              backgroundPositionY: ['0px', '100px']
+            }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+
+        {/* Cursor Glow */}
+        <motion.div
+          className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{
+            left: 'var(--mouse-x, 50%)',
+            top: 'var(--mouse-y, 50%)',
+            transform: 'translate(-50%, -50%)',
+            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, transparent 70%)',
+            filter: 'blur(40px)'
+          }}
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Tire Tracks */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-10">
+          <defs>
+            <pattern id="tire-tracks" x="0" y="0" width="100" height="20" patternUnits="userSpaceOnUse">
+              <rect x="10" y="2" width="30" height="4" fill="rgba(239,68,68,0.3)" rx="2"/>
+              <rect x="10" y="14" width="30" height="4" fill="rgba(239,68,68,0.3)" rx="2"/>
+              <rect x="60" y="2" width="30" height="4" fill="rgba(239,68,68,0.3)" rx="2"/>
+              <rect x="60" y="14" width="30" height="4" fill="rgba(239,68,68,0.3)" rx="2"/>
+            </pattern>
+          </defs>
+          <motion.rect
+            width="100%"
+            height="100%"
+            fill="url(#tire-tracks)"
+            animate={{ x: [0, -100] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          />
+        </svg>
+
+        {/* Exhaust Particles */}
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-2 h-2 bg-red-500/40 rounded-full pointer-events-none blur-sm"
+            initial={{ x: 0, y: 0, opacity: 0 }}
+            animate={{
+              x: [0, Math.random() * 100 - 50],
+              y: [0, Math.random() * 100 + 50],
+              opacity: [0, 0.6, 0],
+              scale: [0, 1, 0]
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.2,
+              ease: "easeOut"
+            }}
+            style={{
+              left: `${20 + (i * 4)}%`,
+              top: `${30 + (i % 3) * 20}%`
+            }}
+          />
+        ))}
+
+        {/* Car Cursor */}
+        <motion.div
+          className="absolute pointer-events-none z-50"
+          style={{
+            left: 'var(--mouse-x, 50%)',
+            top: 'var(--mouse-y, 50%)',
+            transform: 'translate(-50%, -50%)'
+          }}
+          animate={{ rotate: [0, 2, -2, 0] }}
+          transition={{ duration: 0.5, repeat: Infinity }}
+        >
+          <svg width="60" height="40" viewBox="0 0 60 40" className="drop-shadow-2xl">
+            <motion.g animate={{ y: [0, -1, 0] }} transition={{ duration: 0.3, repeat: Infinity }}>
+              <ellipse cx="30" cy="35" rx="25" ry="3" fill="rgba(0,0,0,0.3)" opacity="0.5"/>
+              <path d="M15 25 L10 30 L50 30 L45 25 L40 15 L20 15 Z" fill="url(#carGradient)" stroke="#EF4444" strokeWidth="1.5"/>
+              <rect x="22" y="17" width="7" height="6" fill="rgba(239, 68, 68, 0.3)" rx="1"/>
+              <rect x="31" y="17" width="7" height="6" fill="rgba(239, 68, 68, 0.3)" rx="1"/>
+              <circle cx="48" cy="28" r="2" fill="#FFD700">
+                <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="12" cy="28" r="2" fill="#FF4444"/>
+              <motion.circle
+                cx="20" cy="32" r="4"
+                fill="#333" stroke="#EF4444" strokeWidth="1"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                style={{ transformOrigin: '20px 32px' }}
+              />
+              <motion.circle
+                cx="40" cy="32" r="4"
+                fill="#333" stroke="#EF4444" strokeWidth="1"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                style={{ transformOrigin: '40px 32px' }}
+              />
+            </motion.g>
+            <defs>
+              <linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#EF4444"/>
+                <stop offset="100%" stopColor="#DC2626"/>
+              </linearGradient>
+            </defs>
+          </svg>
+
+          <motion.div
+            className="absolute right-full top-1/2 -translate-y-1/2"
+            animate={{ opacity: [0, 0.8, 0], x: [10, -20] }}
+            transition={{ duration: 0.4, repeat: Infinity }}
+          >
+            <div className="flex flex-col gap-1">
+              <div className="h-0.5 w-8 bg-gradient-to-r from-transparent to-red-500/80 rounded"/>
+              <div className="h-0.5 w-6 bg-gradient-to-r from-transparent to-red-500/60 rounded"/>
+              <div className="h-0.5 w-4 bg-gradient-to-r from-transparent to-red-500/40 rounded"/>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Horizon Lights */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-zinc-950/80 to-transparent">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`light-${i}`}
+              className="absolute bottom-10 w-1 h-20 bg-gradient-to-t from-red-500/60 to-transparent"
+              style={{ left: `${i * 12.5}%` }}
+              animate={{
+                height: [60, 80, 60],
+                opacity: [0.4, 0.8, 0.4]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.2
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
-            <h2
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 sm:mb-8 text-white leading-tight"
+            <motion.h2
+              className="text-6xl md:text-7xl font-black mb-8 text-white"
               style={{ fontFamily: 'Orbitron, sans-serif' }}
+              animate={{
+                textShadow: [
+                  '0 0 20px rgba(239, 68, 68, 0.5)',
+                  '0 0 30px rgba(239, 68, 68, 0.8)',
+                  '0 0 20px rgba(239, 68, 68, 0.5)'
+                ]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
             >
               READY TO<br/>IGNITE YOUR <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">JOURNEY?</span>
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-zinc-300 mb-8 sm:mb-10 md:mb-12 leading-relaxed max-w-2xl mx-auto px-4">
+            </motion.h2>
+            <p className="text-xl text-zinc-300 mb-12 leading-relaxed max-w-2xl mx-auto">
               Join thousands of enthusiasts who've experienced automotive excellence.
               Your premium vehicle awaits.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <Link to="/contact" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 px-8 sm:px-12 py-5 sm:py-7 md:py-8 text-base sm:text-lg font-bold rounded-none border-b-4 border-red-900 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                <Button className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 px-12 py-8 text-lg font-bold rounded-none border-b-4 border-red-900 hover:scale-105 transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                   BOOK CONSULTATION
                 </Button>
               </Link>
               <Link to="/vehicles" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 px-8 sm:px-12 py-5 sm:py-7 md:py-8 text-base sm:text-lg font-bold rounded-none transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                <Button variant="outline" className="w-full sm:w-auto border-2 border-zinc-600 text-white hover:bg-zinc-800 hover:border-red-500 px-12 py-8 text-lg font-bold rounded-none transition-all duration-300" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                   EXPLORE VEHICLES
                 </Button>
               </Link>
