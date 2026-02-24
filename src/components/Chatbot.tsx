@@ -353,7 +353,7 @@ export default function Chatbot() {
                         fontWeight: 600
                       }}
                     >
-                      Tap a question to see a detailed answer.
+                      NO CUBY PASTE NO CHATGPT
                     </span>
                   </div>
                 </div>
