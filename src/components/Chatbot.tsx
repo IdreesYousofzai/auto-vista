@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Car,
   Loader2,
   MessageSquare,
   Sparkles,
@@ -322,7 +321,7 @@ export default function Chatbot() {
                       border: '1px solid rgba(255,255,255,0.3)'
                     }}
                   >
-                    <Car size={24} color="white" />
+                    <imag/>
                   </motion.div>
                   <div>
                     <h3
