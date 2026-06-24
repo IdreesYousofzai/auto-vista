@@ -79,25 +79,7 @@ This template can be deployed to Cloudflare Pages or integrated with your Wix si
 
 2. Follow your hosting provider's instructions (Cloudflare Pages or Wix) to publish the generated output.
 
-## Contributing
-
-Contributions are welcome. Suggested workflow:
-
-1. Fork the repo
-2. Create a feature branch
-3. Make changes and add tests
-4. Run linting and tests
-5. Open a pull request
-
-## Support & documentation
-
-- Wix Developer Documentation: https://dev.wix.com/
-- Astro Documentation: https://docs.astro.build/
-
 ## License
 
 This project is provided under the MIT License. See LICENSE for details.
 
----
-
-Built with ❤️ — Auto Vista template
