@@ -1,114 +1,103 @@
-## 🚀 Getting Started
+# Auto Vista
 
-### Prerequisites
+A starter template for building modern, responsive sites using Astro and Wix (Wix Vibe). Auto Vista includes prebuilt UI components, Tailwind CSS, Radix UI primitives, and integrations for Wix CMS and Members so you can jumpstart new projects quickly.
 
-- Node.js (version 18 or higher)
-- npm or yarn package manager
-- Wix account and site
+## Key features
 
-### Installation
+- Astro-powered pages and fast static rendering
+- Tailwind CSS for utility-first styling
+- Radix UI primitives and a library of reusable components
+- Wix integrations (CMS, Members) ready to connect
+- TypeScript and linting setup
+- Vitest for unit testing
 
-1. **Install dependencies**:
+## Prerequisites
+
+- Node.js 18 or higher
+- npm (or yarn/pnpm)
+- A Wix account and site (for deployment/integrations)
+
+## Quick start
+
+1. Install dependencies
+
    ```bash
    npm run install-template
    ```
 
-2. **Set up environment variables**:
+2. Create a .env file or pull environment variables
+
    ```bash
    npm run env
    ```
 
-3. **Start development server**:
+3. Start development server
+
    ```bash
    npm run dev
    ```
 
-The development server will start and you can view your site at `http://localhost:4321`.
+Visit http://localhost:4321 to preview the site locally.
 
-## 📁 Project Structure
+## Project layout
 
-```
-main/
-├── src/
-│   ├── components/          # React components
-│   │   ├── ui/             # Reusable UI components
-│   │   ├── Head.tsx        # Page head component
-│   │   └── Router.tsx      # Routing component
-│   ├── hooks/              # Custom React hooks
-│   ├── lib/                # Utility functions
-│   ├── pages/              # Astro pages
-│   └── styles/             # Global styles
-├── integrations/           # Wix integrations
-│   ├── cms/               # CMS integration
-│   └── members/           # Member authentication
-├── public/                # Static assets
-└── eslint-rules/          # Custom ESLint rules
-```
+- src/ — React components, pages, hooks, and styles
+- integrations/ — Wix CMS and Members integration code
+- public/ — Static assets
+- eslint-rules/ — Custom ESLint rules
 
-## 🎨 UI Components
+(See the repo folders for full structure and implementation details.)
 
-This template includes a comprehensive set of UI components built with Radix UI and styled with Tailwind CSS:
+## Available scripts
 
-- **Layout**: Accordion, Collapsible, Tabs, Sheet
-- **Forms**: Input, Select, Checkbox, Radio Group, Switch
-- **Navigation**: Navigation Menu, Menubar, Breadcrumb
-- **Feedback**: Alert, Toast, Progress, Skeleton
-- **Overlays**: Dialog, Popover, Tooltip, Hover Card
-- **Data Display**: Table, Card, Badge, Avatar
-- **Interactive**: Button, Toggle, Slider, Command
+- `npm run dev` — Start development server
+- `npm run build` — Build for production
+- `npm run preview` — Preview the production build locally
+- `npm run release` — Release to Wix
+- `npm run env` — Pull or setup environment variables
+- `npm run check` — Type-check with Astro
+- `npm run test:run` — Run tests
+- `npm run install-template` — Install project dependencies
 
-## 🔧 Available Scripts
+## Testing
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run release` - Release to Wix
-- `npm run env` - Pull environment variables
-- `npm run check` - Type check with Astro
-- `npm run test:run` - Run tests
-- `npm run install-template` - Install dependencies
-
-## 🧪 Testing
-
-The project includes Vitest for testing:
+Run unit tests with Vitest:
 
 ```bash
 npm run test:run
 ```
 
-## 📱 Responsive Design
+## Deployment
 
-The template is built with a mobile-first approach and includes:
+This template can be deployed to Cloudflare Pages or integrated with your Wix site. Typical deployment steps:
 
-- Responsive breakpoints
-- Touch-friendly interactions
-- Optimized images
-- Flexible layouts
+1. Build the site
 
-## 🚀 Deployment
+   ```bash
+   npm run build
+   ```
 
-The template is configured for deployment on Cloudflare:
+2. Follow your hosting provider's instructions (Cloudflare Pages or Wix) to publish the generated output.
 
-```bash
-npm run build
-```
+## Contributing
 
-## 🤝 Contributing
+Contributions are welcome. Suggested workflow:
 
-1. Fork the repository
+1. Fork the repo
 2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
+3. Make changes and add tests
+4. Run linting and tests
+5. Open a pull request
 
-## 🆘 Support
+## Support & documentation
 
-For support and questions:
+- Wix Developer Documentation: https://dev.wix.com/
+- Astro Documentation: https://docs.astro.build/
 
-- Check the [Wix Developer Documentation](https://dev.wix.com/)
-- Review the [Astro Documentation](https://docs.astro.build/)
+## License
 
+This project is provided under the MIT License. See LICENSE for details.
 
 ---
 
-Built with ❤️ using Wix Vibe, Astro, and modern web technologies.
+Built with ❤️ — Auto Vista template
