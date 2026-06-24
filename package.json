@@ -55,7 +55,7 @@
     "@wix/astro": "2.23.0",
     "@wix/astro-pages": "^2.0.1",
     "@wix/postcss-pseudo-to-data": "^1.0.0",
-    "@wix/babel-plugin-jsx-dynamic-data": "1.0.13",
+    "@wix/babel-plugin-jsx-dynamic-data": "*",
     "@wix/babel-plugin-jsx-source-attrs": "^1.1.0",
     "@wix/wix-data-items-sdk": "^1.0.469",
     "@wix/benefit-programs": "^1.0.121",
